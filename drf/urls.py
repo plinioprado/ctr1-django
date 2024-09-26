@@ -25,6 +25,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 
 urlpatterns = [
+    path('ledger/', include('ledger1.urls')),
     path('invoice1/', include('invoice1.urls')),
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
