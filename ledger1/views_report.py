@@ -17,8 +17,9 @@ from ledger1.reports.reports_service import service
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def view(request: Request, name: str):
-    if request.method == "GET":
-        try:
+
+    try:
+        if request.method == "GET":
 
             data: dict = service(name)
 
@@ -27,12 +28,19 @@ def view(request: Request, name: str):
                 "message": "ok",
                 "data": data
             }
-        except Exception as err:
-            res = {
-                "code": 500,
-                "message": f"Error: {str(err)}",
-            }
 
-        return Response(res)
+        else:
+            raise ValueError("invalid method")
 
-    return Response({'message': 'invalid method'})
+    except ValueError as err:
+        res = {
+            "code": 400,
+            "message": f"Error: {str(err)}",
+        }
+    except Exception as err: # pylint: disable=broad-exception-caught
+        res = {
+            "code": 500,
+            "message": f"Error: {str(err)}",
+        }
+
+    return Response(res)

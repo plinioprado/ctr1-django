@@ -3,10 +3,16 @@
 from ledger1.models.account1 import Account1
 import ledger1.dao.sqlite.account1_dao as dao
 
-def get(acc_from: str, acc_to: str) -> list[dict]:
+def get(acc: str, acc_to: str) -> list[dict]:
     """ Get (read) accounts """
 
-    data = dao.get(acc_from, acc_to)
+    if acc is None:
+        raise ValueError("acc param missing")
+
+    af = f"{acc[0:1]}.{acc[1:2]}.{acc[2:3]}"
+    at = af if acc_to is None else f"{acc_to[0:1]}.{acc_to[1:2]}.{acc_to[2:3]}"
+
+    data = dao.get(af, at)
 
     return {
         "code": 200,
@@ -15,8 +21,13 @@ def get(acc_from: str, acc_to: str) -> list[dict]:
     }
 
 
-def post(acc: Account1) -> str:
+def post(data: dict) -> str:
     """ Port (create) account """
+
+    acc = Account1(
+        num=data["num"],
+        name=data["name"],
+        dc=data["dc"])
 
     acc_num: str = dao.post(acc)
 
@@ -26,8 +37,13 @@ def post(acc: Account1) -> str:
     }
 
 
-def put(acc: Account1) -> str:
+def put(data: dict) -> str:
     """ Put (update) account """
+
+    acc = Account1(
+        num=data["num"],
+        name=data["name"],
+        dc=data["dc"])
 
     acc_num: str = dao.put(acc)
 
@@ -37,10 +53,15 @@ def put(acc: Account1) -> str:
     }
 
 
-def delete(acc_num: str) -> str:
+def delete(acc: str) -> str:
     """ Delete account """
 
-    num: str = dao.delete(acc_num)
+    if acc is None:
+        raise ValueError("acc param missing")
+
+    an = f"{acc[0:1]}.{acc[1:2]}.{acc[2:3]}"
+
+    num: str = dao.delete(an)
 
     return {
         "code": 200,

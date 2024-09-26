@@ -12,30 +12,54 @@ This poject explores coding and tools using:
 
 ## Scope
 
-Interface using the REST endpoints:
+Interface using the REST endpoints for:
 
-Login using Django
+* Login using Django
+* ledger1 module
+  * account CRUD
+  * transaction CRUD
+  * reports (with filter for date and account)
+    * chart_account
+    * journal
+    * general_ledger
+    * trial_balance
+  * potential integration with documents
+    * invoice1
+    * bank statement (tdb)
+    * eft(tdb)
+  * reset db
+* invoice1 module
+  * invoice1 CRUD (no filter)
+  * Reset: Reset db
 
-Invoice1 CRUD:
 
-* GET: get all invoices
-* POST: Create invoice
-* PUT: Update invoice
-* DELETE: Delete invoice
-* Reset: Reset db
+invoice
+bank statement
+EFT
 
-Invoice data is based in Invoice1 from the CTR - Finance controls project
+Constrains:
 
-```Javascript
-{
-    num: 1, // auto
-    value: 1000.00, // float
-    issueDate: "2000-01-02", // string representing date in yyyy-mm-dd
-    parts_seller_name: "Example Ltd", // string between 3 and 30 chars
-    parts_buyer_name: "Cedar stores Ltd.", // string between 3 and 30 chars
-    status: "open" // "open", "paid", or "canceled"
-}
-```
+* No user login
+* Single tennant
+* Single language (English)
+* Single currency (CAD)
+
+Notes:
+
+* Invoice data is based in Invoice1 from the CTR - Finance controls project
+
+    ```Javascript
+    {
+        num: 1, // auto
+        value: 1000.00, // float
+        issueDate: "2000-01-02", // string representing date in yyyy-mm-dd
+        parts_seller_name: "Example Ltd", // string between 3 and 30 chars
+        parts_buyer_name: "Cedar stores Ltd.", // string between 3 and 30 chars
+        status: "open" // "open", "paid", or "canceled"
+    }
+    ```
+
+
 
 ## Install
 

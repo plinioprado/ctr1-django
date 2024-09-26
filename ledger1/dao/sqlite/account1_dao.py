@@ -1,4 +1,8 @@
-""" Data Access for ledger account service and SQLite """
+""" Dara access object
+
+Queries to get the operations from the ledger account business logic
+and execure them in the SQLite database
+"""
 
 import csv
 import sqlite3
@@ -31,6 +35,7 @@ def get(acc_from: str, acc_to: str) -> list[dict]:
         """
         query_params = (acc_from, acc_to)
         for row in cur.execute(query_text, query_params):
+
             acc = Account1(
                 num=str(row[0]),
                 name=str(row[1]),
@@ -76,6 +81,8 @@ def post(acc: Account1) -> str:
 def put(acc: Account1) -> str:
     """ Put (update) account """
 
+    print(acc)
+
     con, cur = get_connection()
 
     try:
@@ -85,7 +92,7 @@ def put(acc: Account1) -> str:
             dc = ?
         WHERE num = ?;
         """
-        query_params = (acc.name, acc.dc, 1 if acc.dc else 0)
+        query_params = (acc.name, 1 if acc.dc else 0, acc.num)
         cur.execute(query_text, query_params)
         con.commit()
 
@@ -117,7 +124,7 @@ def delete(num: str) -> str:
 
 
 def reset() -> None:
-    """ reset account1 table """
+    """ Reset account1 table """
 
     try:
         con, cur = get_connection()

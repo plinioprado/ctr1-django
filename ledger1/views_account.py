@@ -12,16 +12,49 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from ledger1.reports.reports_service import service
+import ledger1.accounts1 as service
 
-@api_view(["GET"])
+@api_view(["GET", "POST", "PUT", "DELETE"])
 @permission_classes([IsAuthenticated])
 def view(request: Request):
-    if request.method == "GET":
-        res = {
-            "code": 200,
-            "message": "account wip"
-        }
-        return Response(res)
 
-    return Response({'message': 'invalid method'})
+    try:
+        if request.method == "GET":
+
+            acc = request.query_params.get("acc")
+            acc_to = request.query_params.get("acc_to")
+
+            res: dict = service.get(
+                acc,
+                acc_to
+            )
+
+        elif request.method == "POST":
+
+            res: dict = service.post(request.data)
+
+        elif request.method == "PUT":
+
+            res: dict = service.put(request.data)
+
+        elif request.method == "DELETE":
+
+            acc = request.query_params.get("acc")
+
+            res: dict = service.delete(acc)
+
+        else:
+            raise ValueError("invalid method")
+
+    except ValueError as err:
+        res = {
+            "code": 400,
+            "message": f"Error: {str(err)}",
+        }
+    except Exception as err: # pylint: disable=broad-exception-caught
+        res = {
+            "code": 500,
+            "message": f"Error: {str(err)}",
+        }
+
+    return Response(res)
