@@ -6,7 +6,7 @@ from . import views_transaction
 from . import views_report
 
 urlpatterns = [
-    path('account/', views_account.view),
-    path('transaction/', views_transaction.view),
-    path('report/<str:name>/', views_report.view),
+    path("account/", views_account.view),
+    path("transaction/", views_transaction.view),
+    path("report/<str:name>/", views_report.view),
 ]

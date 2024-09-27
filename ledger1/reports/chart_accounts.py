@@ -4,7 +4,11 @@ from ledger1.dao.sqlite.report_dao import get as get_accounts
 from ledger1.models.account1 import Account1
 
 
-def get(entity_name: str):
+def get(
+        entity_name: str,
+        acc_from: str,
+        acc_to: str
+    ):
     """
     Creates the report from the data from a DAO query
 
@@ -19,7 +23,7 @@ def get(entity_name: str):
     """
 
     rows: list[list] = []
-    accounts: list[Account1] = get_accounts()
+    accounts: list[Account1] = get_accounts(acc_from, acc_to)
     rows.append(["num", "name", "Dc"])
     for account in accounts:
         rows.append([

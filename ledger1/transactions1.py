@@ -3,7 +3,7 @@
 import ledger1.dao.sqlite.transaction1_dao as dao
 from ledger1.models.transaction1 import Transaction1, Transaction1Seq
 
-def get(num: str) -> dict:
+def get(num: int) -> dict:
     """ get (read) transaction """
 
     result: Transaction1 | None = dao.get(num)
