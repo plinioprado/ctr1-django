@@ -1,6 +1,6 @@
 """ settings """
 
-from ledger1.util.fileio import read_json
+from ledger1.utils.fileio import read_json
 
 def get():
     """ get the settings as a dict """

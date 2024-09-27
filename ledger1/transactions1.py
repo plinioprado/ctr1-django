@@ -1,14 +1,25 @@
-""" Transactions 1 CRUD """
+""" Ledger transaction crud
+
+    Returns for all functions:
+        dict with content of the REST response containing:
+            code (int): 200 meaning success
+            message (str): message
+            data (lisr[dict]): list of dicts with transaction data, only applicable to GET
+"""
 
 import ledger1.dao.sqlite.transaction1_dao as dao
 from ledger1.models.transaction1 import Transaction1, Transaction1Seq
 
 def get(num: int) -> dict:
-    """ get (read) transaction """
+    """ get (read) transaction
+
+    Arguments:
+        num: number of the account to get
+    """
 
     result: Transaction1 | None = dao.get(num)
 
-    data = {} if result is None else result.asdict()
+    data: dict = {} if result is None else result.asdict()
 
     return {
         "code": 200,
@@ -18,15 +29,19 @@ def get(num: int) -> dict:
 
 
 def post(data: dict) -> dict:
-    """ post (create) transaction """
+    """ post (create) transaction
 
-    seqs = [Transaction1Seq(
+    Arguments:
+        data: data of the transaction to be created as a dict
+    """
+
+    seqs: list[Transaction1Seq] = [Transaction1Seq(
         seq=int(seq["seq"]),
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"])) for seq in data["seqs"]]
 
-    tra = Transaction1(
+    tra: Transaction1 = Transaction1(
         num=None,
         date=data["date"],
         descr=data["descr"],
@@ -35,7 +50,7 @@ def post(data: dict) -> dict:
         seqs=seqs
     )
 
-    tra_num = dao.post(tra)
+    tra_num: int = dao.post(tra)
 
     return {
         "code": 200,
@@ -44,15 +59,19 @@ def post(data: dict) -> dict:
 
 
 def put(data: dict):
-    """ put (update) transaction """
+    """ put (update) transaction
 
-    seqs = [Transaction1Seq(
+    Arguments:
+        data: data of the transaction to be updated as a dict
+    """
+
+    seqs: list[Transaction1Seq] = [Transaction1Seq(
         seq=int(seq["seq"]),
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"])) for seq in data["seqs"]]
 
-    tra = Transaction1(
+    tra: Transaction1 = Transaction1(
         num=data["num"],
         date=data["date"],
         descr=data["descr"],
@@ -61,7 +80,7 @@ def put(data: dict):
         seqs=seqs
     )
 
-    dao_num = dao.put(tra)
+    dao_num: int = dao.put(tra)
 
     return {
         "code": 200,
@@ -70,9 +89,13 @@ def put(data: dict):
 
 
 def delete(num: int):
-    """ delete transaction """
+    """ delete transaction
 
-    dao_num = dao.delete(num)
+    Arguments:
+        number of the account to delete
+    """
+
+    dao_num: int = dao.delete(num)
 
     return {
         "code": 200,

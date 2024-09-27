@@ -1,10 +1,23 @@
-""" Services for ledger account service """
+""" Ledger account crud
+
+    Returns for all functions:
+        dict: content of the REST response containing:
+            code (int): 200 meaning success
+            message (str): message
+            data (lisr[dict]): list of dicts with account data, only applicable to GET
+"""
 
 from ledger1.models.account1 import Account1
 import ledger1.dao.sqlite.account1_dao as dao
 
-def get(acc: str, acc_to: str) -> dict:
-    """ Get (read) accounts """
+def get(acc: str, acc_to: str | None) -> dict:
+    """ Get (read) accounts
+
+    Arguments:
+        acc: minimum account number to filter in format 9.9.9
+        acc_to: maximum account number to filter in format 9.9.9,
+            if None the filter will use the acc as maximum too
+    """
 
     if acc is None:
         raise ValueError("acc param missing")
@@ -22,7 +35,11 @@ def get(acc: str, acc_to: str) -> dict:
 
 
 def post(data: dict) -> dict:
-    """ Port (create) account """
+    """ post (create) transaction
+
+    Arguments:
+        data: data of the account to be created as a dict
+    """
 
     acc = Account1(
         num=data["num"],
@@ -38,7 +55,11 @@ def post(data: dict) -> dict:
 
 
 def put(data: dict) -> dict:
-    """ Put (update) account """
+    """ Put (update) account
+
+    Arguments:
+        data: data of the account to be updated as a dict
+    """
 
     acc = Account1(
         num=data["num"],
@@ -53,13 +74,17 @@ def put(data: dict) -> dict:
     }
 
 
-def delete(acc: str) -> dict:
-    """ Delete account """
+def delete(acc_num: str) -> dict:
+    """ Delete account
 
-    if acc is None:
+    Arguments:
+        acc_num: number of the account to be deleted
+    """
+
+    if acc_num is None:
         raise ValueError("acc param missing")
 
-    an = f"{acc[0:1]}.{acc[1:2]}.{acc[2:3]}"
+    an = f"{acc_num[0:1]}.{acc_num[1:2]}.{acc_num[2:3]}"
 
     num: str = dao.delete(an)
 

@@ -1,5 +1,5 @@
-""" report DRF view
-Receives a REST request from ./urls and responds with data from the ledger1.account1 component
+""" invoice1 DRF view
+Receives a REST request from .urls and responds with data from the ledger1.account component
 
 Arguments:
     request (Request): DRF REST request object
@@ -12,28 +12,35 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from ledger1.reports_service import service
+import ledger1.accounts1 as service
 
-@api_view(["GET"])
+@api_view(["GET", "POST", "PUT", "DELETE"])
 @permission_classes([IsAuthenticated])
-def view(request: Request, name: str):
+def view(request: Request):
 
     try:
         if request.method == "GET":
 
-            data: dict = service(
-                name,
+            res: dict = service.get(
                 acc=request.query_params.get("acc"),
-                acc_to=request.query_params.get("acc_to"),
-                date=request.query_params.get("date"),
-                date_to=request.query_params.get("date_to")
+                acc_to=request.query_params.get("acc_to")
             )
 
-            res = {
-                "code": 200,
-                "message": "ok",
-                "data": data
-            }
+        elif request.method == "POST":
+
+            res: dict = service.post(request.data)
+
+        elif request.method == "PUT":
+
+            res: dict = service.put(
+                data=request.data
+            )
+
+        elif request.method == "DELETE":
+
+            res: dict = service.delete(
+                acc=request.query_params.get("acc")
+            )
 
         else:
             raise ValueError("invalid method")
