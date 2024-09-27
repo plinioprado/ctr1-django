@@ -21,12 +21,9 @@ def view(request: Request):
     try:
         if request.method == "GET":
 
-            acc = request.query_params.get("acc")
-            acc_to = request.query_params.get("acc_to")
-
             res: dict = service.get(
-                acc,
-                acc_to
+                acc=request.query_params.get("acc"),
+                acc_to=request.query_params.get("acc_to")
             )
 
         elif request.method == "POST":
@@ -35,13 +32,15 @@ def view(request: Request):
 
         elif request.method == "PUT":
 
-            res: dict = service.put(request.data)
+            res: dict = service.put(
+                data=request.data
+            )
 
         elif request.method == "DELETE":
 
-            acc = request.query_params.get("acc")
-
-            res: dict = service.delete(acc)
+            res: dict = service.delete(
+                acc=request.query_params.get("acc")
+            )
 
         else:
             raise ValueError("invalid method")

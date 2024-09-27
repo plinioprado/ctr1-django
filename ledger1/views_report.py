@@ -21,7 +21,13 @@ def view(request: Request, name: str):
     try:
         if request.method == "GET":
 
-            data: dict = service(name)
+            data: dict = service(
+                name,
+                acc=request.query_params.get("acc"),
+                acc_to=request.query_params.get("acc_to"),
+                date=request.query_params.get("date"),
+                date_to=request.query_params.get("date_to")
+            )
 
             res = {
                 "code": 200,

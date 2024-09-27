@@ -5,9 +5,16 @@ from ledger1.dao.sqlite.util import get_connection
 from ledger1.models.account1 import Account1
 
 
-def get() -> list[Account1]:
+def get(
+        acc_from: str,
+        acc_to: str
+    ) -> list[Account1]:
     """
     Read (get) all accounts
+
+    Params:
+        acc_from (str): account number from in format 9.9.9
+        acc_to (str): account number fo in format 9.9.9
 
     Returns:
         List of all accounts as a list of Accounts
@@ -15,7 +22,11 @@ def get() -> list[Account1]:
 
     report_rows = []
     con, _ = get_connection()
-    for row in con.execute("SELECT num, name, dc FROM account1"):
+    for row in con.execute("""
+        SELECT num, name, dc FROM account1
+        WHERE (num BETWEEN ? AND ?)
+        """,
+        (acc_from, acc_to)):
         account = Account1(num=str(row[0]), name=str(row[1]), dc=int(row[2]) == 1)
         report_rows.append(account)
 
@@ -24,7 +35,9 @@ def get() -> list[Account1]:
 
 def get_general_ledger(
     date_from: str,
-    date_to: str
+    date_to: str,
+    acc_from: str,
+    acc_to: str,
 ) -> list[dict]:
     """
     data for general ledger
@@ -49,10 +62,12 @@ def get_general_ledger(
         FROM transaction1_detail td
             INNER JOIN transaction1 t ON td.num = t.num
             INNER JOIN account1 acc ON acc.num = td.account_num
-        WHERE t.dt BETWEEN ? AND ?
+        WHERE (account_num BETWEEN ? AND ?) AND (t.dt BETWEEN ? AND ?)
         ORDER BY td.account_num, t.dt, t.num, td.seq
         """,
         (
+            acc_from,
+            acc_to,
             datetime.datetime.fromisoformat(date_from).timestamp(),
             datetime.datetime.fromisoformat(date_to).timestamp()
         )
@@ -133,7 +148,9 @@ def get_journal(
 
 def get_trial_balance(
     date_from: str,
-    date_to: str
+    date_to: str,
+    acc_from: str,
+    acc_to: str,
 ) -> list[dict]:
     """
     data for general ledger
@@ -164,6 +181,7 @@ def get_trial_balance(
                     ORDER BY td.account_num
             ) AS val_cr
         FROM account1 acc
+        WHERE (acc_num BETWEEN ? AND ?)
         ORDER BY acc_num
         """,
         (
@@ -171,6 +189,8 @@ def get_trial_balance(
             datetime.datetime.fromisoformat(date_to).timestamp(),
             datetime.datetime.fromisoformat(date_from).timestamp(),
             datetime.datetime.fromisoformat(date_to).timestamp(),
+            acc_from,
+            acc_to
         )):
 
         val_db = 0 if row[2] is None else row[2]

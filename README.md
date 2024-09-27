@@ -85,13 +85,23 @@ There an opiton to access user and group endpoints
 * Users: http://127.0.0.1:8000/users/
 * Groups: http://127.0.0.1:8000/groups/
 * Invoice1: http://127.0.0.1:8000/invoice1/
-* Invoice1: http://127.0.0.1:8000/ledger/account/
+* Account1: http://127.0.0.1:8000/ledger/account/
+* Transaction: http://127.0.0.1:8000/ledger/transaction/
+* Report: http://127.0.0.1:8000/ledger/report/
 
 ## Stack
 
 * Python 3
 * venv
 * Django and djangorestframework
+
+## Error handling
+
+Will be responded with code:
+
+* 400: client (user) error, raised as ValueError
+* 500: server (application) error, raised as any error except ValueError
+
 
 ## Test
 
