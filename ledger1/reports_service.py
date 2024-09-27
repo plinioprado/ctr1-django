@@ -19,7 +19,9 @@ def service(name: str) -> dict:
 
     # Get report
     if name == "chart_accounts":
+        print(1)
         data: dict = chart_accounts_get(entity_name)
+        print(2)
     elif name == "journal":
         data = journal_get(
             entity_name,
@@ -44,7 +46,11 @@ def service(name: str) -> dict:
     if data:
         export_csv(data)
 
-    return data
+    return {
+        "code": 200,
+        "message": "ok",
+        "data": data
+    }
 
 
 def export_csv(data: dict) -> None:

@@ -3,7 +3,7 @@
 from ledger1.models.account1 import Account1
 import ledger1.dao.sqlite.account1_dao as dao
 
-def get(acc: str, acc_to: str) -> list[dict]:
+def get(acc: str, acc_to: str) -> dict:
     """ Get (read) accounts """
 
     if acc is None:
@@ -21,7 +21,7 @@ def get(acc: str, acc_to: str) -> list[dict]:
     }
 
 
-def post(data: dict) -> str:
+def post(data: dict) -> dict:
     """ Port (create) account """
 
     acc = Account1(
@@ -37,7 +37,7 @@ def post(data: dict) -> str:
     }
 
 
-def put(data: dict) -> str:
+def put(data: dict) -> dict:
     """ Put (update) account """
 
     acc = Account1(
@@ -53,7 +53,7 @@ def put(data: dict) -> str:
     }
 
 
-def delete(acc: str) -> str:
+def delete(acc: str) -> dict:
     """ Delete account """
 
     if acc is None:

@@ -117,12 +117,16 @@ Check code linting:
 
 ```shell
 pylint invoice1/invoice1_service.py
-pylint ledger1/ledger1_service.py
+pylint ledger1/accounts1.py
+pylint ledger1/transactions1.py
+pylint ledger1/reports_service.py
 ```
 
 Check type hints:
 
 ```shell
 mypy invoice1/invoice1_service.py
-mypy ledger1/ledger1_service.py
+mypy ledger1/accounts1.py
+mypy ledger1/transactions1.py
+mypy ledger1/reports_service.py
 ```
