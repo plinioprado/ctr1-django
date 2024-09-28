@@ -1,0 +1,68 @@
+""" pytest """
+
+# pylint: disable=missing-function-docstring
+
+from ledger1.reports_service import service
+
+
+def test_chart_accounts():
+    """ test chart of accunts """
+
+    result = service("chart_accounts")
+    assert isinstance(result, dict)
+    assert result["code"] == 200
+    assert result["message"] == "ok"
+    assert isinstance(result["data"], dict)
+    assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "chart of accounts"}
+    assert isinstance(result["data"]["table"], list)
+    assert result["data"]["table"][0] == ['num', 'name', 'Dc']
+    assert result["data"]["table"][1] == ["1.0.0", "assets", "D"]
+
+
+def test_journal():
+    """ test chart of accunts """
+
+    result = service("journal")
+    assert isinstance(result, dict)
+    assert result["code"] == 200
+    assert result["message"] == "ok"
+    assert isinstance(result["data"], dict)
+    assert result["data"]["header"]["entity_name"] == "Example Ltd."
+    assert result["data"]["header"]["title"] == "journal"
+    assert isinstance(result["data"]["table"], list)
+    assert result["data"]["table"][0] == ['dt', 'num', 'descr', 'doc_type',
+            'doc_num', 'seq', 'acc_num', 'acc_name', 'val', 'dc']
+    assert result["data"]["table"][1] == ['2020-01-02', 1, 'capital contribution', 'statement1', 1, 1, '1.1.2', 'checking account', 10000.0, 'D']
+
+
+def test_general_ledger():
+    """ test general ledger """
+
+    result = service("general_ledger")
+    assert isinstance(result, dict)
+    assert result["code"] == 200
+    assert result["message"] == "ok"
+    assert isinstance(result["data"], dict)
+    assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "general ledger"}
+    assert result["data"]["filters"] == {'date_from': '2020-01-01', 'date_to': '2020-01-31'}
+    assert  result["data"]["table"][0] == ['dt', 'num', 'descr', 'doc_type',
+        'doc_num', 'seq', 'val_db', 'val_cr', 'val_bal']
+    assert result["data"]["table"][1] == ['1.1.2', 'checking account']
+    assert result["data"]["table"][2] == ['2020-01-02', 1, 'capital contribution',
+        'statement1', 1, 1, 10000.0, 0, 10000.0]
+
+
+def test_trial_balance():
+    """ test trial balance """
+
+    result = service("trial_balance")
+    assert isinstance(result, dict)
+    assert result["code"] == 200
+    assert result["message"] == "ok"
+    assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "trial balance"}
+    assert result["data"]["filters"] == {'date_from': '2020-01-01', 'date_to': '2020-01-31'}
+    assert result["data"]["table"][0] == ['acc_num', 'acc_name', 'val_db', 'val_cr', 'val_bal']
+    assert result["data"]["table"][1] == ['1.0.0', 'assets', 12000.0, -1200.0, 10800.0]
+    assert result["data"]["table"][2] == ['1.1.0', 'current assets', 12000.0, -1200.0, 10800.0]
+    assert result["data"]["table"][3] == ['1.1.1', 'cash', 0, 0, 0]
+    assert result["data"]["table"][4] == ['1.1.2', 'checking account', 11000, -200.0, 10800]

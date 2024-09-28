@@ -1,0 +1,11 @@
+{
+  "entity": {
+    "name": "Example Ltd."
+  },
+  "filters": {
+    "date_min": "2020-01-01",
+    "date_max": "2020-01-31",
+    "acc_min": "1.0.0",
+    "acc_max": "9.9.9"
+  }
+}

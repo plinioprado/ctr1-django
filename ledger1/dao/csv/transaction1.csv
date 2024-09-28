@@ -1,0 +1,6 @@
+num,dt,descr,doc_type,doc_num
+1,"2020-01-02",capital contribution,statement1,1
+2,"2020-01-05",lawyer fees,eft1,1
+3,"2020-01-20",sale to cedar store ltd,invoice1,1
+4,"2020-01-21",receiving from cedar store ltd,statement1,2
+
