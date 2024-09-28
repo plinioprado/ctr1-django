@@ -16,42 +16,42 @@ import ledger1.transactions1 as service
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 @permission_classes([IsAuthenticated])
-def view(request: Request):
+def view(request: Request, num: dict | None = None):
 
     try:
 
         if request.method == "GET":
 
-            num = request.query_params.get("num")
-
-            res = service.get(num)
+            ret = service.get(num)
 
         elif request.method == "POST":
 
-            res: dict = service.post(request.data)
+            ret: dict = service.post(request.data)
 
         elif request.method == "PUT":
 
-            res: dict = service.put(request.data)
+            ret: dict = service.put(request.data)
 
         elif request.method == "DELETE":
 
-            num = request.query_params.get("num")
-
-            res: dict = service.delete(num)
+            ret: dict = service.delete(num)
 
         else:
             raise ValueError("invalid method")
 
+        status_code = ret.pop("code")
+        response: Response = Response(ret)
+        response.status_code = status_code
+        return response
+
     except ValueError as err:
-        res = {
-            "code": 400,
-            "message": f"Error: {str(err)}",
-        }
+        res: Response = Response({ "message": f"Error: {str(err)}"})
+        res.status_code = 400
+        return res
+
     except Exception as err: # pylint: disable=broad-exception-caught
-        res = {
-            "code": 500,
-            "message": f"Error: {str(err)}",
-        }
+        res: Response = Response({ "message": f"Error: {str(err)}" })
+        res.status_code = 500
+        return res
 
     return Response(res)

@@ -10,7 +10,7 @@
 from ledger1.models.account1 import Account1
 import ledger1.dao.sqlite.account1_dao as dao
 
-def get(acc: str, acc_to: str | None) -> dict:
+def get(acc: str, acc_to: str | None = None) -> dict:
     """ Get (read) accounts
 
     Arguments:

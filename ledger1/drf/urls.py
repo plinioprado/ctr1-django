@@ -7,6 +7,8 @@ from . import views_report
 
 urlpatterns = [
     path("account/", views_account.view),
+    path("account/<str:acc>", views_account.view),
     path("transaction/", views_transaction.view),
-    path("report/<str:name>/", views_report.view),
+    path("transaction/<int:num>", views_transaction.view),
+    path("report/<str:name>", views_report.view),
 ]

@@ -16,44 +16,39 @@ import ledger1.accounts1 as service
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 @permission_classes([IsAuthenticated])
-def view(request: Request):
+def view(request: Request, acc: str | None = None):
 
     try:
         if request.method == "GET":
 
-            res: dict = service.get(
-                acc=request.query_params.get("acc"),
-                acc_to=request.query_params.get("acc_to")
-            )
+            ret: dict = service.get(acc)
 
         elif request.method == "POST":
 
-            res: dict = service.post(request.data)
+            ret = service.post(request.data)
 
         elif request.method == "PUT":
 
-            res: dict = service.put(
-                data=request.data
-            )
+            ret = service.put(data=request.data)
 
         elif request.method == "DELETE":
 
-            res: dict = service.delete(
-                acc=request.query_params.get("acc")
-            )
+            ret = service.delete(acc_num=acc)
 
         else:
             raise ValueError("invalid method")
 
-    except ValueError as err:
-        res = {
-            "code": 400,
-            "message": f"Error: {str(err)}",
-        }
-    except Exception as err: # pylint: disable=broad-exception-caught
-        res = {
-            "code": 500,
-            "message": f"Error: {str(err)}",
-        }
+        status_code = ret.pop("code")
+        response: Response = Response(ret)
+        response.status_code = status_code
+        return response
 
-    return Response(res)
+    except ValueError as err:
+        res: Response = Response({ "message": f"Error: {str(err)}"})
+        res.status_code = 400
+        return response
+
+    except Exception as err: # pylint: disable=broad-exception-caught
+        res: Response = Response({ "message": f"Error: {str(err)}" })
+        res.status_code = 500
+        return response
