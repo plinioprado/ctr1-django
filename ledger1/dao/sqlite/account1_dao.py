@@ -1,4 +1,4 @@
-""" Dara access object
+""" Data access object
 
 Queries to get the operations from the ledger account business logic
 and execure them in the SQLite database

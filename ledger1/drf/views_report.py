@@ -1,5 +1,5 @@
 """ report DRF view
-Receives a REST request from ./urls and responds with data from the ledger1.account1 component
+Receives a REST request from .urls and responds with data from the ledger1.report component
 
 Arguments:
     request (Request): DRF REST request object
@@ -29,24 +29,21 @@ def view(request: Request, name: str):
                 date_to=request.query_params.get("date_to")
             )
 
-            res = {
-                "code": 200,
+            response: Response = Response({
                 "message": "ok",
                 "data": data
-            }
+            })
+            response.status_code = 200
 
         else:
             raise ValueError("invalid method")
 
     except ValueError as err:
-        res = {
-            "code": 400,
-            "message": f"Error: {str(err)}",
-        }
-    except Exception as err: # pylint: disable=broad-exception-caught
-        res = {
-            "code": 500,
-            "message": f"Error: {str(err)}",
-        }
+        response: Response = Response({"message": f"Error: {str(err)}"})
+        response.status_code = 400
 
-    return Response(res)
+    except Exception as err: # pylint: disable=broad-exception-caught
+        response: Response = Response({ "message": f"Error: {str(err)}" })
+        response.status_code = 500
+
+    return response
