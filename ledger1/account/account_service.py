@@ -7,7 +7,7 @@
             data (lisr[dict]): list of dicts with account data, only applicable to GET
 """
 
-from ledger1.models.account1 import Account1
+from ledger1.account.account1 import Account1
 import ledger1.dao.sqlite.account1_dao as dao
 
 def get(acc: str, acc_to: str | None = None) -> dict:

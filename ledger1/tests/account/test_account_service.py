@@ -2,7 +2,7 @@
 
 # pylint: disable=missing-function-docstring
 
-from ledger1.accounts1 import get, post, put, delete
+from ledger1.account.account_service import get, post, put, delete
 
 def test_get():
     result: list = get(acc="111", acc_to="111")

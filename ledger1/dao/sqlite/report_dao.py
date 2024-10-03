@@ -2,7 +2,7 @@
 
 import datetime
 from ledger1.dao.sqlite.util import get_connection
-from ledger1.models.account1 import Account1
+from ledger1.account.account1 import Account1
 
 
 def get(

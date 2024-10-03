@@ -12,7 +12,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from ledger1.reports_service import service
+from ledger1.reports.reports_service import service
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -21,7 +21,7 @@ def view(request: Request, name: str):
     try:
         if request.method == "GET":
 
-            data: dict = service(
+            ret: dict = service(
                 name,
                 acc=request.query_params.get("acc"),
                 acc_to=request.query_params.get("acc_to"),
@@ -29,21 +29,20 @@ def view(request: Request, name: str):
                 date_to=request.query_params.get("date_to")
             )
 
-            response: Response = Response({
-                "message": "ok",
-                "data": data
-            })
-            response.status_code = 200
-
         else:
             raise ValueError("invalid method")
 
+        status_code = ret.pop("code")
+        response: Response = Response(ret)
+        response.status_code = status_code
+        return response
+
     except ValueError as err:
-        response: Response = Response({"message": f"Error: {str(err)}"})
-        response.status_code = 400
+        res: Response = Response({ "message": f"Error: {str(err)}"})
+        res.status_code = 400
+        return response
 
     except Exception as err: # pylint: disable=broad-exception-caught
-        response: Response = Response({ "message": f"Error: {str(err)}" })
-        response.status_code = 500
-
-    return response
+        res: Response = Response({ "message": f"Error: {str(err)}" })
+        res.status_code = 500
+        return response

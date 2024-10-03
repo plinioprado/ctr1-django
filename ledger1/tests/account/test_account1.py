@@ -4,7 +4,7 @@
 
 from dataclasses import asdict
 import pytest
-from ledger1.models.account1 import Account1
+from ledger1.account.account1 import Account1
 
 
 def test_validation():
