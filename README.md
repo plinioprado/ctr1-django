@@ -32,7 +32,6 @@ Interface using the REST endpoints for:
   * invoice1 CRUD (no filter)
   * Reset: Reset db
 
-
 invoice
 bank statement
 EFT
@@ -58,8 +57,6 @@ Notes:
         status: "open" // "open", "paid", or "canceled"
     }
     ```
-
-
 
 ## Install
 
