@@ -2,7 +2,7 @@
 
 # pylint: disable=missing-function-docstring
 
-import ledger1.transactions1 as service
+import ledger1.transaction.transaction_service as service
 
 
 def test_get():

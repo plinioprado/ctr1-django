@@ -1,7 +1,7 @@
 """ Finance reports - Chart of accounts """
 
 from ledger1.dao.sqlite.report_dao import get as get_accounts
-from ledger1.models.account1 import Account1
+from ledger1.account.account1 import Account1
 
 
 def get(

@@ -8,7 +8,7 @@
 """
 
 import ledger1.dao.sqlite.transaction1_dao as dao
-from ledger1.models.transaction1 import Transaction1, Transaction1Seq
+from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq
 
 def get(num: int) -> dict:
     """ get (read) transaction

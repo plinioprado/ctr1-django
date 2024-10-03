@@ -4,7 +4,7 @@
 
 
 import datetime
-from ledger1.models.transaction1 import Transaction1, Transaction1Seq
+from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq
 
 
 def test_transaction_existent():
