@@ -6,7 +6,7 @@ and execure them in the SQLite database
 
 import csv
 import sqlite3
-from ledger1.models.account1 import Account1
+from ledger1.account.account1 import Account1
 
 
 def get_connection() -> tuple[sqlite3.Connection, sqlite3.Cursor]:

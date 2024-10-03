@@ -2,7 +2,7 @@
 
 # pylint: disable=missing-function-docstring
 
-from ledger1.reports_service import service
+from ledger1.reports.reports_service import service
 
 
 def test_chart_accounts():
