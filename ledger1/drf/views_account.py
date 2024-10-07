@@ -1,4 +1,4 @@
-""" invoice1 DRF view
+""" account DRF view
 Receives a REST request from .urls and responds with data from the ledger1.account component
 
 Arguments:

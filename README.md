@@ -71,10 +71,10 @@ source venv/bin/activate # activate venv
 python manage.py runserver
 ```
 
-The first request should be to adim endpoint to login with a Django page.
+The first request should be http://localhost:8000/admin/ to login with a Django page.
     For this demo, login is "admin" and pass "12345"
-The next ones will be to the invoice1 endpoint
-There an opiton to access user and group endpoints
+The next ones will be to the application endpoints
+To logout, request again http://localhost:8000/admin/ and click logout
 
 ## Endpoints
 
@@ -98,7 +98,6 @@ Will be responded with code:
 
 * 400: client (user) error, raised as ValueError
 * 500: server (application) error, raised as any error except ValueError
-
 
 ## Test
 
