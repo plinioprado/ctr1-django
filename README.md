@@ -71,10 +71,20 @@ source venv/bin/activate # activate venv
 python manage.py runserver
 ```
 
+## Authentication
+
+Basic Auth implemented then commented out in setings.py and the views.
+
+Running with Browser when enabled:
+
 The first request should be http://localhost:8000/admin/ to login with a Django page.
     For this demo, login is "admin" and pass "12345"
 The next ones will be to the application endpoints
 To logout, request again http://localhost:8000/admin/ and click logout
+
+Running with Postman when enabled:
+
+In Authorization, select Aasic Auth, fill Username and Password
 
 ## Endpoints
 
@@ -91,6 +101,7 @@ To logout, request again http://localhost:8000/admin/ and click logout
 * Python 3
 * venv
 * Django and djangorestframework
+* django-cors-headers
 
 ## Error handling
 

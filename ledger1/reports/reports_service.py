@@ -23,6 +23,8 @@ def service(
 
     entity_name = settings["entity"]["name"]
 
+    if name == "chart_accounts":
+        df = None
     if date is None:
         df = settings["filters"]["date_min"]
     elif not date_iso_is_valid(date):
@@ -34,6 +36,8 @@ def service(
     else:
         df = date
 
+    if name == "chart_accounts":
+        dt = None
     if date_to is None:
         dt = settings["filters"]["date_max"]
     elif not date_iso_is_valid(date_to):
