@@ -37,6 +37,10 @@ def get(
             "entity_name": entity_name,
             "title": "chart of accounts"
         },
+        "filters": {
+            "acc": acc_from,
+            "acc_to": acc_to,
+        },
         "table": rows,
     }
 

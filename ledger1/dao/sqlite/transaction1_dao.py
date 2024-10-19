@@ -1,12 +1,80 @@
 """ data access object from transaction to sqlite """
 
 import csv
+import datetime
 import sqlite3
 from ledger1.dao.sqlite.util import get_connection
 from ledger1.utils.field import date_iso_to_timestamp, date_timestamp_to_iso
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq
 
-def get(num: int) -> Transaction1 | None:
+
+def get_many(date_from: str, date_to: str) -> Transaction1 | None:
+    """ return one transaction """
+
+    con, cur = get_connection()
+
+    try:
+
+        query_text: str = """
+        SELECT
+            td.num,
+            t.dt AS date,
+            t.descr,
+            t.doc_type,
+            t.doc_num,
+            td.seq,
+            td.account_num,
+            td.val,
+            td.dc
+        FROM transaction1_detail td
+        INNER JOIN transaction1 t ON t.num = td.num
+        WHERE t.dt BETWEEN ? AND ?
+        ORDER BY td.num DESC, td.seq DESC
+        """
+        query_data: tuple = (
+            datetime.datetime.fromisoformat(date_from).timestamp(),
+            datetime.datetime.fromisoformat(date_to).timestamp()
+        )
+
+        seqs = []
+        tras = []
+        for row in cur.execute(query_text, query_data):
+
+            num = int(row[0])
+            date: str = str(date_timestamp_to_iso(row[1]))
+            descr: str = str(row[2])
+            doc_type: str = str(row[3])
+            doc_num: int = int(row[4])
+            seq: int = int(row[5])
+            account: str = row[6]
+            val=row[7]
+            dc: bool = row[8] == 1
+
+            seqs.insert(0, Transaction1Seq(
+                seq,
+                account,
+                val,
+                dc))
+
+            if seq == 1:
+                tras.insert(0, Transaction1(
+                    num,
+                    date,
+                    descr,
+                    doc_type,
+                    doc_num,
+                    seqs))
+                seqs = []
+
+        return tras
+
+    except sqlite3.Error as err:
+        raise IOError(f"Error getting transaction: {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_one(num: int) -> Transaction1 | None:
     """ return one transaction """
 
     con, cur = get_connection()
@@ -30,6 +98,10 @@ def get(num: int) -> Transaction1 | None:
         """
         query_data: tuple = (num,)
 
+        date = None,
+        descr = None
+        doc_type = None
+        doc_num = None
         seqs = []
         for row in cur.execute(query_text, query_data):
             if row[5] == 1:
@@ -48,16 +120,15 @@ def get(num: int) -> Transaction1 | None:
         if len(seqs) == 0:
             return None
 
-        tra = Transaction1(
-            num,
-            date,
-            descr=descr,
-            doc_type=doc_type,
-            doc_num=doc_num,
-            seqs=seqs
-        )
+        else:
+            return Transaction1(
+                num,
+                date,
+                descr=descr,
+                doc_type=doc_type,
+                doc_num=doc_num,
+                seqs=seqs)
 
-        return tra
 
     except sqlite3.Error as err:
         raise IOError(f"Error getting transaction: {str(err)}") from err

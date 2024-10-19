@@ -1,4 +1,4 @@
-""" invoice1 DRF view
+""" account DRF view
 Receives a REST request from .urls and responds with data from the ledger1.account component
 
 Arguments:
@@ -10,12 +10,12 @@ Returns:
 """
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view #, permission_classes
+# from rest_framework.permissions import IsAuthenticated
 import ledger1.account.account_service as service
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def view(request: Request, acc: str | None = None):
 
     try:
@@ -46,9 +46,9 @@ def view(request: Request, acc: str | None = None):
     except ValueError as err:
         res: Response = Response({ "message": f"Error: {str(err)}"})
         res.status_code = 400
-        return response
+        return res
 
     except Exception as err: # pylint: disable=broad-exception-caught
         res: Response = Response({ "message": f"Error: {str(err)}" })
         res.status_code = 500
-        return response
+        return res

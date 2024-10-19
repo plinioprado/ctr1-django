@@ -47,7 +47,7 @@ def get(
             "title": "journal",
         },
         "filters": {
-            "date_from": date_from,
+            "date": date_from,
             "date_to": date_to,
         },
         "table": rows,
