@@ -1,13 +1,14 @@
 """ data access object from transaction to sqlite """
 
 import csv
+import datetime
 import sqlite3
 from ledger1.dao.sqlite.util import get_connection
 from ledger1.utils.field import date_iso_to_timestamp, date_timestamp_to_iso
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq
 
 
-def get_many() -> Transaction1 | None:
+def get_many(date_from: str, date_to: str) -> Transaction1 | None:
     """ return one transaction """
 
     con, cur = get_connection()
@@ -27,13 +28,17 @@ def get_many() -> Transaction1 | None:
             td.dc
         FROM transaction1_detail td
         INNER JOIN transaction1 t ON t.num = td.num
+        WHERE t.dt BETWEEN ? AND ?
         ORDER BY td.num DESC, td.seq DESC
         """
-        #query_data: tuple = (num,)
+        query_data: tuple = (
+            datetime.datetime.fromisoformat(date_from).timestamp(),
+            datetime.datetime.fromisoformat(date_to).timestamp()
+        )
 
         seqs = []
         tras = []
-        for row in cur.execute(query_text):
+        for row in cur.execute(query_text, query_data):
 
             num = int(row[0])
             date: str = str(date_timestamp_to_iso(row[1]))

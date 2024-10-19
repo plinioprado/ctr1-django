@@ -22,7 +22,10 @@ def view(request: Request, num: dict | None = None):
 
         if request.method == "GET":
 
-            ret = service.get(num)
+            ret = service.get(
+                num,
+                date=request.query_params.get("date"),
+                date_to=request.query_params.get("date_to"))
 
         elif request.method == "POST":
 
