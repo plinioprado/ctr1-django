@@ -4,11 +4,13 @@ from django.urls import path
 from . import views_account
 from . import views_transaction
 from . import views_report
+from . import views_reset
 
 urlpatterns = [
-    path("account/", views_account.view),
-    path("account/<str:acc>", views_account.view),
-    path("transaction/", views_transaction.view),
-    path("transaction/<int:num>", views_transaction.view),
+    path("accounts/", views_account.view),
+    path("accounts/<str:acc>", views_account.view),
+    path("transactions/", views_transaction.view),
+    path("transactions/<int:num>", views_transaction.view),
     path("report/<str:name>", views_report.view),
+    path("reset/", views_reset.view)
 ]

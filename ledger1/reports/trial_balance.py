@@ -40,8 +40,10 @@ def get(
             "title": "trial balance",
         },
         "filters": {
-            "date_from": date_from,
+            "date": date_from,
             "date_to": date_to,
+            "acc": acc_from,
+            "acc_to": acc_to,
         },
         "table": rows,
     }

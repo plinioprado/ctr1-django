@@ -71,26 +71,58 @@ source venv/bin/activate # activate venv
 python manage.py runserver
 ```
 
-The first request should be to adim endpoint to login with a Django page.
+## Authentication
+
+Basic Auth implemented then commented out in setings.py and the views.
+
+Running with Browser when enabled:
+
+The first request should be http://localhost:8000/admin/ to login with a Django page.
     For this demo, login is "admin" and pass "12345"
-The next ones will be to the invoice1 endpoint
-There an opiton to access user and group endpoints
+The next ones will be to the application endpoints
+To logout, request again http://localhost:8000/admin/ and click logout
+
+Running with Postman when enabled:
+
+In Authorization, select Aasic Auth, fill Username and Password
 
 ## Endpoints
 
-* Admin: http://127.0.0.1:8000/admin/
-* Users: http://127.0.0.1:8000/users/
-* Groups: http://127.0.0.1:8000/groups/
-* Invoice1: http://127.0.0.1:8000/invoice1/
-* Account1: http://127.0.0.1:8000/ledger/account/
-* Transaction: http://127.0.0.1:8000/ledger/transaction/
-* Report: http://127.0.0.1:8000/ledger/report/
+Accounts
+
+* GET    http://localhost:8000/ledger/accounts/{num}   Get account
+* POST   http://localhost:8000/ledger/accounts/        Create account
+* PUT    http://localhost:8000/ledger/accounts/        Update account
+* DELETE http://localhost:8000/ledger/accounts/{num}   Delete one account
+
+Transactions
+
+* GET    http://localhost:8000/ledger/transactions/        Get all transactions
+* GET    http://localhost:8000/ledger/transactions/{num}   Get transaction
+* POST   http://localhost:8000/ledger/transactions/        Create transaction
+* PUT    http://localhost:8000/ledger/transactions/        Update transaction
+* DELETE http://localhost:8000/ledger/transactions/{num}   Delete one transaction
+
+Reports
+
+* Report: http://localhost:8000/ledger/report/
+
+Admin
+
+* GET    http://localhost:8000/ledger/reset/   Reset accounts and transactions
+
+Django
+
+* Admin: http://localhost/admin/
+* Users: http://localhost:8000/users/
+* Groups: http://localhost:8000/groups/
 
 ## Stack
 
 * Python 3
 * venv
 * Django and djangorestframework
+* django-cors-headers
 
 ## Error handling
 
@@ -98,7 +130,6 @@ Will be responded with code:
 
 * 400: client (user) error, raised as ValueError
 * 500: server (application) error, raised as any error except ValueError
-
 
 ## Test
 
