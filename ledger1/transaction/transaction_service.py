@@ -17,9 +17,24 @@ def get(num: int) -> dict:
         num: number of the account to get
     """
 
-    result: Transaction1 | None = dao.get(num)
+    if num is None:
+        result: list[Transaction1] = dao.get_many()
+        data = []
+        for tra in result:
+            for seq in tra.seqs:
 
-    data: dict = {} if result is None else result.asdict()
+                data.append({
+                    "num": tra.num,
+                    "date": tra.date,
+                    "descr": tra.descr,
+                    "account": seq.account,
+                    "val": seq.val,
+                    "dc": seq.dc
+                })
+
+    else:
+        result: Transaction1 | None = dao.get_one(num)
+        data: dict = {} if result is None else result.asdict()
 
     return {
         "code": 200,

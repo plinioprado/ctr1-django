@@ -88,13 +88,34 @@ In Authorization, select Aasic Auth, fill Username and Password
 
 ## Endpoints
 
-* Admin: http://127.0.0.1:8000/admin/
-* Users: http://127.0.0.1:8000/users/
-* Groups: http://127.0.0.1:8000/groups/
-* Invoice1: http://127.0.0.1:8000/invoice1/
-* Account1: http://127.0.0.1:8000/ledger/account/
-* Transaction: http://127.0.0.1:8000/ledger/transaction/
-* Report: http://127.0.0.1:8000/ledger/report/
+Accounts
+
+* GET    http://localhost:8000/ledger/accounts/{num}   Get account
+* POST   http://localhost:8000/ledger/accounts/        Create account
+* PUT    http://localhost:8000/ledger/accounts/        Update account
+* DELETE http://localhost:8000/ledger/accounts/{num}   Delete one account
+
+Transactions
+
+* GET    http://localhost:8000/ledger/transactions/        Get all transactions
+* GET    http://localhost:8000/ledger/transactions/{num}   Get transaction
+* POST   http://localhost:8000/ledger/transactions/        Create transaction
+* PUT    http://localhost:8000/ledger/transactions/        Update transaction
+* DELETE http://localhost:8000/ledger/transactions/{num}   Delete one transaction
+
+Reports
+
+* Report: http://localhost:8000/ledger/report/
+
+Admin
+
+* GET    http://localhost:8000/ledger/reset/   Reset accounts and transactions
+
+Django
+
+* Admin: http://localhost/admin/
+* Users: http://localhost:8000/users/
+* Groups: http://localhost:8000/groups/
 
 ## Stack
 

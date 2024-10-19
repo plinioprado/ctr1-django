@@ -40,9 +40,9 @@ def view(request: Request, name: str):
     except ValueError as err:
         res: Response = Response({ "message": f"Error: {str(err)}"})
         res.status_code = 400
-        return response
+        return res
 
     except Exception as err: # pylint: disable=broad-exception-caught
         res: Response = Response({ "message": f"Error: {str(err)}" })
         res.status_code = 500
-        return response
+        return res

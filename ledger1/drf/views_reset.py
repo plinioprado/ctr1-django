@@ -1,40 +1,26 @@
-""" account DRF view
-Receives a REST request from .urls and responds with data from the ledger1.account component
+""" reset DRF view
+
+resets ledger1 db on the path ledger/reset
 
 Arguments:
     request (Request): DRF REST request object
 
 Returns:
-    Response: DRF REST response with ledger1 data
-
+    Response: DRF REST response reset confirmation
 """
+
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view #, permission_classes
 # from rest_framework.permissions import IsAuthenticated
-import ledger1.account.account_service as service
+import ledger1.admin.admin_service as service
 
-@api_view(["GET", "POST", "PUT", "DELETE"])
+@api_view(["GET"])
 # @permission_classes([IsAuthenticated])
-def view(request: Request, acc: str | None = None):
-
+def view(request: Request):
     try:
         if request.method == "GET":
-
-            ret: dict = service.get(acc)
-
-        elif request.method == "POST":
-
-            ret = service.post(request.data)
-
-        elif request.method == "PUT":
-
-            ret = service.put(data=request.data)
-
-        elif request.method == "DELETE":
-
-            ret = service.delete(acc_num=acc)
-
+            ret: dict = service.reset()
         else:
             raise ValueError("invalid method")
 

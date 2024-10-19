@@ -1,7 +1,7 @@
 Example Ltd.
 chart of accounts
 
-acc,1.0.0,acc_to,1.2.0
+acc,1.0.0,acc_to,9.9.9
 num,name,Dc
 1.0.0,assets,D
 1.1.0,current assets,D
@@ -9,3 +9,26 @@ num,name,Dc
 1.1.2,checking account,D
 1.1.3,account receivables,D
 1.2.0,long term assets,D
+1.2.1,long term investments,D
+1.3.0,capital assets,D
+1.3.1,equipments,D
+1.3.2,depreciation and ammortization,D
+2.0.0,liabilities,C
+2.1.0,current liabilities,C
+2.1.1,accounts payable,C
+2.2.0,long term debt,C
+2.2.1,long term financing,C
+2.3.0,equity,C
+2.3.1,capital,C
+2.3.2,retained earnings,C
+3.0.0,profit or loss,C
+3.1.0,revenues,C
+3.1.1,service sales,C
+3.2.0,cost of goods sold,C
+3.2.1,service costs,D
+3.3.0,operational expenses,C
+3.3.1,wage expense,C
+3.3.2,service expense,C
+3.3.3,rent expense,C
+3.3.4,bank fees,C
+3.3.5,utility expense,C
