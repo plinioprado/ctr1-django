@@ -32,15 +32,27 @@ def get(num: int) -> dict:
                     "dc": seq.dc
                 })
 
+        response = {
+            "code": 200,
+            "message": "ok",
+            "data": data,
+            "filters": {
+                "date": "2020-01-01",
+                "date_to": "2020-01-31",
+            },
+        }
+
     else:
         result: Transaction1 | None = dao.get_one(num)
         data: dict = {} if result is None else result.asdict()
 
-    return {
-        "code": 200,
-        "message": "ok",
-        "data": data
-    }
+        response = {
+            "code": 200,
+            "message": "ok",
+            "data": data
+        }
+
+    return response
 
 
 def post(data: dict) -> dict:
