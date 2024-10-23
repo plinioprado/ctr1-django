@@ -3,10 +3,12 @@
 # pylint: disable=missing-function-docstring
 
 from ledger1.reports.reports_service import service
-
+from ledger1.utils.dbutil import reset_db
 
 def test_chart_accounts():
     """ test chart of accunts """
+
+    reset_db()
 
     result = service("chart_accounts")
     assert isinstance(result, dict)
@@ -44,7 +46,11 @@ def test_general_ledger():
     assert result["message"] == "ok"
     assert isinstance(result["data"], dict)
     assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "general ledger"}
-    assert result["data"]["filters"] == {'date_from': '2020-01-01', 'date_to': '2020-01-31'}
+    assert result["data"]["filters"] == {
+        'acc': '1.0.0',
+        'acc_to': '9.9.9',
+        'date': '2020-01-01',
+        'date_to': '2020-01-31'}
     assert  result["data"]["table"][0] == ['dt', 'num', 'descr', 'doc_type',
         'doc_num', 'seq', 'val_db', 'val_cr', 'val_bal']
     assert result["data"]["table"][1] == ['1.1.2', 'checking account']
@@ -60,7 +66,11 @@ def test_trial_balance():
     assert result["code"] == 200
     assert result["message"] == "ok"
     assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "trial balance"}
-    assert result["data"]["filters"] == {'date_from': '2020-01-01', 'date_to': '2020-01-31'}
+    assert result["data"]["filters"] == {
+        'acc': '1.0.0',
+        'acc_to': '9.9.9',
+        'date': '2020-01-01',
+        'date_to': '2020-01-31'}
     assert result["data"]["table"][0] == ['acc_num', 'acc_name', 'val_db', 'val_cr', 'val_bal']
     assert result["data"]["table"][1] == ['1.0.0', 'assets', 12000.0, -1200.0, 10800.0]
     assert result["data"]["table"][2] == ['1.1.0', 'current assets', 12000.0, -1200.0, 10800.0]

@@ -92,3 +92,9 @@ def delete(acc_num: str) -> dict:
         "code": 200,
         "message": f"account {num} deleted"
     }
+
+
+def get_options() -> list[dict]:
+    result = dao.get_options()
+
+    return result

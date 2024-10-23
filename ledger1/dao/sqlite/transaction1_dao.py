@@ -95,6 +95,7 @@ def get_one(num: int) -> Transaction1 | None:
         FROM transaction1_detail td
         INNER JOIN transaction1 t ON t.num = td.num
         WHERE td.num = ?
+        ORDER BY td.num DESC, td.seq DESC
         """
         query_data: tuple = (num,)
 

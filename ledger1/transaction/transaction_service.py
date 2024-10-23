@@ -10,78 +10,28 @@
 import ledger1.dao.sqlite.transaction1_dao as dao
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq
 from ledger1.utils.settings import get as settings_get
+from ledger1.account.account_service import get_options as get_options_acct
 from ledger1.utils.field import date_iso_is_valid, date_iso_to_timestamp
 
-def get(num: int,
-        date: str,
-        date_to: str) -> dict:
+def get(num: int | None,
+        date: str = None,
+        date_to: str = None) -> dict:
     """ get (read) transaction
 
     Arguments:
         num: number of the account to get
     """
 
-    settings = settings_get()
-
     if num is None:
-        if date is None:
-            df = settings["filters"]["date_min"]
-        elif not date_iso_is_valid(date):
-            raise ValueError(f"invalid date {date}")
-        elif date_iso_to_timestamp(date) < date_iso_to_timestamp(settings["filters"]["date_min"]):
-            raise ValueError(f"invalid date {date}: before min {settings["filters"]["date_min"]}")
-        elif date_iso_to_timestamp(date) > date_iso_to_timestamp(settings["filters"]["date_max"]):
-            raise ValueError(f"invalid date {date}: after max {settings["filters"]["date_max"]}")
-        else:
-            df = date
+        response = get_many(date, date_to)
 
-        if date_to is None:
-            dt = settings["filters"]["date_max"]
-        elif not date_iso_is_valid(date_to):
-            raise ValueError(f"invalid date {date_to}")
-        elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(settings["filters"]["date_min"]):
-            raise ValueError(f"invalid date_to {date_to}: before min {settings["filters"]["date_min"]}")
-        elif date_iso_to_timestamp(date_to) > date_iso_to_timestamp(settings["filters"]["date_max"]):
-            raise ValueError(f"invalid date {date_to}: after max {settings["filters"]["date_max"]}")
-        elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(date):
-            raise ValueError("invalid date_to: before date")
-        else:
-            dt = date_to
+    elif num == 0:
+        response = get_defaults()
 
-        result: list[Transaction1] = dao.get_many(df, dt)
-        data = []
-        for tra in result:
-            for seq in tra.seqs:
-
-                data.append({
-                    "num": tra.num,
-                    "date": tra.date,
-                    "descr": tra.descr,
-                    "seq": seq.seq,
-                    "account": seq.account,
-                    "val": seq.val,
-                    "dc": seq.dc
-                })
-
-        response = {
-            "code": 200,
-            "message": "ok",
-            "data": data,
-            "filters": {
-                "date": df,
-                "date_to": dt,
-            },
-        }
-
+    elif isinstance(num, int):
+        response = get_one(int(num))
     else:
-        result: Transaction1 | None = dao.get_one(num)
-        data: dict = {} if result is None else result.asdict()
-
-        response = {
-            "code": 200,
-            "message": "ok",
-            "data": data
-        }
+        raise ValueError("num invalid")
 
     return response
 
@@ -158,4 +108,93 @@ def delete(num: int):
     return {
         "code": 200,
         "message": f"transaction {dao_num} deleted"
+    }
+
+
+def get_defaults():
+    data: dict = {
+        "num": None,
+        "date": "",
+        "descr": "",
+        "doc_type": "",
+        "doc_num": None,
+        "seqs": []
+    }
+    options_account = get_options_acct()
+
+    return {
+        "code": 200,
+        "message": "ok",
+        "data": data,
+        "options" : {
+            "accounts": options_account
+        }
+    }
+
+
+def get_one(num):
+    result: Transaction1 | None = dao.get_one(num)
+
+    data: dict = {} if result is None else result.asdict()
+    options_account = None if not data else get_options_acct()
+    options = {} if not options_account else { "accounts": options_account}
+
+    return {
+        "code": 200,
+        "message": "ok",
+        "data": data,
+        "options": options
+    }
+
+
+def get_many(date: str, date_to: str):
+    settings = settings_get()
+
+    if date is None:
+        df = settings["filters"]["date_min"]
+    elif not date_iso_is_valid(date):
+        raise ValueError(f"invalid date {date}")
+    elif date_iso_to_timestamp(date) < date_iso_to_timestamp(settings["filters"]["date_min"]):
+        raise ValueError(f"invalid date {date}: before min {settings["filters"]["date_min"]}")
+    elif date_iso_to_timestamp(date) > date_iso_to_timestamp(settings["filters"]["date_max"]):
+        raise ValueError(f"invalid date {date}: after max {settings["filters"]["date_max"]}")
+    else:
+        df = date
+
+    if date_to is None:
+        dt = settings["filters"]["date_max"]
+    elif not date_iso_is_valid(date_to):
+        raise ValueError(f"invalid date {date_to}")
+    elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(settings["filters"]["date_min"]):
+        raise ValueError(f"invalid date_to {date_to}: before min {settings["filters"]["date_min"]}")
+    elif date_iso_to_timestamp(date_to) > date_iso_to_timestamp(settings["filters"]["date_max"]):
+        raise ValueError(f"invalid date {date_to}: after max {settings["filters"]["date_max"]}")
+    elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(date):
+        raise ValueError("invalid date_to: before date")
+    else:
+        dt = date_to
+
+    result: list[Transaction1] = dao.get_many(df, dt)
+    data = []
+    for tra in result:
+        for seq in tra.seqs:
+
+            data.append({
+                "num": tra.num,
+                "date": tra.date,
+                "descr": tra.descr,
+                "seq": seq.seq,
+                "account": seq.account,
+                "val": seq.val,
+                "dc": seq.dc
+            })
+
+    return {
+        "code": 200,
+        "message": "ok",
+        "data": data,
+        "filters": {
+            "date": df,
+            "date_to": dt,
+        },
     }

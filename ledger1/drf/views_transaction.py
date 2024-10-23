@@ -16,7 +16,7 @@ import ledger1.transaction.transaction_service as service
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 # @permission_classes([IsAuthenticated])
-def view(request: Request, num: dict | None = None):
+def view(request: Request, num: int | None = None):
 
     try:
 

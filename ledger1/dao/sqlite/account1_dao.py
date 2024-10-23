@@ -123,6 +123,32 @@ def delete(num: str) -> str:
         con.close()
 
 
+def get_options() -> list[dict]:
+    """ Get a list of option for a form select
+
+     """
+
+    accs = []
+    con, cur = get_connection()
+
+    try:
+        query_text: str = """
+        SELECT num, name FROM account1
+        """
+        for row in cur.execute(query_text):
+            accs.append({
+                "value": str(row[0]),
+                "text": (row[1])
+            })
+
+        return accs
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"getting accounts: {str(err)}") from err
+    finally:
+        con.close()
+
+
 def reset() -> None:
     """ Reset account1 table """
 

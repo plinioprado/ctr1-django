@@ -40,8 +40,9 @@ class Transaction1:
     Ledger transaction
 
     Attributes:
-        num (int | None): sequential number Id of the transaction,
-            or None if it's being created so was not yet being assigned by the db
+        num (int | "new" | None):
+            if int: sequential number Id of the transaction,
+            if None: Transaction being created so num was not yet assigned by the db
         date (str): transaction date in ISO format yyyy-mm-dd
         descr (str): description between 3 and 60 chars
         seqs (list[Transaction1Seq]): debits and credits of the transaction
