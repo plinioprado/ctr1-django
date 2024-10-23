@@ -29,7 +29,7 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
         FROM transaction1_detail td
         INNER JOIN transaction1 t ON t.num = td.num
         WHERE t.dt BETWEEN ? AND ?
-        ORDER BY td.num DESC, td.seq DESC
+        ORDER BY td.num, td.seq DESC
         """
         query_data: tuple = (
             datetime.datetime.fromisoformat(date_from).timestamp(),
@@ -51,7 +51,7 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
             dc: bool = row[8] == 1
 
             seqs.insert(0, Transaction1Seq(
-                seq,
+                #seq,
                 account,
                 val,
                 dc))
@@ -63,10 +63,10 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
                     descr,
                     doc_type,
                     doc_num,
-                    seqs))
+                    seqs[::-1]))
                 seqs = []
 
-        return tras
+        return tras[::-1]
 
     except sqlite3.Error as err:
         raise IOError(f"Error getting transaction: {str(err)}") from err
@@ -95,7 +95,7 @@ def get_one(num: int) -> Transaction1 | None:
         FROM transaction1_detail td
         INNER JOIN transaction1 t ON t.num = td.num
         WHERE td.num = ?
-        ORDER BY td.num DESC, td.seq DESC
+        ORDER BY td.num, td.seq
         """
         query_data: tuple = (num,)
 
@@ -112,7 +112,7 @@ def get_one(num: int) -> Transaction1 | None:
                 doc_type: str = str(row[3])
                 doc_num: int = int(row[4])
             seqs.append(Transaction1Seq(
-                seq=row[5],
+                #seq=row[5],
                 account=row[6],
                 val=row[7],
                 dc=row[8] == 1
@@ -169,7 +169,7 @@ def post(tra: Transaction1) -> int | None:
         (num, seq, account_num, val, dc)
         VALUES (?, ?, ?, ?, ?);
         """
-        query_data = [(last_num, seq.seq,  seq.account, seq.val, seq.dc) for seq in tra.seqs]
+        query_data = [(last_num, k + 1,  seq.account, seq.val, seq.dc) for (k, seq) in enumerate(tra.seqs, )]
         cur.executemany(query_text, query_data)
 
         con.commit()
@@ -219,7 +219,7 @@ def put(tra: Transaction1):
         (num, seq, account_num, val, dc)
         VALUES (?, ?, ?, ?, ?);
         """
-        query_data = [(tra.num, seq.seq,  seq.account, seq.val, seq.dc) for seq in tra.seqs]
+        query_data = [(tra.num, k + 1,  seq.account, seq.val, seq.dc) for (k, seq) in enumerate(tra.seqs)]
         cur.executemany(query_text, query_data)
 
         con.commit()

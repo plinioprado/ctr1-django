@@ -21,13 +21,13 @@ def test_get():
         "doc_num": 1,
         "seqs": [
             {
-                "seq": 1,
+                #"seq": 1,
                 "account": "1.1.2",
                 "val": 10000.,
                 "dc": True
             },
             {
-                "seq": 2,
+                #"seq": 2,
                 "account": "2.3.1",
                 "val": 10000.,
                 "dc": False
@@ -56,13 +56,13 @@ def test_post():
             "doc_num": 2,
             "seqs": [
                 {
-                    "seq": 1,
+                    #"seq": 1,
                     "account": "3.1.1",
                     "val": 1000.,
                     "dc": True
                 },
                 {
-                    "seq": 2,
+                    #"seq": 2,
                     "account": "1.1.3",
                     "val": 1000.,
                     "dc": False
@@ -87,13 +87,13 @@ def test_post():
             "doc_num": 2,
             "seqs": [
                 {
-                    "seq": 1,
+                    #"seq": 1,
                     "account": "3.1.1",
                     "val": 1000.,
                     "dc": True
                 },
                 {
-                    "seq": 2,
+                    #"seq": 2,
                     "account": "1.1.3",
                     "val": 1000.,
                     "dc": False
@@ -112,13 +112,13 @@ def test_update():
         "doc_num": 2,
         "seqs": [
             {
-                "seq": 1,
+                #"seq": 1,
                 "account": "3.1.1",
                 "val": 1001.,
                 "dc": True
             },
             {
-                "seq": 2,
+                #"seq": 2,
                 "account": "1.1.3",
                 "val": 1001.,
                 "dc": False
@@ -143,13 +143,13 @@ def test_update():
         "doc_num": 2,
         "seqs": [
             {
-                "seq": 1,
+                #"seq": 1,
                 "account": "3.1.1",
                 "val": 1001.,
                 "dc": True
             },
             {
-                "seq": 2,
+                #"seq": 2,
                 "account": "1.1.3",
                 "val": 1001.,
                 "dc": False

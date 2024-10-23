@@ -44,7 +44,7 @@ def post(data: dict) -> dict:
     """
 
     seqs: list[Transaction1Seq] = [Transaction1Seq(
-        seq=int(seq["seq"]),
+        #seq=int(seq["seq"]),
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"])) for seq in data["seqs"]]
@@ -74,7 +74,7 @@ def put(data: dict):
     """
 
     seqs: list[Transaction1Seq] = [Transaction1Seq(
-        seq=int(seq["seq"]),
+        #seq=int(seq["seq"]),
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"])) for seq in data["seqs"]]
@@ -118,7 +118,14 @@ def get_defaults():
         "descr": "",
         "doc_type": "",
         "doc_num": None,
-        "seqs": []
+        "seqs": [{
+            "account": "",
+            "val": 0,
+            "dc": True
+            },{"account": "",
+            "val": 0,
+            "dc": True
+        }]
     }
     options_account = get_options_acct()
 
@@ -177,13 +184,13 @@ def get_many(date: str, date_to: str):
     result: list[Transaction1] = dao.get_many(df, dt)
     data = []
     for tra in result:
-        for seq in tra.seqs:
+        for i, seq in enumerate(tra.seqs):
 
             data.append({
                 "num": tra.num,
                 "date": tra.date,
                 "descr": tra.descr,
-                "seq": seq.seq,
+                "seq": i + 1,
                 "account": seq.account,
                 "val": seq.val,
                 "dc": seq.dc

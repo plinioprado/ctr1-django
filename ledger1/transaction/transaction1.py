@@ -17,7 +17,7 @@ class Transaction1Seq:
         dc: bool # True if Debit and False if Credit
     """
 
-    seq: int
+    #seq: int
     account: str
     val: float
     dc: bool
@@ -27,7 +27,7 @@ class Transaction1Seq:
         """ return the Transaction seq as a dict """
 
         return {
-            "seq": self.seq,
+            #"seq": self.seq,
             "account": self.account,
             "val": self.val,
             "dc": self.dc
@@ -77,13 +77,16 @@ class Transaction1:
             raise ValueError(f"invalid transaction doc_num {self.doc_num}")
         self.doc_num = int(self.doc_num)
 
-        if not isinstance(self.seqs, list) or len(self.seqs) < 2:
-            raise ValueError(f"invalid transaction seqs {self.seqs}")
+        if not isinstance(self.seqs, list):
+            raise ValueError(f"invalid transaction seqs {self.seqs} (not list)")
+
+        if len(self.seqs) < 2:
+            raise ValueError(f"invalid transaction seqs {self.seqs} (less than 2)")
 
         netdc = 0
         for k, seq in enumerate(self.seqs):
-            if seq.seq != k + 1:
-                raise ValueError(f"invalid transaction seq {seq.asdict()} (seq)")
+            # if seq.seq != k + 1:
+            #     raise ValueError(f"invalid transaction seq {seq.asdict()} (seq)")
 
             if not re.match(r"^\d.\d.\d$", seq.account):
                 raise ValueError(f"invalid transaction seq {seq.asdict()} (acc)")
