@@ -16,13 +16,11 @@ def test_transaction_existent():
             doc_num=1,
             seqs=[
                 Transaction1Seq(
-                    #seq=1,
                     account="1.1.1",
                     val=100.,
                     dc=True
                 ),
                 Transaction1Seq(
-                    #seq=2,
                     account="2.3.1",
                     val=100.,
                     dc=False)
@@ -37,13 +35,11 @@ def test_transaction_existent():
         "doc_num": 1,
         "seqs": [
             {
-                #"seq": 1,
                 "account": "1.1.1",
                 "val": 100,
                 "dc": True
             },
             {
-                #"seq": 2,
                 "account": "2.3.1",
                 "val": 100,
                 "dc": False
@@ -62,13 +58,11 @@ def test_transaction_new():
             doc_num=1,
             seqs=[
                 Transaction1Seq(
-                    #seq=1,
                     account="1.1.1",
                     val=100.,
                     dc=True
                 ),
                 Transaction1Seq(
-                    #seq=2,
                     account="2.3.1",
                     val=100.,
                     dc=False)
@@ -83,13 +77,11 @@ def test_transaction_new():
         "doc_num": 1,
         "seqs": [
             {
-                #"seq": 1,
                 "account": "1.1.1",
                 "val": 100,
                 "dc": True
             },
             {
-                #"seq": 2,
                 "account": "2.3.1",
                 "val": 100,
                 "dc": False

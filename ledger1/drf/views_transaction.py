@@ -21,22 +21,18 @@ def view(request: Request, num: int | None = None):
     try:
 
         if request.method == "GET":
-
             ret = service.get(
                 num,
                 date=request.query_params.get("date"),
                 date_to=request.query_params.get("date_to"))
 
         elif request.method == "POST":
-
             ret: dict = service.post(request.data)
 
         elif request.method == "PUT":
-
             ret: dict = service.put(request.data)
 
         elif request.method == "DELETE":
-
             ret: dict = service.delete(num)
 
         else:

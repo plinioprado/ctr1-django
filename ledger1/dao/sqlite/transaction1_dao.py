@@ -51,7 +51,6 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
             dc: bool = row[8] == 1
 
             seqs.insert(0, Transaction1Seq(
-                #seq,
                 account,
                 val,
                 dc))
@@ -112,7 +111,6 @@ def get_one(num: int) -> Transaction1 | None:
                 doc_type: str = str(row[3])
                 doc_num: int = int(row[4])
             seqs.append(Transaction1Seq(
-                #seq=row[5],
                 account=row[6],
                 val=row[7],
                 dc=row[8] == 1

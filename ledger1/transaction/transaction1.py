@@ -17,7 +17,6 @@ class Transaction1Seq:
         dc: bool # True if Debit and False if Credit
     """
 
-    #seq: int
     account: str
     val: float
     dc: bool
@@ -27,7 +26,7 @@ class Transaction1Seq:
         """ return the Transaction seq as a dict """
 
         return {
-            #"seq": self.seq,
+
             "account": self.account,
             "val": self.val,
             "dc": self.dc

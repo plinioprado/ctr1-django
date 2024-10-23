@@ -44,7 +44,6 @@ def post(data: dict) -> dict:
     """
 
     seqs: list[Transaction1Seq] = [Transaction1Seq(
-        #seq=int(seq["seq"]),
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"])) for seq in data["seqs"]]
@@ -74,7 +73,6 @@ def put(data: dict):
     """
 
     seqs: list[Transaction1Seq] = [Transaction1Seq(
-        #seq=int(seq["seq"]),
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"])) for seq in data["seqs"]]
@@ -113,7 +111,7 @@ def delete(num: int):
 
 def get_defaults():
     data: dict = {
-        "num": None,
+        "num": "new",
         "date": "",
         "descr": "",
         "doc_type": "",
