@@ -25,7 +25,7 @@ def get(
     dao_rows = dao.get_general_ledger(date_from, date_to, acc_from, acc_to)
 
     rows: list[list] =[
-            ["dt", "num", "descr", "doc_type", "doc_num", "seq", "val_db",
+            ["dt", "num", "descr", "seq", "doc_type", "doc_num", "val_db",
             "val_cr", "val_bal"]
         ]
 
@@ -77,9 +77,9 @@ def get(
             dao_row["dt"],
             dao_row["num"],
             dao_row["descr"],
+            dao_row["seq"],
             dao_row["doc_type"],
             dao_row["doc_num"],
-            dao_row["seq"],
             val_db,
             val_cr,
             val_bal

@@ -22,8 +22,8 @@ def get(
 
     dao_rows = dao.get_journal(date_from, date_to)
 
-    rows = [["dt", "num", "descr", "doc_type", "doc_num", "seq",
-        "acc_num", "acc_name", "val", "dc"]
+    rows = [["dt", "num", "descr", "seq",
+        "acc_num", "acc_name", "doc_type", "doc_num", "val", "dc"]
     ]
     for dao_row in dao_rows:
 
@@ -32,11 +32,11 @@ def get(
             dao_row["dt"] if seq == 1 else "",
             dao_row["num"] if seq == 1 else "",
             dao_row["descr"] if seq == 1 else "",
-            dao_row["doc_type"] if seq == 1 else "",
-            dao_row["doc_num"] if seq == 1 else "",
             seq,
             dao_row["acc_num"],
             dao_row["acc_name"],
+            dao_row["doc_type"] if seq == 1 else "",
+            dao_row["doc_num"] if seq == 1 else "",
             dao_row["val"],
             dao_row["dc"]
         ])

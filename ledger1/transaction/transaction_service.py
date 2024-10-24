@@ -214,12 +214,18 @@ def get_many(date: str, date_to: str):
                 }
             })
 
-    return {
+    response = {
         "code": 200,
         "message": "ok",
         "data": data,
         "filters": {
             "date": df,
             "date_to": dt,
-        },
+        }
     }
+
+    options_account = get_options_acct()
+    if len(data) > 0:
+        response["options"] = { "accounts": options_account}
+
+    return response
