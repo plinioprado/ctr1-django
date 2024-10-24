@@ -101,13 +101,10 @@ def get_one(num: int) -> Transaction1 | None:
         """
         query_data: tuple = (num,)
 
-        print(1)
-
         date = None,
         descr = None
         seqs = []
         for row in cur.execute(query_text, query_data):
-            print(2, row)
             if row[3] == 1:
                 num = int(row[0])
                 date: str = str(date_timestamp_to_iso(row[1]))
@@ -121,7 +118,6 @@ def get_one(num: int) -> Transaction1 | None:
                     num=row[8]
                 )
             ))
-        print(2)
 
         if len(seqs) == 0:
             return None

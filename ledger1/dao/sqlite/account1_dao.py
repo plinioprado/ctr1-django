@@ -81,8 +81,6 @@ def post(acc: Account1) -> str:
 def put(acc: Account1) -> str:
     """ Put (update) account """
 
-    print(acc)
-
     con, cur = get_connection()
 
     try:

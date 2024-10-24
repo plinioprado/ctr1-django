@@ -8,9 +8,10 @@
 """
 
 import ledger1.dao.sqlite.transaction1_dao as dao
+from ledger1.document.document_types import DocumentTypes
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
-from ledger1.utils.settings import get as settings_get
 from ledger1.account.account_service import get_options as get_options_acct
+from ledger1.utils.settings import get as settings_get
 from ledger1.utils.field import date_iso_is_valid, date_iso_to_timestamp
 
 def get(num: int | None,
@@ -141,15 +142,18 @@ def get_defaults():
             }
         ]
     }
-    options_account = get_options_acct()
+    options_account = None if not data else get_options_acct()
+    options_document_types = DocumentTypes().as_dict_options()
+    options = {} if not options_account else {
+        "accounts": options_account,
+        "document_types": options_document_types
+    }
 
     return {
         "code": 200,
         "message": "ok",
         "data": data,
-        "options" : {
-            "accounts": options_account
-        }
+        "options" : options
     }
 
 
@@ -158,7 +162,11 @@ def get_one(num):
 
     data: dict = {} if result is None else result.asdict()
     options_account = None if not data else get_options_acct()
-    options = {} if not options_account else { "accounts": options_account}
+    options_document_types = DocumentTypes().as_dict_options()
+    options = {} if not options_account else {
+        "accounts": options_account,
+        "document_types": options_document_types
+    }
 
     return {
         "code": 200,
