@@ -8,7 +8,7 @@
 """
 
 import ledger1.dao.sqlite.transaction1_dao as dao
-from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq
+from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
 from ledger1.utils.settings import get as settings_get
 from ledger1.account.account_service import get_options as get_options_acct
 from ledger1.utils.field import date_iso_is_valid, date_iso_to_timestamp
@@ -46,14 +46,17 @@ def post(data: dict) -> dict:
     seqs: list[Transaction1Seq] = [Transaction1Seq(
         account=str(seq["account"]),
         val=float(seq["val"]),
-        dc=bool(seq["dc"])) for seq in data["seqs"]]
+        dc=bool(seq["dc"]),
+        doc=Transaction1SeqDoc(
+            type=str(seq["doc"]["type"]),
+            num=str(seq["doc"]["num"])
+        )
+    ) for seq in data["seqs"]]
 
     tra: Transaction1 = Transaction1(
         num=None,
         date=data["date"],
         descr=data["descr"],
-        doc_type=data["doc_type"],
-        doc_num=data["doc_num"],
         seqs=seqs
     )
 
@@ -75,15 +78,19 @@ def put(data: dict):
     seqs: list[Transaction1Seq] = [Transaction1Seq(
         account=str(seq["account"]),
         val=float(seq["val"]),
-        dc=bool(seq["dc"])) for seq in data["seqs"]]
+        dc=bool(seq["dc"]),
+        doc=Transaction1SeqDoc(
+            type=str(seq["doc"]["type"]),
+            num=str(seq["doc"]["num"])
+        )
+    ) for seq in data["seqs"]]
+
 
     tra: Transaction1 = Transaction1(
         num=data["num"],
         date=data["date"],
         descr=data["descr"],
-        doc_type=data["doc_type"],
-        doc_num=data["doc_num"],
-        seqs=seqs
+        seqs=seqs,
     )
 
     dao_num: int = dao.put(tra)
@@ -114,16 +121,25 @@ def get_defaults():
         "num": "new",
         "date": "",
         "descr": "",
-        "doc_type": "",
-        "doc_num": None,
-        "seqs": [{
+        "seqs": [
+            {
             "account": "",
             "val": 0,
-            "dc": True
-            },{"account": "",
-            "val": 0,
-            "dc": True
-        }]
+            "dc": True,
+            "doc": {
+                "type": "",
+                "num": "",
+            }
+            },{
+                "account": "",
+                "val": 0,
+                "dc": True,
+                "doc": {
+                    "type": "",
+                    "num": "",
+                }
+            }
+        ]
     }
     options_account = get_options_acct()
 
@@ -191,7 +207,11 @@ def get_many(date: str, date_to: str):
                 "seq": i + 1,
                 "account": seq.account,
                 "val": seq.val,
-                "dc": seq.dc
+                "dc": seq.dc,
+                "doc": {
+                    "type": seq.doc.type,
+                    "num": seq.doc.num
+                }
             })
 
     return {

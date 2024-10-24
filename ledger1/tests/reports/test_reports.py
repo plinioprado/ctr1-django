@@ -34,7 +34,7 @@ def test_journal():
     assert isinstance(result["data"]["table"], list)
     assert result["data"]["table"][0] == ['dt', 'num', 'descr', 'doc_type',
             'doc_num', 'seq', 'acc_num', 'acc_name', 'val', 'dc']
-    assert result["data"]["table"][1] == ['2020-01-02', 1, 'capital contribution', 'statement1', 1, 1, '1.1.2', 'checking account', 10000.0, 'D']
+    assert result["data"]["table"][1] == ['2020-01-02', 1, 'capital contribution', 'bstat1', "1", 1, '1.1.2', 'checking account', 10000.0, 'D']
 
 
 def test_general_ledger():
@@ -55,7 +55,7 @@ def test_general_ledger():
         'doc_num', 'seq', 'val_db', 'val_cr', 'val_bal']
     assert result["data"]["table"][1] == ['1.1.2', 'checking account']
     assert result["data"]["table"][2] == ['2020-01-02', 1, 'capital contribution',
-        'statement1', 1, 1, 10000.0, 0, 10000.0]
+        'bstat1', "1", 1, 10000.0, 0, 10000.0]
 
 
 def test_trial_balance():
