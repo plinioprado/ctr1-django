@@ -3,9 +3,9 @@
 import csv
 import datetime
 import sqlite3
-from ledger1.dao.sqlite.util import get_connection
+from ledger1.dao.sqlite.dao import get_connection
 from ledger1.utils.field import date_iso_to_timestamp, date_timestamp_to_iso
-from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq
+from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
 
 
 def get_many(date_from: str, date_to: str) -> Transaction1 | None:
@@ -20,16 +20,16 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
             td.num,
             t.dt AS date,
             t.descr,
-            t.doc_type,
-            t.doc_num,
             td.seq,
             td.account_num,
             td.val,
-            td.dc
+            td.dc,
+            td.doc_type,
+            td.doc_num
         FROM transaction1_detail td
         INNER JOIN transaction1 t ON t.num = td.num
         WHERE t.dt BETWEEN ? AND ?
-        ORDER BY td.num DESC, td.seq DESC
+        ORDER BY td.num, td.seq DESC
         """
         query_data: tuple = (
             datetime.datetime.fromisoformat(date_from).timestamp(),
@@ -43,30 +43,32 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
             num = int(row[0])
             date: str = str(date_timestamp_to_iso(row[1]))
             descr: str = str(row[2])
-            doc_type: str = str(row[3])
-            doc_num: int = int(row[4])
-            seq: int = int(row[5])
-            account: str = row[6]
-            val=row[7]
-            dc: bool = row[8] == 1
+            seq: int = int(row[3])
+            account: str = row[4]
+            val=row[5]
+            dc: bool = row[6] == 1
 
-            seqs.insert(0, Transaction1Seq(
-                seq,
-                account,
-                val,
-                dc))
+            seqs.insert(
+                0, Transaction1Seq(
+                    account,
+                    val,
+                    dc,
+                    doc=Transaction1SeqDoc(
+                        type=str(row[7]),
+                        num=str(row[8])
+                    )
+                )
+            )
 
             if seq == 1:
                 tras.insert(0, Transaction1(
                     num,
                     date,
                     descr,
-                    doc_type,
-                    doc_num,
                     seqs))
                 seqs = []
 
-        return tras
+        return tras[::-1]
 
     except sqlite3.Error as err:
         raise IOError(f"Error getting transaction: {str(err)}") from err
@@ -86,35 +88,35 @@ def get_one(num: int) -> Transaction1 | None:
             td.num,
             t.dt AS date,
             t.descr,
-            t.doc_type,
-            t.doc_num,
             td.seq,
             td.account_num,
             td.val,
-            td.dc
+            td.dc,
+            td.doc_type,
+            td.doc_num
         FROM transaction1_detail td
         INNER JOIN transaction1 t ON t.num = td.num
         WHERE td.num = ?
+        ORDER BY td.num, td.seq
         """
         query_data: tuple = (num,)
 
         date = None,
         descr = None
-        doc_type = None
-        doc_num = None
         seqs = []
         for row in cur.execute(query_text, query_data):
-            if row[5] == 1:
+            if row[3] == 1:
                 num = int(row[0])
                 date: str = str(date_timestamp_to_iso(row[1]))
                 descr: str = str(row[2])
-                doc_type: str = str(row[3])
-                doc_num: int = int(row[4])
             seqs.append(Transaction1Seq(
-                seq=row[5],
-                account=row[6],
-                val=row[7],
-                dc=row[8] == 1
+                account=row[4],
+                val=row[5],
+                dc=row[6] == 1,
+                doc=Transaction1SeqDoc(
+                    type=row[7],
+                    num=row[8]
+                )
             ))
 
         if len(seqs) == 0:
@@ -125,13 +127,11 @@ def get_one(num: int) -> Transaction1 | None:
                 num,
                 date,
                 descr=descr,
-                doc_type=doc_type,
-                doc_num=doc_num,
                 seqs=seqs)
 
 
     except sqlite3.Error as err:
-        raise IOError(f"Error getting transaction: {str(err)}") from err
+        raise IOError(f"getting transaction: {str(err)}") from err
     finally:
         con.close()
 
@@ -151,24 +151,30 @@ def post(tra: Transaction1) -> int | None:
     try:
         query_text: str = """
         INSERT INTO transaction1
-        (dt, descr, doc_type, doc_num)
-        VALUES (?, ?, ?, ?);
+        (dt, descr)
+        VALUES (?, ?);
         """
         query_params = (
             date_iso_to_timestamp(tra.date),
-            tra.descr,
-            tra.doc_type,
-            tra.doc_num)
+            tra.descr)
         cur.execute(query_text, query_params)
 
         last_num = cur.lastrowid
 
         query_text = """
         INSERT INTO transaction1_detail
-        (num, seq, account_num, val, dc)
-        VALUES (?, ?, ?, ?, ?);
+        (num, seq, account_num, val, dc, doc_type, doc_num)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
         """
-        query_data = [(last_num, seq.seq,  seq.account, seq.val, seq.dc) for seq in tra.seqs]
+        query_data = [(
+            last_num,
+            k + 1,
+            seq.account,
+            seq.val,
+            seq.dc,
+            seq.doc.type,
+            seq.doc.num
+            ) for (k, seq) in enumerate(tra.seqs, )]
         cur.executemany(query_text, query_data)
 
         con.commit()
@@ -198,16 +204,12 @@ def put(tra: Transaction1):
         query_text = """
         UPDATE transaction1 SET
             dt = ?,
-            descr = ?,
-            doc_type = ?,
-            doc_num = ?
+            descr = ?
         WHERE num = ?;
         """
         query_params = (
             date_iso_to_timestamp(tra.date),
             tra.descr,
-            tra.doc_type,
-            tra.doc_num,
             tra.num)
         cur.execute(query_text, query_params)
 
@@ -215,10 +217,18 @@ def put(tra: Transaction1):
 
         query_text = """
         INSERT INTO transaction1_detail
-        (num, seq, account_num, val, dc)
-        VALUES (?, ?, ?, ?, ?);
+        (num, seq, account_num, val, dc, doc_type, doc_num)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
         """
-        query_data = [(tra.num, seq.seq,  seq.account, seq.val, seq.dc) for seq in tra.seqs]
+        query_data = [(
+            tra.num,
+            k + 1,
+            seq.account,
+            seq.val,
+            seq.dc,
+            seq.doc.type,
+            seq.doc.num
+            ) for (k, seq) in enumerate(tra.seqs)]
         cur.executemany(query_text, query_data)
 
         con.commit()
@@ -266,9 +276,7 @@ def reset() -> None:
         cur.execute('''CREATE TABLE IF NOT EXISTS transaction1 (
             num INTEGER PRIMARY KEY,
             dt REAL,
-            descr TEXT,
-            doc_type TEXT,
-            doc_num, INTEGER
+            descr TEXT
         );''')
         con.commit()
 
@@ -283,15 +291,13 @@ def reset() -> None:
 
                 cur.execute(
                     """
-                    INSERT INTO transaction1 (num, dt, descr, doc_type, doc_num)
-                        VALUES (?, ?, ?, ?, ?);
+                    INSERT INTO transaction1 (num, dt, descr)
+                        VALUES (?, ?, ?);
                     """,
                     (
                         int(row["num"]),
                         date_iso_to_timestamp(row["dt"]),
-                        str(row["descr"]),
-                        str(row["doc_type"]),
-                        int(row["doc_num"])
+                        str(row["descr"])
                     )
                 )
                 con.commit()
@@ -300,9 +306,11 @@ def reset() -> None:
         cur.execute('''CREATE TABLE IF NOT EXISTS transaction1_detail (
             num INTEGER,
             seq INTEGER,
-            account_num text,
+            account_num TEXT,
             val real,
-            dc BOOL
+            dc BOOL,
+            doc_type TEXT,
+            doc_num TEXT
         );''')
 
         with open("ledger1/dao/csv/transaction1_detail.csv", "r", encoding="UTF-8") as csvfile:
@@ -315,15 +323,19 @@ def reset() -> None:
                         seq,
                         account_num,
                         val,
-                        dc
-                    ) VALUES (?, ?, ?, ?, ?);
+                        dc,
+                        doc_type,
+                        doc_num
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?);
                     """,
                     (
                         int(row["num"]),
                         int(row["seq"]),
                         str(row["account_num"]),
                         float(row["val"]),
-                        row["dc"] == "True"
+                        row["dc"] == "True",
+                        str(row["doc_type"]),
+                        str(row["doc_num"]),
                     )
                 )
                 con.commit()
