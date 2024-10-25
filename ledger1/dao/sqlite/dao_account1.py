@@ -6,20 +6,9 @@ and execure them in the SQLite database
 
 import csv
 import sqlite3
+from ledger1.utils.fileio import read_text
 from ledger1.account.account1 import Account1
-
-
-def get_connection() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
-    """
-    Connect to the db and
-
-    Returns:
-        Tuple with sqlite3 connection and cursor objects
-    """
-
-    con = sqlite3.connect("ledger1/dao/sqlite/tws.sqlite3")
-    cur = con.cursor()
-    return con, cur
+from ledger1.dao.sqlite.dao import get_connection
 
 
 def get(acc_from: str, acc_to: str) -> list[dict]:
@@ -81,8 +70,6 @@ def post(acc: Account1) -> str:
 def put(acc: Account1) -> str:
     """ Put (update) account """
 
-    print(acc)
-
     con, cur = get_connection()
 
     try:
@@ -123,30 +110,72 @@ def delete(num: str) -> str:
         con.close()
 
 
+def get_options() -> list[dict]:
+    """ Get a list of option for a form select
+
+     """
+
+    accs = []
+    con, cur = get_connection()
+
+    try:
+        query_text: str = """
+        SELECT num, name FROM account1
+        """
+        for row in cur.execute(query_text):
+            accs.append({
+                "value": str(row[0]),
+                "text": (row[1])
+            })
+
+        return accs
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"getting accounts: {str(err)}") from err
+    finally:
+        con.close()
+
+
 def reset() -> None:
     """ Reset account1 table """
 
     try:
+
+        query_text: str = read_text("./ledger1/dao/sqlite/account_reset.sql")
+
         con, cur = get_connection()
-        cur.execute("DROP TABLE IF EXISTS account1;")
-        cur.execute(
-            """CREATE TABLE IF NOT EXISTS account1 (
-            num text PRIMARY KEY,
-            name text,
-            dc bool
-            );""")
+        cur.executescript(query_text)
         con.commit()
 
-        with open("ledger1/dao/csv/account.csv", "r", encoding="UTF-8") as csvfile:
+        with open("./ledger1/dao/csv/account.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)
             for account in reader:
                 cur.execute(
-                    "INSERT INTO account1 (num, name, dc) VALUES (?, ?, ?);",
-                    (account["num"], account["name"], account["dc"])
+                    """
+                    INSERT INTO account1 (
+                        num,
+                        name,
+                        dc,
+                        active,
+                        doc_type,
+                        doc_num
+                    ) VALUES (?, ?, ?, ?, ?, ?);
+                    """,
+                    (
+                        str(account["num"]),
+                        str(account["name"]),
+                        int(account["dc"]) == 1,
+                        int(account["active"]) == 1,
+                        str(account["doc_type"]),
+                        str(account["doc_num"]),
+                    )
                 )
                 con.commit()
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"Error reseting account {str(err)}") from err
+        raise ValueError(f"reseting account {str(err)}") from err
+    except Exception as err:
+        print(err)
+        raise err
     finally:
         con.close()

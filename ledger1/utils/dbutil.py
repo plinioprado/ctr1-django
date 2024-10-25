@@ -1,6 +1,7 @@
 """ database utilities """
 
-import ledger1.dao.sqlite.reset_dao as reset_dao
+from ledger1.dao.sqlite.dao_transaction1 import reset as reset_transaction
+from ledger1.dao.sqlite.dao_account1 import reset as reset_account
 
 def reset_db() -> str:
     """ Resets the sqlite3 database
@@ -9,6 +10,7 @@ def reset_db() -> str:
        'message ok' if no error
     """
 
-    reset_dao.reset()
+    reset_account()
+    reset_transaction()
 
     return "reset ok"

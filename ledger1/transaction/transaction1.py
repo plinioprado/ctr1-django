@@ -4,6 +4,10 @@ import re
 import datetime
 from dataclasses import dataclass
 
+@dataclass
+class Transaction1SeqDoc:
+    type: str
+    num: str
 
 @dataclass
 class Transaction1Seq:
@@ -17,20 +21,23 @@ class Transaction1Seq:
         dc: bool # True if Debit and False if Credit
     """
 
-    seq: int
     account: str
     val: float
     dc: bool
-
+    doc: Transaction1SeqDoc
 
     def asdict(self):
         """ return the Transaction seq as a dict """
 
         return {
-            "seq": self.seq,
+
             "account": self.account,
             "val": self.val,
-            "dc": self.dc
+            "dc": self.dc,
+            "doc": {
+                "type": self.doc.type,
+                "num": self.doc.num
+            }
         }
 
 
@@ -40,8 +47,9 @@ class Transaction1:
     Ledger transaction
 
     Attributes:
-        num (int | None): sequential number Id of the transaction,
-            or None if it's being created so was not yet being assigned by the db
+        num (int | "new" | None):
+            if int: sequential number Id of the transaction,
+            if None: Transaction being created so num was not yet assigned by the db
         date (str): transaction date in ISO format yyyy-mm-dd
         descr (str): description between 3 and 60 chars
         seqs (list[Transaction1Seq]): debits and credits of the transaction
@@ -50,8 +58,6 @@ class Transaction1:
     num: int | None
     date: str
     descr: str
-    doc_type: str
-    doc_num: int
     seqs: list[Transaction1Seq]
 
     def __post_init__(self):
@@ -69,20 +75,14 @@ class Transaction1:
         if not isinstance(self.descr, str) or len(self.descr) < 3:
             raise ValueError(f"invalid transaction descr {self.descr}")
 
-        if not isinstance(self.doc_type, str) or len(self.descr) < 1:
-            raise ValueError(f"invalid transaction doc_type {self.doc_type}")
+        if not isinstance(self.seqs, list):
+            raise ValueError(f"invalid transaction seqs {self.seqs} (not list)")
 
-        if not isinstance(self.doc_num, int) or self.doc_num < 1:
-            raise ValueError(f"invalid transaction doc_num {self.doc_num}")
-        self.doc_num = int(self.doc_num)
-
-        if not isinstance(self.seqs, list) or len(self.seqs) < 2:
-            raise ValueError(f"invalid transaction seqs {self.seqs}")
+        if len(self.seqs) < 2:
+            raise ValueError(f"invalid transaction seqs {self.seqs} (less than 2)")
 
         netdc = 0
-        for k, seq in enumerate(self.seqs):
-            if seq.seq != k + 1:
-                raise ValueError(f"invalid transaction seq {seq.asdict()} (seq)")
+        for seq in self.seqs:
 
             if not re.match(r"^\d.\d.\d$", seq.account):
                 raise ValueError(f"invalid transaction seq {seq.asdict()} (acc)")
@@ -106,7 +106,5 @@ class Transaction1:
             "num": self.num,
             "date" : self.date,
             "descr": self.descr,
-            "doc_type": self.doc_type,
-            "doc_num": self.doc_num,
             "seqs": [seq.asdict() for seq in self.seqs]
         }

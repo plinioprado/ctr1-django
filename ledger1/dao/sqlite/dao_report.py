@@ -1,7 +1,7 @@
 """ Data access objects for chart of accounts report to sqlite """
 
 import datetime
-from ledger1.dao.sqlite.util import get_connection
+from ledger1.dao.sqlite.dao import get_connection
 from ledger1.account.account1 import Account1
 
 
@@ -27,7 +27,7 @@ def get(
         WHERE (num BETWEEN ? AND ?)
         """,
         (acc_from, acc_to)):
-        account = Account1(num=str(row[0]), name=str(row[1]), dc=int(row[2]) == 1)
+        account = Account1(num=str(row[0]), name=str(row[1]), dc=bool(row[2]) == 1)
         report_rows.append(account)
 
     return report_rows
@@ -54,8 +54,8 @@ def get_general_ledger(
             t.dt,
             td.num,
             t.descr,
-            t.doc_type,
-            t.doc_num,
+            td.doc_type,
+            td.doc_num,
             td.seq,
             td.val,
             td.dc
@@ -80,7 +80,7 @@ def get_general_ledger(
             "num": int(row[3]),
             "descr": str(row[4]),
             "doc_type": str(row[5]),
-            "doc_num": int(row[6]),
+            "doc_num": str(row[6]),
             "seq": int(row[7]),
             "val": float(row[8]),
             "dc": bool(row[9])
@@ -112,8 +112,8 @@ def get_journal(
             t.dt,
             td.num,
             t.descr,
-            t.doc_type,
-            t.doc_num,
+            td.doc_type,
+            td.doc_num,
             td.seq,
             td.account_num,
             acc.name as account_name,
@@ -135,7 +135,7 @@ def get_journal(
             "num": int(row[1]),
             "descr": str(row[2]),
             "doc_type": str(row[3]),
-            "doc_num": int(row[4]),
+            "doc_num": str(row[4]),
             "seq": int(row[5]),
             "acc_num": str(row[6]),
             "acc_name": str(row[7]),

@@ -19,27 +19,47 @@ def test_get():
 
     response = service.get()
     assert isinstance(response, dict)
-    assert response == {
-        "code": 200,
-        "message": "ok",
-        "data": [
-            {
-                "num": 1,
-                "value": 1000.00,
-                "issue_date": "2020-01-15",
-                "parts_seller_name": "Example Ltd",
-                "parts_buyer_name": "Cedar stores Ltd.",
-                "status": "open"
-            },
-            {
-                "num": 2,
-                "value": 1200.00,
-                "issue_date": "2020-01-16",
-                "parts_seller_name": "Example Ltd",
-                "parts_buyer_name": "Mahogany Manufacturing Ltd.",
-                "status": "open"
-            }]
-        }
+    assert response["code"] == 200
+    assert response["message"] == "ok"
+    assert response["data"] == [
+        {
+            "num": 1,
+            "value": 1000.00,
+            "issue_date": "2020-01-15",
+            "parts_seller_name": "Example Ltd",
+            "parts_buyer_name": "Cedar stores Ltd.",
+            "status": "open"
+        },
+        {
+            "num": 2,
+            "value": 1200.00,
+            "issue_date": "2020-01-16",
+            "parts_seller_name": "Example Ltd",
+            "parts_buyer_name": "Mahogany Manufacturing Ltd.",
+            "status": "open"
+        }]
+
+    # assert response == {
+    #     "code": 200,
+    #     "message": "ok",
+    #     "data": [
+    #         {
+    #             "num": 1,
+    #             "value": 1000.00,
+    #             "issue_date": "2020-01-15",
+    #             "parts_seller_name": "Example Ltd",
+    #             "parts_buyer_name": "Cedar stores Ltd.",
+    #             "status": "open"
+    #         },
+    #         {
+    #             "num": 2,
+    #             "value": 1200.00,
+    #             "issue_date": "2020-01-16",
+    #             "parts_seller_name": "Example Ltd",
+    #             "parts_buyer_name": "Mahogany Manufacturing Ltd.",
+    #             "status": "open"
+    #         }]
+    #     }
 
 
 def test_get_by_num():
