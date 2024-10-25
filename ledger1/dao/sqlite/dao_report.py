@@ -1,7 +1,7 @@
 """ Data access objects for chart of accounts report to sqlite """
 
 import datetime
-from ledger1.dao.sqlite.util import get_connection
+from ledger1.dao.sqlite.dao import get_connection
 from ledger1.account.account1 import Account1
 
 

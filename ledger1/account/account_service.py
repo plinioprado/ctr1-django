@@ -8,7 +8,7 @@
 """
 
 from ledger1.account.account1 import Account1
-import ledger1.dao.sqlite.account1_dao as dao
+import ledger1.dao.sqlite.dao_account1 as dao
 
 def get(acc: str, acc_to: str | None = None) -> dict:
     """ Get (read) accounts

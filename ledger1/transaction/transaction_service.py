@@ -7,7 +7,7 @@
             data (lisr[dict]): list of dicts with transaction data, only applicable to GET
 """
 
-import ledger1.dao.sqlite.transaction1_dao as dao
+import ledger1.dao.sqlite.dao_transaction1 as dao
 from ledger1.document.document_types import DocumentTypes
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
 from ledger1.account.account_service import get_options as get_options_acct
@@ -143,7 +143,7 @@ def get_defaults():
         ]
     }
     options_account = None if not data else get_options_acct()
-    options_document_types = DocumentTypes().as_dict_options()
+    options_document_types = DocumentTypes().get_dict_options("t")
     options = {} if not options_account else {
         "accounts": options_account,
         "document_types": options_document_types
@@ -162,7 +162,7 @@ def get_one(num):
 
     data: dict = {} if result is None else result.asdict()
     options_account = None if not data else get_options_acct()
-    options_document_types = DocumentTypes().as_dict_options()
+    options_document_types = DocumentTypes().get_dict_options("t")
     options = {} if not options_account else {
         "accounts": options_account,
         "document_types": options_document_types

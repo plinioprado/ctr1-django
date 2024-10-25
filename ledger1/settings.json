@@ -7,14 +7,5 @@
     "date_max": "2020-01-31",
     "acc_min": "1.0.0",
     "acc_max": "9.9.9"
-  },
-  "documents": [
-    { "id": "eft", "name": "eft" },
-    {
-      "id": "bstat",
-      "name": "bank stat."
-    },
-    { "id": "inv", "name": "invoice" },
-    { "id": "rec", "name": "receivable" }
-  ]
+  }
 }

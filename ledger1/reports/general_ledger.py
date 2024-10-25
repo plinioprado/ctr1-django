@@ -1,6 +1,6 @@
 """ Finance reports - General ledger """
 
-import ledger1.dao.sqlite.report_dao as dao
+import ledger1.dao.sqlite.dao_report as dao
 
 def get(
     entity_name: str,
