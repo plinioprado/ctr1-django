@@ -1,6 +1,5 @@
 import csv
 import sqlite3
-from ledger1.utils.fileio import read_text
 from ledger1.dao.sqlite.dao import get_connection
 from ledger1.document.document_type import DocumentType
 
@@ -37,12 +36,7 @@ def reset() -> None:
     """ Reset account1 table """
 
     try:
-
-        query_text: str = read_text("./ledger1/dao/sqlite/document_type_reset.sql")
-
         con, cur = get_connection()
-        cur.executescript(query_text)
-        con.commit()
 
         with open("./ledger1/dao/csv/document_type.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)

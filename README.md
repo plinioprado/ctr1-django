@@ -10,6 +10,12 @@ This poject explores coding and tools using:
 * An Invoice1 app in ./invoice1, using function based views and plain Python 3 service in ./invoice1/invoice_service.py. This service is a class containing methods that receive variables with the content of the requests and returns dicts with the contents of the responses. So it can be incorporated into other REST services beyond DRF.
 * An User app using DRF working with class-based views and Django coding in ./drf/user, accessed via endpoints and also the Django admin.
 
+## Run
+
+```shell
+python manage.py runserver
+```
+
 ## Scope
 
 Interface using the REST endpoints for:
@@ -65,12 +71,6 @@ git clone plinioprado/ctr-ledger1-django # clone repo
 source venv/bin/activate # activate venv
 ```
 
-## Run
-
-```shell
-python manage.py runserver
-```
-
 ## Authentication
 
 Basic Auth implemented then commented out in setings.py and the views.
@@ -102,6 +102,10 @@ Transactions
 * POST   http://localhost:8000/ledger/transactions/        Create transaction
 * PUT    http://localhost:8000/ledger/transactions/        Update transaction
 * DELETE http://localhost:8000/ledger/transactions/{num}   Delete one transaction
+
+Documents
+
+* GET    http://localhost:8000/ledger/documents/{type}       Get transactions from a type
 
 Reports
 
