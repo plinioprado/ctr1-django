@@ -16,23 +16,19 @@ def get(doc_type: str, doc_num: str = None) -> dict:
 def get_many(doc_type: str) -> dict:
     docs: list[Document1] = dao_document.get(doc_type)
     data = [ doc.asdict() for doc in docs]
-    ret_format = read_json("./ledger1/document/format/inv1_list.json")
 
     return {
         "code": 200,
         "data": data,
-        "format": ret_format,
         "message": "ok",
     }
 
 def get_one(doc_type: str, doc_num: str) -> dict:
     doc: Document1 = dao_document.get_one(doc_type, doc_num)
     data = doc.asdict()
-    ret_format = read_json("./ledger1/document/format/inv1_item.json")
 
     return {
         "code": 200,
         "data": data,
-        "format": ret_format,
         "message": "ok",
     }
