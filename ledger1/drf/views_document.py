@@ -6,11 +6,11 @@ from ledger1.document.documents1 import get
 
 @api_view(["GET"])
 # @permission_classes([IsAuthenticated])
-def view(request: Request, doc_type: str = None):
+def view(request: Request, doc_type: str = None, doc_num: str = None):
 
     try:
         if request.method == "GET":
-            ret = get(doc_type)
+            ret = get(doc_type=doc_type, doc_num=doc_num)
         else:
             raise ValueError("invalid method")
 

@@ -29,14 +29,51 @@ def get(doc_type):
 
             docs.append(
                 Document1(
-                    num=str(row[0]),
-                    date=date_timestamp_to_iso(row[1]),
-                    val=float(row[2]),
-                    cpart_name=(row[3])
+                    num=str(row["doc_num"]),
+                    date=date_timestamp_to_iso(row["dt"]),
+                    val=float(row["val"]),
+                    cpart_name=(row["cpart_name"])
                 )
             )
 
         return docs
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"getting accounts: {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_one(doc_type: str, doc_num: str):
+
+    print(doc_type, doc_num)
+
+    try:
+        con, cur = dao.get_connection()
+
+        query_text = """
+        SELECT
+            td.doc_num as num,
+            t.dt,
+            td.val,
+            d.cpart_name
+        FROM transaction1_detail td
+            INNER JOIN transaction1 t ON t.num = td.num
+            INNER JOIN document d ON d.type_id = td.doc_type AND d.num = td.doc_num
+        WHERE td.doc_type = ? AND td.doc_num = ?
+        """
+        query_params = (doc_type, doc_num)
+        cur.execute(query_text, query_params)
+        row = cur.fetchone()
+
+        doc = Document1(
+            num=row["num"],
+            date=date_timestamp_to_iso(row["dt"]),
+            val=float(row["val"]),
+            cpart_name=(row["cpart_name"])
+            )
+
+        return doc
 
     except sqlite3.DatabaseError as err:
         raise IOError(f"getting accounts: {str(err)}") from err

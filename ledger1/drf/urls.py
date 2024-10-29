@@ -11,6 +11,7 @@ urlpatterns = [
     path("accounts/", views_account.view),
     path("accounts/<str:acc>", views_account.view),
     path("documents/<str:doc_type>/", views_document.view),
+    path("documents/<str:doc_type>/<str:doc_num>", views_document.view),
     path("report/<str:name>", views_report.view),
     path("reset/", views_reset.view),
     path("transactions/", views_transaction.view),
