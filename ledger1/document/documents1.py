@@ -1,6 +1,5 @@
 from ledger1.document.document1 import Document1
 from ledger1.dao.sqlite import dao_document
-from ledger1.utils.fileio import read_json
 
 def get(doc_type: str, doc_num: str = None) -> dict:
     if doc_type is None and doc_num is None:

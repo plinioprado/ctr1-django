@@ -26,7 +26,8 @@ def view(request: Request, name: str):
                 acc=request.query_params.get("acc"),
                 acc_to=request.query_params.get("acc_to"),
                 date=request.query_params.get("date"),
-                date_to=request.query_params.get("date_to")
+                date_to=request.query_params.get("date_to"),
+                doc_type=request.query_params.get("doc_type")
             )
 
         else:

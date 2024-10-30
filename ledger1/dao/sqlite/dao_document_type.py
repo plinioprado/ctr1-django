@@ -9,7 +9,6 @@ def get():
             SELECT
                 id,
                 name,
-                at,
                 active
             FROM document_type;
             """
@@ -19,10 +18,9 @@ def get():
         types = []
         for row in res.fetchall():
             types.append(DocumentType(
-                id=str(row[0]),
-                name=str(row[0]),
-                at=str(row[2]),
-                active=int(row[3]) == 1
+                id=str(row["id"]),
+                name=str(row["name"]),
+                active=int(row["active"]) == 1
             ))
 
         return types
@@ -31,6 +29,7 @@ def get():
         raise ValueError(f"getting document_type {str(err)}") from err
     finally:
         con.close()
+
 
 def reset() -> None:
     """ Reset account1 table """
@@ -46,14 +45,12 @@ def reset() -> None:
                     INSERT INTO document_type (
                         id,
                         name,
-                        at,
                         active
-                    ) VALUES (?, ?, ?, ?);
+                    ) VALUES (?, ?, ?);
                     """,
                     (
                         str(account["id"]),
                         str(account["name"]),
-                        str(account["at"]),
                         int(account["active"]) == 1,
                     )
                 )
