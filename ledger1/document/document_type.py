@@ -15,7 +15,6 @@ from dataclasses import dataclass
 class DocumentType:
     id: str
     name: str
-    at: str
     active: bool
 
     def __post_init__(self):
@@ -27,8 +26,6 @@ class DocumentType:
             raise ValueError('missing document type name')
         if not isinstance(self.id, str) or len(self.id) > 30:
             raise ValueError('invalid document type name')
-        if self.at not in ["a", "t"]:
-            raise ValueError('invalid document transaction at')
         if self.active not in [True, False]:
             self.active = True
 
@@ -37,15 +34,13 @@ class DocumentType:
         return {
             "id": self.id,
             "name": self.name,
-            "at": self.at,
             "active": self.active
         }
 
     @staticmethod
-    def asdefault(at) -> dict:
+    def asdefault() -> dict:
         return {
             "id": "",
             "name": "",
-            "at": at,
             "active": True
         }

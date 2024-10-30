@@ -7,6 +7,7 @@ from ledger1.reports.chart_accounts import get as chart_accounts_get
 from ledger1.reports.journal import get as journal_get
 from ledger1.reports.general_ledger import get as general_ledger_get
 from ledger1.reports.trial_balance import get as trial_balance_get
+from ledger1.reports.documents import get as documents_get
 
 
 def service(
@@ -14,7 +15,8 @@ def service(
         acc: str = None,
         acc_to: str = None,
         date: str = None,
-        date_to: str = None
+        date_to: str = None,
+        doc_type: str = None
     ) -> dict:
     """ directs the request to its report service """
 
@@ -93,6 +95,13 @@ def service(
             date_to=dt,
             acc_from=af,
             acc_to=at
+        )
+    elif name == "documents":
+        data = documents_get(
+            entity_name,
+            date_from=df,
+            date_to=dt,
+            doc_type=doc_type
         )
     else:
         raise ValueError("invalid report name")
