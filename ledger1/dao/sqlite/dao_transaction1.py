@@ -272,14 +272,6 @@ def reset() -> None:
     con, cur = get_connection()
 
     try:
-        cur.execute('''DROP TABLE IF EXISTS transaction1;''')
-        cur.execute('''CREATE TABLE IF NOT EXISTS transaction1 (
-            num INTEGER PRIMARY KEY,
-            dt REAL,
-            descr TEXT
-        );''')
-        con.commit()
-
         with open(
             "ledger1/dao/csv/transaction1.csv",
             "r",
@@ -301,17 +293,6 @@ def reset() -> None:
                     )
                 )
                 con.commit()
-
-        cur.execute('''DROP TABLE IF EXISTS transaction1_detail;''')
-        cur.execute('''CREATE TABLE IF NOT EXISTS transaction1_detail (
-            num INTEGER,
-            seq INTEGER,
-            account_num TEXT,
-            val real,
-            dc BOOL,
-            doc_type TEXT,
-            doc_num TEXT
-        );''')
 
         with open("ledger1/dao/csv/transaction1_detail.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)

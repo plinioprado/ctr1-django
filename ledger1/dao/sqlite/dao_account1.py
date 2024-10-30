@@ -6,7 +6,6 @@ and execure them in the SQLite database
 
 import csv
 import sqlite3
-from ledger1.utils.fileio import read_text
 from ledger1.account.account1 import Account1
 from ledger1.dao.sqlite.dao import get_connection
 
@@ -140,12 +139,7 @@ def reset() -> None:
     """ Reset account1 table """
 
     try:
-
-        query_text: str = read_text("./ledger1/dao/sqlite/account_reset.sql")
-
         con, cur = get_connection()
-        cur.executescript(query_text)
-        con.commit()
 
         with open("./ledger1/dao/csv/account.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)

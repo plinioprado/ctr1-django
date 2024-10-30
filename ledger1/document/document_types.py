@@ -13,10 +13,10 @@ class DocumentTypes:
         return [type.asdict() for type in self.types]
 
 
-    def get_dict_options(self, at: str | None) -> list[dict]:
-        return [{ "value": type.id, "text": type.name} for type in self.types if at and type.at == at and type.active]
+    def get_dict_options(self) -> list[dict]:
+        return [{ "value": type.id, "text": type.name} for type in self.types if type.active]
 
 
     @staticmethod
-    def get_default_dict(at) -> dict:
-        return DocumentType.asdefault(at)
+    def get_default_dict() -> dict:
+        return DocumentType.asdefault()

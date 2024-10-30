@@ -1,5 +1,6 @@
-id,name,at,active
-"accban1","checking acc","a",1
-"bstat1","bank statement","t",1
-"inv1","invoice","t",1
-"etf1","etf","t",1
+id,name,active
+"accban1","checking acc",1
+"bstat1","bank statement",1
+"inv1","invoice",1
+"rec1","receivable",1
+"etf1","etf",1

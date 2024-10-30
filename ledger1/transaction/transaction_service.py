@@ -143,7 +143,7 @@ def get_defaults():
         ]
     }
     options_account = None if not data else get_options_acct()
-    options_document_types = DocumentTypes().get_dict_options("t")
+    options_document_types = DocumentTypes().get_dict_options()
     options = {} if not options_account else {
         "accounts": options_account,
         "document_types": options_document_types
@@ -162,7 +162,7 @@ def get_one(num):
 
     data: dict = {} if result is None else result.asdict()
     options_account = None if not data else get_options_acct()
-    options_document_types = DocumentTypes().get_dict_options("t")
+    options_document_types = DocumentTypes().get_dict_options()
     options = {} if not options_account else {
         "accounts": options_account,
         "document_types": options_document_types

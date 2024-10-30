@@ -247,3 +247,54 @@ def get_trial_balance(
     data: list[dict] = list(reversed(rows))
 
     return data
+
+
+def get_documents(
+    date_from: str,
+    date_to: str,
+    doc_type: str
+) -> list[dict]:
+    """
+    data documents report
+    """
+
+    con, cur = get_connection() # pylint: disable=unused-variable
+
+    query_text = """
+    SELECT
+        td.doc_num,
+        t.dt,
+        t.descr,
+        CONCAT(td.num, ".", td.seq) AS tra,
+        CONCAT(td.account_num, " ", a.name) AS account,
+        td.val,
+        td.dc
+    FROM transaction1_detail td
+        INNER JOIN transaction1 t ON t.num = td.num
+        INNER JOIN account1 a ON a.num = td.account_num
+    WHERE t.dt BETWEEN ? AND ? AND td.doc_type = ?
+    ORDER BY td.doc_num, t.dt, td.num, td.seq
+    """
+    query_params = (
+        datetime.datetime.fromisoformat(date_from).timestamp(),
+        datetime.datetime.fromisoformat(date_to).timestamp(),
+        doc_type
+    )
+    cur.execute(query_text, query_params)
+
+    rows = [["num","date","transaction","account","history","val_db","val_cr"]]
+    for record in cur.fetchall():
+        val_db = record["val"] if record["dc"] else 0
+        val_cr = record["val"] if not record["dc"] else 0
+
+        rows.append([
+            record["doc_num"],
+            datetime.datetime.fromtimestamp(record["dt"]).isoformat()[0:10],
+            record["descr"],
+            record["tra"],
+            record["account"],
+            val_db,
+            val_cr
+            ])
+
+    return rows
