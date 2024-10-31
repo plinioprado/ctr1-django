@@ -24,11 +24,12 @@ def get(
 
     dao_rows = dao.get_trial_balance(date_from, date_to, acc_from, acc_to)
 
-    rows =[["acc_num", "acc_name", "val_db", "val_cr", "val_bal"]]
+    rows =[["acc_num", "acc_name", "val_open", "val_db", "val_cr", "val_bal"]]
     for dao_row in dao_rows:
         rows.append([
             dao_row["acc_num"],
             dao_row["acc_name"],
+            dao_row["val_open"],
             dao_row["val_db"],
             dao_row["val_cr"],
             dao_row["val_bal"],
