@@ -46,8 +46,6 @@ def get(doc_type):
 
 def get_one(doc_type: str, doc_num: str):
 
-    print(doc_type, doc_num)
-
     try:
         con, cur = dao.get_connection()
 

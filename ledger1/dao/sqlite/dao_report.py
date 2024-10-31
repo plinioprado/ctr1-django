@@ -48,42 +48,62 @@ def get_general_ledger(
 
     for row in con.execute(
         """
-        SELECT
-            td.account_num,
-            acc.name as account_name,
-            t.dt,
-            td.num,
-            t.descr,
-            td.doc_type,
-            td.doc_num,
-            td.seq,
-            td.val,
-            td.dc
-        FROM transaction1_detail td
-            INNER JOIN transaction1 t ON td.num = t.num
-            INNER JOIN account1 acc ON acc.num = td.account_num
-        WHERE (account_num BETWEEN ? AND ?) AND (t.dt BETWEEN ? AND ?)
+            SELECT
+                td.account_num,
+                acc.name as account_name,
+                ? AS dt,
+                0 AS num,
+                "opening balance" AS descr,
+                "" AS doc_type,
+                "" AS doc_num,
+                0 AS seq,
+                SUM(IIF(td.dc = 1, td.val, -td.val)) AS val,
+                1 AS dc
+            FROM transaction1_detail td
+                INNER JOIN transaction1 t ON td.num = t.num
+                INNER JOIN account1 acc ON acc.num = td.account_num
+            WHERE t.dt < ?
+            GROUP BY td.account_num
+
+        UNION
+            SELECT
+                td.account_num,
+                acc.name as account_name,
+                t.dt,
+                t.num,
+                t.descr,
+                td.doc_type,
+                td.doc_num,
+                td.seq,
+                td.val,
+                td.dc
+            FROM transaction1_detail td
+                INNER JOIN transaction1 t ON td.num = t.num
+                INNER JOIN account1 acc ON acc.num = td.account_num
+            WHERE (account_num BETWEEN ? AND ?) AND (t.dt BETWEEN ? AND ?)
         ORDER BY td.account_num, t.dt, t.num, td.seq
         """,
         (
+            datetime.datetime.fromisoformat(date_from).timestamp(),
+            datetime.datetime.fromisoformat(date_from).timestamp(),
             acc_from,
             acc_to,
             datetime.datetime.fromisoformat(date_from).timestamp(),
-            datetime.datetime.fromisoformat(date_to).timestamp()
+            datetime.datetime.fromisoformat(date_to).timestamp(),
         )
     ):
 
         report_rows.append({
-            "account_num": str(row[0]),
-            "account_name": str(row[1]),
-            "dt": datetime.datetime.fromtimestamp(row[2]).isoformat()[0:10],
-            "num": int(row[3]),
-            "descr": str(row[4]),
-            "doc_type": str(row[5]),
-            "doc_num": str(row[6]),
-            "seq": int(row[7]),
-            "val": float(row[8]),
-            "dc": bool(row[9])
+            "account_num": str(row["account_num"]),
+            "account_name": str(row["account_name"]),
+            "dt": datetime.datetime.fromtimestamp(row["dt"]).isoformat()[0:10],
+            "num": int(row["num"]),
+            "descr": str(row["descr"]),
+            "doc_type": str(row["doc_type"]),
+            "doc_num": str(row["doc_num"]),
+            "seq": int(row["seq"]),
+            "val": 0 if row["val"] is None else float(row["val"]),
+            "dc": bool(row["dc"] == 1)
         })
 
     return report_rows
