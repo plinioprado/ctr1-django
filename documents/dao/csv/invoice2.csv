@@ -1,0 +1,3 @@
+num,date,type,seller_name,buyer_name,descr_services,val_sale,val_gst
+"1.1","20202-01-02","sell.311",null,"cedar store ltd","consulting",1000,50
+"1.2","20202-01-22","sell.311",null,"aspen industries ltd","consulting",500,25
