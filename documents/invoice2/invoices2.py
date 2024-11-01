@@ -1,15 +1,12 @@
 from documents.invoice2.invoice2 import Invoice2
+from documents.dao.sqlite import dao_invoice2
 
 def get(num: str = None) -> dict:
 
     if num is None:
-        # for now without  filters
-        invoices: list[Invoice2] = get_many()
-        data = [invoice.asdict() for invoice in invoices ]
-
+        data: list[dict] = get_many()
     else:
-        invoice: Invoice2 = get_one(num)
-        data = invoice.asdict()
+        data: dict = get_one(num)
 
     return {
         "code": 200,
@@ -19,37 +16,44 @@ def get(num: str = None) -> dict:
 
 
 def get_many() -> list[Invoice2]:
-    invoices = [Invoice2()]
-    return invoices
+    invoices: list[Invoice2] = dao_invoice2.get_many()
+    data = [invoice.asdict() for invoice in invoices]
+
+    return data
 
 
-def get_one(num) -> Invoice2:
-    invoice: Invoice2 = Invoice2(num=num)
-    return invoice
+def get_one(num: str) -> Invoice2:
+    invoice: Invoice2 | None = dao_invoice2.get_one(num)
+    if invoice is None:
+        data = {}
+    else:
+        data = invoice.asdict()
+
+    return data
 
 
-def post(data) -> dict:
-    invoice = Invoice2(data)
+# def post(data) -> dict:
+#     invoice = Invoice2(data)
 
-    return {
-        "code": 200,
-        "message": f"invoice {invoice.num} created"
-    }
-
-
-def put(data) -> dict:
-
-    invoice = Invoice2(data)
-
-    return {
-        "code": 200,
-        "message": f"invoice {invoice.num} updated"
-    }
+#     return {
+#         "code": 200,
+#         "message": f"invoice {invoice.num} created"
+#     }
 
 
-def delete(num) -> dict:
+# def put(data) -> dict:
 
-    return {
-        "code": 200,
-        "message": f"invoice {num} deleted"
-    }
+#     invoice = Invoice2(data)
+
+#     return {
+#         "code": 200,
+#         "message": f"invoice {invoice.num} updated"
+#     }
+
+
+# def delete(num) -> dict:
+
+#     return {
+#         "code": 200,
+#         "message": f"invoice {num} deleted"
+#     }

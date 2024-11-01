@@ -4,19 +4,18 @@ from dataclasses import dataclass
 class Invoice2:
 
     num: int = None
-    date: str = ""
-    type: list[tuple] = []
+    dt: str = ""
+    type: str = ""
     seller_name: str = ""
     buyer_name: str = ""
     descr: str = ""
     val_sale: float = 0
     val_gst: float = 0
 
-
     def asdict(self):
         return {
             "num": self.num,
-            "date": self.date,
+            "dt": self.dt,
             "type": self.type,
             "seller_name": self.seller_name,
             "buyer_name": self.buyer_name,

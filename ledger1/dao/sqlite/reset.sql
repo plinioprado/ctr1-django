@@ -19,24 +19,6 @@ CREATE TABLE IF NOT EXISTS transaction1 (
     descr TEXT
 );
 
--- document
-
-DROP TABLE IF EXISTS document_type;
-CREATE TABLE document_type (
-    id TEXT PRIMARY KEY,
-    name TEXT,
-    active INTEGER
-);
-
-DROP TABLE IF EXISTS document;
-CREATE TABLE document (
-    type_id TEXT,
-    num TEXT,
-    cpart_name TEXT,
-    PRIMARY KEY (type_id, num)
-    FOREIGN KEY (type_id) REFERENCES document_type(id)
-);
-
 -- transaction
 
 DROP TABLE IF EXISTS transaction1_detail;
