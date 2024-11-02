@@ -1,25 +1,27 @@
 from documents.invoice2.invoice2 import Invoice2
 from documents.dao.sqlite import dao_invoice2
+from documents.util import fileutil
+from documents.util import dateutil
 
 def get(num: str = None) -> dict:
 
     if num is None:
-        data: list[dict] = get_many()
+        response: list[dict] = get_many()
     else:
-        data: dict = get_one(num)
+        response: dict = get_one(num)
 
-    return {
-        "code": 200,
-        "data": data,
-        "message": "ok"
-    }
+    return response
 
 
 def get_many() -> list[Invoice2]:
     invoices: list[Invoice2] = dao_invoice2.get_many()
     data = [invoice.asdict() for invoice in invoices]
 
-    return data
+    return {
+        "code": 200,
+        "data": data,
+        "message": "ok"
+    }
 
 
 def get_one(num: str) -> Invoice2:
@@ -29,31 +31,67 @@ def get_one(num: str) -> Invoice2:
     else:
         data = invoice.asdict()
 
-    return data
+    options = fileutil.read_json("./documents/dao/csv/invoice2_options.json")
+
+    return {
+        "code": 200,
+        "data": data,
+        "message": "ok",
+        "options": options
+    }
 
 
-# def post(data) -> dict:
-#     invoice = Invoice2(data)
-
-#     return {
-#         "code": 200,
-#         "message": f"invoice {invoice.num} created"
-#     }
+def post(data) -> dict:
 
 
-# def put(data) -> dict:
+    seller_name = "" if data["seller_name"] is None else str(data["seller_name"])
+    buyer_name = "" if data["buyer_name"] is None else str(data["buyer_name"])
 
-#     invoice = Invoice2(data)
+    invoice: Invoice2 =  Invoice2(
+        num=str(data["num"]),
+        dt=dateutil.date_iso_to_timestamp(data["dt"]),
+        type=str(data["type"]),
+        seller_name=seller_name,
+        buyer_name=buyer_name,
+        descr=str(data["descr"]),
+        val_sale=float(data["val_sale"]),
+        val_gst=float(data["val_gst"])
+    )
 
-#     return {
-#         "code": 200,
-#         "message": f"invoice {invoice.num} updated"
-#     }
+    last_num = dao_invoice2.post(invoice)
+
+    return {
+        "code": 200,
+        "message": f"invoice {last_num} created"
+    }
 
 
-# def delete(num) -> dict:
+def put(data) -> dict:
 
-#     return {
-#         "code": 200,
-#         "message": f"invoice {num} deleted"
-#     }
+    invoice: Invoice2 =  Invoice2(
+        num=str(data["num"]),
+        dt=dateutil.date_iso_to_timestamp(data["dt"]),
+        type=str(data["type"]),
+        seller_name=str(data["seller_name"]),
+        buyer_name=str(data["buyer_name"]),
+        descr=str(data["descr"]),
+        val_sale=float(data["val_sale"]),
+        val_gst=float(data["val_gst"])
+    )
+
+    num = dao_invoice2.put(invoice)
+
+    return {
+        "code": 200,
+        "message": f"invoice {num} updated"
+    }
+
+
+def delete(num) -> dict:
+
+    deleted_num: str = dao_invoice2.delete(num)
+
+    return {
+        "code": 200,
+        "message": f"invoice {deleted_num} deleted"
+    }

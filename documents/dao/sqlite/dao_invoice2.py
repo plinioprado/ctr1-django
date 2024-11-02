@@ -88,6 +88,96 @@ def get_one(num: str) -> Invoice2:
     finally:
         con.close()
 
+
+def post(invoice: Invoice2) -> str:
+
+    # tuple = tuple[:-1]
+    con, cur = dbutil.get_connection()
+
+    print(11)
+
+    try:
+        query_text: str = """
+        INSERT INTO invoice2 (
+            dt,
+            type,
+            seller_name,
+            buyer_name,
+            descr,
+            val_sale,
+            val_gst,
+            num
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        """
+        query_data = invoice.assqlitetuple()
+        cur.execute(query_text, query_data)
+        con.commit()
+
+
+
+        last_num = cur.lastrowid
+
+        print(19, last_num)
+
+        return last_num
+
+    except sqlite3.DatabaseError as err:
+        print(str(err))
+        raise IOError(f"creating account {last_num}: {str(err)}") from err
+    finally:
+        con.close()
+
+
+def put(invoice: Invoice2) -> None:
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = """
+        UPDATE invoice2 SET
+            dt = ?,
+            type = ?,
+            seller_name = ?,
+            buyer_name = ?,
+            descr = ?,
+            val_sale = ?,
+            val_gst = ?
+        WHERE num = ?;
+        """
+        query_data = invoice.assqlitetuple()
+        cur.execute(query_text, query_data)
+        con.commit()
+
+        return invoice.num
+
+    except sqlite3.DatabaseError as err:
+        print(str(err))
+        raise IOError(f"updating invoice {invoice.num}: {str(err)}") from err
+    finally:
+        con.close()
+
+
+
+def delete(num: str) -> str:
+    """ Delete account """
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = "DELETE FROM invoice2 WHERE num = ?;"
+        query_params = (num,)
+        cur.execute(query_text, query_params)
+        con.commit()
+
+        return num
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"deleting account {num}: {str(err)}") from err
+    finally:
+        con.close()
+
+
 def restore(settings) -> None:
     """ Reset invoice2 table """
 

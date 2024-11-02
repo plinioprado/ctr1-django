@@ -15,12 +15,23 @@ from rest_framework.decorators import api_view #, permission_classes
 # from rest_framework.permissions import IsAuthenticated
 from documents.invoice2 import invoices2
 
-@api_view(["GET"])
+@api_view(["GET", "POST", "PUT", "DELETE"])
 # @permission_classes([IsAuthenticated])
 def view(request: Request, num: str = None):
     try:
         if request.method == "GET":
             ret: dict = invoices2.get(num)
+
+        elif request.method == "DELETE":
+            ret = invoices2.delete(num)
+
+        elif request.method == "POST":
+            ret = invoices2.post(data=request.data)
+
+        elif request.method == "PUT":
+
+            ret = invoices2.put(data=request.data)
+
         else:
             raise ValueError("invalid method")
 

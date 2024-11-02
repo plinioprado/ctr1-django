@@ -1,0 +1,40 @@
+{
+  "type": [
+    {
+      "value": "sell.311",
+      "text": "sale of services"
+    },
+    {
+      "value": "buy.331",
+      "text": "service costs"
+    },
+    {
+      "value": "buy.341",
+      "text": "operating expenses"
+    },
+    {
+      "value": "buy.341",
+      "text": "rent expense"
+    },
+    {
+      "value": "buy.342",
+      "text": "utilities expense"
+    },
+    {
+      "value": "buy.343",
+      "text": "payroll expense"
+    },
+    {
+      "value": "buy.344",
+      "text": "administration expense"
+    },
+    {
+      "value": "buy.345",
+      "text": "travel fees"
+    },
+    {
+      "value": "buy.346",
+      "text": "bank fee"
+    }
+  ]
+}

@@ -23,3 +23,15 @@ class Invoice2:
             "val_sale": self.val_sale,
             "val_gst": self.val_gst,
         }
+
+    def assqlitetuple(self):
+        return (
+            self.dt,
+            self.type,
+            self.seller_name,
+            self.buyer_name,
+            self.descr,
+            self.val_sale,
+            self.val_gst,
+            self.num,
+        )
