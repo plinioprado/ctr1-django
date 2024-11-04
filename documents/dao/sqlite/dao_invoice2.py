@@ -23,16 +23,7 @@ def get_many() -> list[Invoice2]:
             """
         invoices = []
         for row in cur.execute(query_text):
-            invoices.append(Invoice2(
-                num=str(row["num"]),
-                dt=dateutil.date_timestamp_to_iso(row["dt"]),
-                type=str(row["type"]),
-                seller_name=str(row["seller_name"]),
-                buyer_name=str(row["buyer_name"]),
-                descr=str(row["descr"]),
-                val_sale=float(row["val_sale"]),
-                val_gst=float(row["val_gst"])
-            ))
+            invoices.append(Invoice2(row))
 
         return invoices
 
@@ -71,16 +62,7 @@ def get_one(num: str) -> Invoice2:
         if row is None:
             return None
 
-        return Invoice2(
-                num=str(row["num"]),
-                dt=dateutil.date_timestamp_to_iso(row["dt"]),
-                type=str(row["type"]),
-                seller_name=str(row["seller_name"]),
-                buyer_name=str(row["buyer_name"]),
-                descr=str(row["descr"]),
-                val_sale=float(row["val_sale"]),
-                val_gst=float(row["val_gst"])
-            )
+        return Invoice2(row)
     except sqlite3.DatabaseError as err:
         raise ValueError(f"reseting account {str(err)}") from err
     except Exception as err:
@@ -91,10 +73,7 @@ def get_one(num: str) -> Invoice2:
 
 def post(invoice: Invoice2) -> str:
 
-    # tuple = tuple[:-1]
     con, cur = dbutil.get_connection()
-
-    print(11)
 
     try:
         query_text: str = """
@@ -114,16 +93,11 @@ def post(invoice: Invoice2) -> str:
         cur.execute(query_text, query_data)
         con.commit()
 
-
-
-        last_num = cur.lastrowid
-
-        print(19, last_num)
+        last_num = invoice.num
 
         return last_num
 
     except sqlite3.DatabaseError as err:
-        print(str(err))
         raise IOError(f"creating account {last_num}: {str(err)}") from err
     finally:
         con.close()
@@ -152,7 +126,6 @@ def put(invoice: Invoice2) -> None:
         return invoice.num
 
     except sqlite3.DatabaseError as err:
-        print(str(err))
         raise IOError(f"updating invoice {invoice.num}: {str(err)}") from err
     finally:
         con.close()

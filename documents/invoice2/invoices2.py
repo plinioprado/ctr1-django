@@ -1,7 +1,6 @@
 from documents.invoice2.invoice2 import Invoice2
 from documents.dao.sqlite import dao_invoice2
 from documents.util import fileutil
-from documents.util import dateutil
 
 def get(num: str = None) -> dict:
 
@@ -42,21 +41,7 @@ def get_one(num: str) -> Invoice2:
 
 
 def post(data) -> dict:
-
-
-    seller_name = "" if data["seller_name"] is None else str(data["seller_name"])
-    buyer_name = "" if data["buyer_name"] is None else str(data["buyer_name"])
-
-    invoice: Invoice2 =  Invoice2(
-        num=str(data["num"]),
-        dt=dateutil.date_iso_to_timestamp(data["dt"]),
-        type=str(data["type"]),
-        seller_name=seller_name,
-        buyer_name=buyer_name,
-        descr=str(data["descr"]),
-        val_sale=float(data["val_sale"]),
-        val_gst=float(data["val_gst"])
-    )
+    invoice: Invoice2 =  Invoice2(data)
 
     last_num = dao_invoice2.post(invoice)
 
@@ -67,17 +52,7 @@ def post(data) -> dict:
 
 
 def put(data) -> dict:
-
-    invoice: Invoice2 =  Invoice2(
-        num=str(data["num"]),
-        dt=dateutil.date_iso_to_timestamp(data["dt"]),
-        type=str(data["type"]),
-        seller_name=str(data["seller_name"]),
-        buyer_name=str(data["buyer_name"]),
-        descr=str(data["descr"]),
-        val_sale=float(data["val_sale"]),
-        val_gst=float(data["val_gst"])
-    )
+    invoice: Invoice2 =  Invoice2(data)
 
     num = dao_invoice2.put(invoice)
 
