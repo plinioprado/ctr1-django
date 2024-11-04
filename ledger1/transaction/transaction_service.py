@@ -93,7 +93,6 @@ def put(data: dict):
         descr=data["descr"],
         seqs=seqs,
     )
-
     dao_num: int = dao.put(tra)
 
     return {

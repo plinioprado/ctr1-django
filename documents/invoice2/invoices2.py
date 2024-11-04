@@ -1,3 +1,4 @@
+from ledger1.transaction import transaction_service
 from documents.invoice2.invoice2 import Invoice2
 from documents.dao.sqlite import dao_invoice2
 from documents.util import fileutil
@@ -42,7 +43,7 @@ def get_one(num: str) -> Invoice2:
 
 def post(data) -> dict:
     invoice: Invoice2 =  Invoice2(data)
-
+    transaction_service.post(invoice.get_transaction_dict())
     last_num = dao_invoice2.post(invoice)
 
     return {
@@ -53,7 +54,9 @@ def post(data) -> dict:
 
 def put(data) -> dict:
     invoice: Invoice2 =  Invoice2(data)
-
+    tra_num = dao_invoice2.get_tra_num(invoice.num)
+    invoice.set_tra_num(tra_num)
+    transaction_service.put(invoice.get_transaction_dict())
     num = dao_invoice2.put(invoice)
 
     return {
@@ -64,6 +67,8 @@ def put(data) -> dict:
 
 def delete(num) -> dict:
 
+    tra_num = dao_invoice2.get_tra_num(num)
+    transaction_service.delete(tra_num)
     deleted_num: str = dao_invoice2.delete(num)
 
     return {

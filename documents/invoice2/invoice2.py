@@ -7,6 +7,8 @@ it contains
     Complement
 """
 
+from documents.util import dateutil
+
 class Invoice2:
 
     num: str = None
@@ -17,6 +19,7 @@ class Invoice2:
     descr: str = ""
     val_sale: float = 0
     val_gst: float = 0
+    doc_type: str = "inv2"
     transaction_num = None
 
     def __init__(self,  data):
@@ -25,9 +28,7 @@ class Invoice2:
             raise ValueError("missing invoice number")
         self.num = data["num"]
 
-        if (data["dt"] is None):
-            raise ValueError("missing invoice data")
-        self.dt = data["dt"]
+        self.set_dt(data["dt"])
 
         if (data["type"] is None):
             raise ValueError("missing invoice type")
@@ -44,12 +45,35 @@ class Invoice2:
 
         if (data["val_sale"] is None):
             raise ValueError("missing invoice val_sale")
-        self.val_sale = data["val_sale"]
+        self.val_sale = float(data["val_sale"])
 
-        self.val_gst = data["val_gst"]
+        if (data["val_gst"] is not None):
+            self.val_gst = float(data["val_gst"])
 
         if "transaction_num" in data.keys():
-            self.transaction_num = data["transaction_num"]
+            self.set_tra_num(data["transaction_num"])
+
+
+    def set_dt(self, dt: str | int):
+        if (dt is None):
+            raise ValueError("missing invoice data")
+
+        try:
+            if isinstance(dt, str):
+                dt_stamp = dateutil.date_iso_to_timestamp(dt)
+            else:
+                dt_stamp = dt
+            dt_iso = dateutil.date_timestamp_to_iso(dt_stamp)
+            self.dt = dt_iso
+        except ValueError as err:
+            raise ValueError(f"invalid invoice data {dt}: {str(err)}") from err
+
+
+    def set_tra_num(self, tra_num):
+        if not isinstance(tra_num, int):
+            raise ValueError(f"invalid transaction number {tra_num}")
+
+        self.transaction_num = tra_num
 
 
     def asdict(self):
@@ -76,14 +100,20 @@ class Invoice2:
             self.num,
         )
 
+    def _get_acc_from_type(self):
+        acc_raw = self.type.split(".")[1]
+        acc_formated = f"{acc_raw[0]}.{acc_raw[1]}.{acc_raw[2]}"
+        return acc_formated
+
+
     def get_transaction_dict(self):
         seqs = [
                 {
-                    "account": "",
+                    "account": self._get_acc_from_type(),
                     "val": self.val_sale,
                     "dc": False,
                     "doc": {
-                        "type": "inv2",
+                        "type": self.doc_type,
                         "num": self.num
                     }
                 },
@@ -98,7 +128,7 @@ class Invoice2:
                 },
                 {
                     "account": "1.1.3",
-                    "val": (self.val_sale, + self.val_gst),
+                    "val": (self.val_sale + self.val_gst),
                     "dc": True,
                     "doc": {
                         "type": "",
@@ -113,3 +143,5 @@ class Invoice2:
             "descr": self.descr,
             "seqs": seqs
         }
+
+

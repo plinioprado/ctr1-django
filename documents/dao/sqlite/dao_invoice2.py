@@ -10,16 +10,19 @@ def get_many() -> list[Invoice2]:
     try:
         query_text = """
             SELECT
-                num,
-                dt,
-                type,
-                seller_name,
-                buyer_name,
-                descr,
-                val_sale,
-                val_gst
-                FROM invoice2
-                ORDER BY num
+                d.num,
+                t.dt,
+                d.type,
+                d.seller_name,
+                d.buyer_name,
+                d.descr,
+                d.val_sale,
+                d.val_gst
+                FROM invoice2 d
+                    INNER JOIN transaction1_detail td ON
+                        td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
+                    INNER JOIN transaction1 t ON t.num = td.num
+                ORDER BY d.num
             """
         invoices = []
         for row in cur.execute(query_text):
@@ -42,17 +45,19 @@ def get_one(num: str) -> Invoice2:
     try:
         query_text = """
             SELECT
-                num,
-                dt,
-                type,
-                seller_name,
-                buyer_name,
-                descr,
-                val_sale,
-                val_gst
-                FROM invoice2
-                WHERE num = ?
-                ORDER BY num
+                d.num,
+                t.dt,
+                d.type,
+                d.seller_name,
+                d.buyer_name,
+                d.descr,
+                d.val_sale,
+                d.val_gst
+                FROM invoice2 d
+                    INNER JOIN transaction1_detail td ON
+                        td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
+                    INNER JOIN transaction1 t ON t.num = td.num
+                WHERE d.num = ?
             """
         query_data = (num,)
 
@@ -131,7 +136,6 @@ def put(invoice: Invoice2) -> None:
         con.close()
 
 
-
 def delete(num: str) -> str:
     """ Delete account """
 
@@ -147,6 +151,33 @@ def delete(num: str) -> str:
 
     except sqlite3.DatabaseError as err:
         raise IOError(f"deleting account {num}: {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_tra_num(doc_num: str) -> int:
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = """
+            SELECT num
+            FROM transaction1_detail
+            WHERE
+                seq = 1 AND
+                doc_type = "inv2" AND
+                doc_num = ?
+            """
+        query_data = (doc_num,)
+
+        cur.execute(query_text, query_data)
+        row = cur.fetchone()
+
+        return int(row["num"])
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"reseting account {str(err)}") from err
+    except Exception as err:
+        raise err
     finally:
         con.close()
 

@@ -35,13 +35,11 @@ def reset() -> None:
     """ Reset account1 table """
 
     try:
-        print(1)
         con, cur = get_connection()
 
         with open("./ledger1/dao/csv/document_type.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)
             for doc_type in reader:
-                print(doc_type)
                 cur.execute(
                     """
                     INSERT INTO document_type (
@@ -59,8 +57,6 @@ def reset() -> None:
                     )
                 )
                 con.commit()
-
-        print(2)
 
     except sqlite3.DatabaseError as err:
         raise ValueError(f"reseting document_type {str(err)}") from err
