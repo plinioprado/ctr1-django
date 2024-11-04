@@ -35,26 +35,32 @@ def reset() -> None:
     """ Reset account1 table """
 
     try:
+        print(1)
         con, cur = get_connection()
 
         with open("./ledger1/dao/csv/document_type.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)
-            for account in reader:
+            for doc_type in reader:
+                print(doc_type)
                 cur.execute(
                     """
                     INSERT INTO document_type (
                         id,
                         name,
+                        traacc,
                         active
-                    ) VALUES (?, ?, ?);
+                    ) VALUES (?, ?, ?, ?);
                     """,
                     (
-                        str(account["id"]),
-                        str(account["name"]),
-                        int(account["active"]) == 1,
+                        str(doc_type["id"]),
+                        str(doc_type["name"]),
+                        int(doc_type["traacc"]) == 1,
+                        int(doc_type["active"]) == 1,
                     )
                 )
                 con.commit()
+
+        print(2)
 
     except sqlite3.DatabaseError as err:
         raise ValueError(f"reseting document_type {str(err)}") from err

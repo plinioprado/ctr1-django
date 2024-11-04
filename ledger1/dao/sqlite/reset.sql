@@ -12,6 +12,14 @@ CREATE TABLE account1 (
     doc_num TEXT
 );
 
+DROP TABLE IF EXISTS document_type;
+CREATE TABLE IF NOT EXISTS document_type (
+    id TEXT PRIMARY KEY,
+    "name" TEXT,
+    traacc INTEGER,
+    active INTEGER
+);
+
 DROP TABLE IF EXISTS transaction1;
 CREATE TABLE IF NOT EXISTS transaction1 (
     num INTEGER PRIMARY KEY,
