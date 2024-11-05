@@ -1,7 +1,6 @@
 import csv
 import sqlite3
 from documents.invoice2.invoice2 import Invoice2
-from documents.util import dateutil
 from documents.util import dbutil
 
 def get_many() -> list[Invoice2]:
@@ -16,8 +15,11 @@ def get_many() -> list[Invoice2]:
                 d.seller_name,
                 d.buyer_name,
                 d.descr,
-                d.val_sale,
-                d.val_gst
+                td.val as val_sale,
+                (SELECT td2.val
+                FROM transaction1_detail td2
+                WHERE td2.num = t.num AND td2.seq = 2)
+                AS val_gst
                 FROM invoice2 d
                     INNER JOIN transaction1_detail td ON
                         td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
@@ -51,8 +53,11 @@ def get_one(num: str) -> Invoice2:
                 d.seller_name,
                 d.buyer_name,
                 d.descr,
-                d.val_sale,
-                d.val_gst
+                td.val as val_sale,
+                (SELECT td2.val
+                FROM transaction1_detail td2
+                WHERE td2.num = t.num AND td2.seq = 2)
+                AS val_gst
                 FROM invoice2 d
                     INNER JOIN transaction1_detail td ON
                         td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
@@ -83,16 +88,13 @@ def post(invoice: Invoice2) -> str:
     try:
         query_text: str = """
         INSERT INTO invoice2 (
-            dt,
             type,
             seller_name,
             buyer_name,
             descr,
-            val_sale,
-            val_gst,
             num
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?);
         """
         query_data = invoice.assqlitetuple()
         cur.execute(query_text, query_data)
@@ -115,13 +117,10 @@ def put(invoice: Invoice2) -> None:
     try:
         query_text = """
         UPDATE invoice2 SET
-            dt = ?,
             type = ?,
             seller_name = ?,
             buyer_name = ?,
-            descr = ?,
-            val_sale = ?,
-            val_gst = ?
+            descr = ?
         WHERE num = ?;
         """
         query_data = invoice.assqlitetuple()
@@ -190,14 +189,11 @@ def restore(settings) -> None:
         query_text: str = """
         INSERT INTO invoice2 (
             num,
-            dt,
             type,
             seller_name,
             buyer_name,
-            descr,
-            val_sale,
-            val_gst
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+            descr
+        ) VALUES (?, ?, ?, ?, ?);
         """
 
         con, cur = dbutil.get_connection()
@@ -206,13 +202,10 @@ def restore(settings) -> None:
             for invoice in reader:
                 query_data: tuple = (
                     invoice["num"],
-                    dateutil.date_iso_to_timestamp(invoice["dt"]),
                     invoice["type"],
                     invoice["seller_name"],
                     invoice["buyer_name"],
                     invoice["descr"],
-                    invoice["val_sale"],
-                    invoice["val_gst"]
                 )
                 cur.execute(query_text, query_data)
                 con.commit()
