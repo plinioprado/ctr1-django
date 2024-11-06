@@ -115,7 +115,7 @@ class Invoice2:
                     }
                 },
                 {
-                    "account": "3.2.1",
+                    "account": "2.1.3",
                     "val": self.val_gst,
                     "dc": False,
                     "doc": {

@@ -9,35 +9,31 @@
       "text": "sale of products"
     },
     {
-      "value": "buy.331",
+      "value": "buy.411",
       "text": "service costs"
     },
     {
-      "value": "buy.341",
-      "text": "operating expenses"
-    },
-    {
-      "value": "buy.341",
+      "value": "buy.421",
       "text": "rent expense"
     },
     {
-      "value": "buy.342",
+      "value": "buy.422",
       "text": "utilities expense"
     },
     {
-      "value": "buy.343",
+      "value": "buy.423",
       "text": "payroll expense"
     },
     {
-      "value": "buy.344",
+      "value": "buy.424",
       "text": "administration expense"
     },
     {
-      "value": "buy.345",
+      "value": "buy.425",
       "text": "travel fees"
     },
     {
-      "value": "buy.346",
+      "value": "buy.426",
       "text": "bank fee"
     }
   ]

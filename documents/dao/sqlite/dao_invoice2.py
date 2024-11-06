@@ -7,6 +7,7 @@ def get_many() -> list[Invoice2]:
     con, cur = dbutil.get_connection()
 
     try:
+
         query_text = """
             SELECT
                 d.num,
