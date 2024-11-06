@@ -13,8 +13,7 @@ def get_many() -> list[Invoice2]:
                 d.num,
                 t.dt,
                 d.type,
-                d.seller_name,
-                d.buyer_name,
+                d.cpart_name,
                 d.descr,
                 td.val as val_sale,
                 (SELECT td2.val
@@ -51,8 +50,7 @@ def get_one(num: str) -> Invoice2:
                 d.num,
                 t.dt,
                 d.type,
-                d.seller_name,
-                d.buyer_name,
+                d.cpart_name,
                 d.descr,
                 td.val as val_sale,
                 (SELECT td2.val
@@ -90,12 +88,11 @@ def post(invoice: Invoice2) -> str:
         query_text: str = """
         INSERT INTO invoice2 (
             type,
-            seller_name,
-            buyer_name,
+            cpart_name,
             descr,
             num
         )
-        VALUES (?, ?, ?, ?, ?);
+        VALUES (?, ?, ?, ?);
         """
         query_data = invoice.assqlitetuple()
         cur.execute(query_text, query_data)
@@ -119,8 +116,7 @@ def put(invoice: Invoice2) -> None:
         query_text = """
         UPDATE invoice2 SET
             type = ?,
-            seller_name = ?,
-            buyer_name = ?,
+            cpart_name = ?,
             descr = ?
         WHERE num = ?;
         """
@@ -191,10 +187,9 @@ def restore(settings) -> None:
         INSERT INTO invoice2 (
             num,
             type,
-            seller_name,
-            buyer_name,
+            cpart_name,
             descr
-        ) VALUES (?, ?, ?, ?, ?);
+        ) VALUES (?, ?, ?, ?);
         """
 
         con, cur = dbutil.get_connection()
@@ -204,8 +199,7 @@ def restore(settings) -> None:
                 query_data: tuple = (
                     invoice["num"],
                     invoice["type"],
-                    invoice["seller_name"],
-                    invoice["buyer_name"],
+                    invoice["cpart_name"],
                     invoice["descr"],
                 )
                 cur.execute(query_text, query_data)

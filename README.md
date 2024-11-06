@@ -58,8 +58,7 @@ Notes:
         num: 1, // auto
         value: 1000.00, // float
         issueDate: "2000-01-02", // string representing date in yyyy-mm-dd
-        parts_seller_name: "Example Ltd", // string between 3 and 30 chars
-        parts_buyer_name: "Cedar stores Ltd.", // string between 3 and 30 chars
+        cpart_name: "Cedar stores Ltd.", // string between 3 and 30 chars
         status: "open" // "open", "paid", or "canceled"
     }
     ```

@@ -19,8 +19,7 @@ class Invoice2:
     num: str = None
     dt: str = ""
     type: str = ""
-    seller_name: str = ""
-    buyer_name: str = ""
+    cpart_name: str = ""
     descr: str = ""
     val_sale: float = 0
     val_gst: float = 0
@@ -40,10 +39,9 @@ class Invoice2:
             raise ValueError("missing invoice type")
         self.type = data["type"]
 
-        if (data["seller_name"] is None and data["buyer_name"] is None):
-            raise ValueError("missing invoice seller and buyer name" )
-        self.seller_name = "" if data["seller_name"] is None else str(data["seller_name"])
-        self.buyer_name = "" if data["buyer_name"] is None else str(data["buyer_name"])
+        if data["cpart_name"] is None:
+            raise ValueError("missing invoice buyer name" )
+        self.cpart_name = "" if data["cpart_name"] is None else str(data["cpart_name"])
 
         if data["descr"] is None:
             raise ValueError("missing invoice descr")
@@ -117,8 +115,7 @@ class Invoice2:
             "num": self.num,
             "dt": self.dt,
             "type": self.type,
-            "seller_name": self.seller_name,
-            "buyer_name": self.buyer_name,
+            "cpart_name": self.cpart_name,
             "descr": self.descr,
             "val_sale": self.seqs[0].val,
             "val_gst": self.seqs[1].val,
@@ -130,8 +127,7 @@ class Invoice2:
 
         return (
             self.type,
-            self.seller_name,
-            self.buyer_name,
+            self.cpart_name,
             self.descr,
             self.num,
         )

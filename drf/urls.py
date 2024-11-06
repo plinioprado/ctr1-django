@@ -27,7 +27,6 @@ router.register(r'groups', views.GroupViewSet)
 urlpatterns = [
     path('ledger/', include('ledger1.drf.urls')),
     path('documents/', include('documents.drf.urls')),
-    path('invoice1/', include('invoice1.urls')),
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
