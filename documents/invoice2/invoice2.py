@@ -1,13 +1,18 @@
 """
 Invoice2 is a simple invoice that can be stores in the tws double entry finance control
 
-it contains
-    Transaction
-    TransactioDetail
-    Complement
 """
 
+from  dataclasses import dataclass, asdict
 from documents.util import dateutil
+
+@dataclass
+class Invoice2Seq:
+    account: str
+    val: float
+    dc: int
+    doc: dict
+
 
 class Invoice2:
 
@@ -21,6 +26,7 @@ class Invoice2:
     val_gst: float = 0
     doc_type: str = "inv2"
     transaction_num = None
+    seqs: list[Invoice2Seq] = []
 
     def __init__(self,  data):
 
@@ -39,23 +45,54 @@ class Invoice2:
         self.seller_name = "" if data["seller_name"] is None else str(data["seller_name"])
         self.buyer_name = "" if data["buyer_name"] is None else str(data["buyer_name"])
 
-        if (data["descr"] is None):
+        if data["descr"] is None:
             raise ValueError("missing invoice descr")
         self.descr = data["descr"]
 
-        if (data["val_sale"] is None):
+        val_tot: float = 0
+        self.seqs = []
+
+        if data["val_sale"] is None:
             raise ValueError("missing invoice val_sale")
+        self.seqs.append(Invoice2Seq(
+            account=self._get_acc_from_type(),
+            val=float(data["val_sale"]),
+            dc=False,
+            doc= {
+                "type": "inv2",
+                "num": data["num"]
+            }))
+        val_tot += float(data["val_sale"])
         self.val_sale = float(data["val_sale"])
 
-        if (data["val_gst"] is not None):
+        if data["val_gst"] is not None:
+            self.seqs.append(Invoice2Seq(
+                account="2.1.3",
+                val=float(data["val_gst"]),
+                dc=False,
+                doc= {
+                    "type": "",
+                    "num": ""
+                }))
+            val_tot += float(data["val_gst"])
             self.val_gst = float(data["val_gst"])
 
+        self.seqs.append(Invoice2Seq(
+            account="1.1.3",
+            val=val_tot,
+            dc=True,
+            doc= {
+                "type": "",
+                "num": ""
+            }))
+
+        # optional because will be set by the back-end based on self.num
         if "transaction_num" in data.keys():
             self.set_tra_num(data["transaction_num"])
 
 
     def set_dt(self, dt: str | int):
-        if (dt is None):
+        if dt is None:
             raise ValueError("missing invoice data")
 
         try:
@@ -84,11 +121,13 @@ class Invoice2:
             "seller_name": self.seller_name,
             "buyer_name": self.buyer_name,
             "descr": self.descr,
-            "val_sale": self.val_sale,
-            "val_gst": self.val_gst,
+            "val_sale": self.seqs[0].val,
+            "val_gst": self.seqs[1].val,
         }
 
     def assqlitetuple(self):
+        """ returns the data stored in the table invoice1"""
+
         return (
             self.type,
             self.seller_name,
@@ -104,41 +143,13 @@ class Invoice2:
 
 
     def get_transaction_dict(self):
-        seqs = [
-                {
-                    "account": self._get_acc_from_type(),
-                    "val": self.val_sale,
-                    "dc": False,
-                    "doc": {
-                        "type": self.doc_type,
-                        "num": self.num
-                    }
-                },
-                {
-                    "account": "2.1.3",
-                    "val": self.val_gst,
-                    "dc": False,
-                    "doc": {
-                        "type": "",
-                        "num": ""
-                    }
-                },
-                {
-                    "account": "1.1.3",
-                    "val": (self.val_sale + self.val_gst),
-                    "dc": True,
-                    "doc": {
-                        "type": "",
-                        "num": ""
-                    }
-                }
-            ]
+        """ returns the data stored in the table transaction1_detail"""
 
         return {
             "num": self.transaction_num,
             "date" : self.dt,
             "descr": self.descr,
-            "seqs": seqs
+            "seqs": [asdict(s) for s in self.seqs]
         }
 
 
