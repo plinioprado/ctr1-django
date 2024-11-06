@@ -63,7 +63,6 @@ class Invoice2:
                 "num": data["num"]
             }))
         val_tot += float(data["val_sale"])
-        self.val_sale = float(data["val_sale"])
 
         if data["val_gst"] is not None:
             self.seqs.append(Invoice2Seq(
@@ -75,7 +74,7 @@ class Invoice2:
                     "num": ""
                 }))
             val_tot += float(data["val_gst"])
-            self.val_gst = float(data["val_gst"])
+
 
         self.seqs.append(Invoice2Seq(
             account="1.1.3",
@@ -123,6 +122,7 @@ class Invoice2:
             "descr": self.descr,
             "val_sale": self.seqs[0].val,
             "val_gst": self.seqs[1].val,
+            "seqs": [asdict(seq) for seq in self.seqs],
         }
 
     def assqlitetuple(self):
@@ -137,6 +137,8 @@ class Invoice2:
         )
 
     def _get_acc_from_type(self):
+        """ set tra.num based in doc.num """
+
         acc_raw = self.type.split(".")[1]
         acc_formated = f"{acc_raw[0]}.{acc_raw[1]}.{acc_raw[2]}"
         return acc_formated
@@ -149,7 +151,5 @@ class Invoice2:
             "num": self.transaction_num,
             "date" : self.dt,
             "descr": self.descr,
-            "seqs": [asdict(s) for s in self.seqs]
+            "seqs": [asdict(seq) for seq in self.seqs]
         }
-
-
