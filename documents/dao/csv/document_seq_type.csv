@@ -1,0 +1,21 @@
+doc_type,doc_dc,doc_seq_type,acc,name
+inv2,1,base,3.1.1,sale of services
+inv2,1,base,3.1.2,sale of products
+inv2,1,add,2.1.3,gst
+inv2,1,add,2.1.3,pst
+inv2,1,sub,3.2.1,discount
+inv2,1,tot,1.1.1,cash
+inv2,1,tot,1.1.2,checking acc.
+inv2,1,tot,1.1.3,receivable
+inv2,0,base,4.1.1,service costs
+inv2,0,base,4.2.1,rent expense
+inv2,0,base,4.2.2,utilities expense
+inv2,0,base,4.2.3,payroll expense
+inv2,0,base,4.2.4,admin. expense
+inv2,0,base,4.2.5,travel fees
+inv2,0,base,4.2.6,bank fee
+inv2,0,add,2.1.3,gst
+inv2,0,add,2.1.3,pst
+inv2,0,tot,1.1.1,cash
+inv2,0,tot,1.1.2,checking account
+inv2,0,tot,3.2.1,account payable

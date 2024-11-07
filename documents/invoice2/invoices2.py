@@ -32,12 +32,15 @@ def get_one(num: str) -> Invoice2:
         data = invoice.asdict()
 
     options = fileutil.read_json("./documents/dao/csv/invoice2_options.json")
+    seq_types = fileutil.read_csv("./documents/dao/csv/document_seq_type.csv")
 
     return {
         "code": 200,
         "data": data,
         "message": "ok",
-        "options": options
+        "options": {
+            "seq_types": seq_types
+        }
     }
 
 
