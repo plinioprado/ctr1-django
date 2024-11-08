@@ -13,9 +13,10 @@ def get(num: str = None) -> dict:
     return response
 
 
-def get_many() -> list[Invoice2]:
-    invoices: list[Invoice2] = dao_invoice2.get_many()
-    data = [invoice.asdict() for invoice in invoices]
+def get_many() -> list[dict]:
+    """ get a list of dicts representing documents """
+
+    data: list[dict] = dao_invoice2.get_many()
 
     return {
         "code": 200,
@@ -31,7 +32,6 @@ def get_one(num: str) -> Invoice2:
     else:
         data = invoice.asdict()
 
-    options = fileutil.read_json("./documents/dao/csv/invoice2_options.json")
     seq_types = fileutil.read_csv("./documents/dao/csv/document_seq_type.csv")
 
     return {
@@ -45,6 +45,8 @@ def get_one(num: str) -> Invoice2:
 
 
 def post(data) -> dict:
+    """ create new invoice """
+
     invoice: Invoice2 =  Invoice2(data)
     transaction_service.post(invoice.get_transaction_dict())
     last_num = dao_invoice2.post(invoice)

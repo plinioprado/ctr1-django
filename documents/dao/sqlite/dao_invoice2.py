@@ -2,8 +2,9 @@ import csv
 import sqlite3
 from documents.invoice2.invoice2 import Invoice2
 from documents.util import dbutil
+from documents.util import dateutil
 
-def get_many() -> list[Invoice2]:
+def get_many() -> list[dict]:
     con, cur = dbutil.get_connection()
 
     try:
@@ -12,23 +13,26 @@ def get_many() -> list[Invoice2]:
             SELECT
                 d.num,
                 t.dt,
-                d.type,
                 d.cpart_name,
                 d.descr,
-                td.val as val_sale,
-                (SELECT td2.val
-                FROM transaction1_detail td2
-                WHERE td2.num = t.num AND td2.seq = 2)
-                AS val_gst
+                td.val as val_sale
                 FROM invoice2 d
                     INNER JOIN transaction1_detail td ON
                         td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
                     INNER JOIN transaction1 t ON t.num = td.num
                 ORDER BY d.num
             """
+
+        cur.execute(query_text)
         invoices = []
-        for row in cur.execute(query_text):
-            invoices.append(Invoice2(row))
+        for row in cur.fetchall():
+            invoices.append({
+                "num": str(row["num"]),
+                "dt": dateutil.date_timestamp_to_iso(row["dt"]),
+                "cpart_name": str(row["cpart_name"]),
+                "descr": str(row["descr"]),
+                "val_sale": float(row["val_sale"]),
+            })
 
         return invoices
 
@@ -52,11 +56,7 @@ def get_one(num: str) -> Invoice2:
                 d.type,
                 d.cpart_name,
                 d.descr,
-                td.val as val_sale,
-                (SELECT td2.val
-                FROM transaction1_detail td2
-                WHERE td2.num = t.num AND td2.seq = 2)
-                AS val_gst
+                t.num AS tra_num
                 FROM invoice2 d
                     INNER JOIN transaction1_detail td ON
                         td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
@@ -66,12 +66,38 @@ def get_one(num: str) -> Invoice2:
         query_data = (num,)
 
         cur.execute(query_text, query_data)
-        row = cur.fetchone()
+        data = dict(cur.fetchone())
 
-        if row is None:
+        if data is None:
             return None
 
-        return Invoice2(row)
+        query_text = """
+            SELECT
+                td.account_num AS acc,
+                td.val,
+                td.dc,
+                td.doc_type,
+                td.doc_num
+            FROM
+                transaction1_detail td
+            WHERE td.num = ?
+            ORDER BY td.seq
+            """
+        query_data = (data["tra_num"],)
+        cur.execute(query_text, query_data)
+
+        seqs = []
+        for row in cur.fetchall():
+            seqs.append({
+            "account": row["acc"],
+            "val": float(row["val"]),
+            "dc": row["dc"] == 1,
+            "doc": { "type": row["doc_type"], "num": row["doc_num"] }
+        })
+        data["seqs"] = seqs
+        invoice = Invoice2(data)
+
+        return invoice
     except sqlite3.DatabaseError as err:
         raise ValueError(f"reseting account {str(err)}") from err
     except Exception as err:

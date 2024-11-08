@@ -1,10 +1,11 @@
 """
-Invoice2 is a simple invoice that can be stores in the tws double entry finance control
+Invoice2 is a simple invoice that can be stored in the tws double entry finance control
 
 """
 
 from  dataclasses import dataclass, asdict
 from documents.util import dateutil
+from documents.util import fileutil
 
 @dataclass
 class Invoice2Seq:
@@ -21,21 +22,23 @@ class Invoice2:
     type: str = ""
     cpart_name: str = ""
     descr: str = ""
-    val_sale: float = 0
-    val_gst: float = 0
     doc_type: str = "inv2"
+    doc_dc = True
     transaction_num = None
     seqs: list[Invoice2Seq] = []
 
-    def __init__(self,  data):
+    options: dict = {
+        "seq_types": []
+    }
 
-        if (data["num"] is None):
+    def __init__(self,  data):
+        if data["num"] is None:
             raise ValueError("missing invoice number")
         self.num = data["num"]
 
         self.set_dt(data["dt"])
 
-        if (data["type"] is None):
+        if data["type"] is None:
             raise ValueError("missing invoice type")
         self.type = data["type"]
 
@@ -47,41 +50,24 @@ class Invoice2:
             raise ValueError("missing invoice descr")
         self.descr = data["descr"]
 
-        val_tot: float = 0
+        self.options["seq_types"] = fileutil.read_csv("./documents/dao/csv/document_seq_type.csv")
+        doc_base_acc = data["seqs"][0]["account"]
+        self.doc_dc = [tp for tp in self.options["seq_types"] if tp["acc"] == doc_base_acc][0]["doc_dc"] == 1
+
+        seq_tot = 0
         self.seqs = []
-
-        if data["val_sale"] is None:
-            raise ValueError("missing invoice val_sale")
-        self.seqs.append(Invoice2Seq(
-            account=self._get_acc_from_type(),
-            val=float(data["val_sale"]),
-            dc=False,
-            doc= {
-                "type": "inv2",
-                "num": data["num"]
-            }))
-        val_tot += float(data["val_sale"])
-
-        if data["val_gst"] is not None:
+        for key, seq in enumerate(data["seqs"]):
+            seq_dc = self.get_dc_from_acc(seq["account"])
+            val = float(seq["val"]) if key < len(data["seqs"]) - 1 else seq_tot
             self.seqs.append(Invoice2Seq(
-                account="2.1.3",
-                val=float(data["val_gst"]),
-                dc=False,
+                account=seq["account"],
+                val=val,
+                dc=seq_dc,
                 doc= {
-                    "type": "",
-                    "num": ""
+                    "type": self.doc_type if key == 0 else "",
+                    "num": data["num"] if key == 0 else "",
                 }))
-            val_tot += float(data["val_gst"])
-
-
-        self.seqs.append(Invoice2Seq(
-            account="1.1.3",
-            val=val_tot,
-            dc=True,
-            doc= {
-                "type": "",
-                "num": ""
-            }))
+            seq_tot += val
 
         # optional because will be set by the back-end based on self.num
         if "transaction_num" in data.keys():
@@ -104,6 +90,8 @@ class Invoice2:
 
 
     def set_tra_num(self, tra_num):
+        """ some processes will need the tra_num in addition to the doc_num"""
+
         if not isinstance(tra_num, int):
             raise ValueError(f"invalid transaction number {tra_num}")
 
@@ -111,14 +99,14 @@ class Invoice2:
 
 
     def asdict(self):
+        """ return a dict for a response """
+
         return {
             "num": self.num,
             "dt": self.dt,
             "type": self.type,
             "cpart_name": self.cpart_name,
             "descr": self.descr,
-            "val_sale": self.seqs[0].val,
-            "val_gst": self.seqs[1].val,
             "seqs": [asdict(seq) for seq in self.seqs],
         }
 
@@ -141,7 +129,7 @@ class Invoice2:
 
 
     def get_transaction_dict(self):
-        """ returns the data stored in the table transaction1_detail"""
+        """ get the data for the table transaction1_detail"""
 
         return {
             "num": self.transaction_num,
@@ -149,3 +137,11 @@ class Invoice2:
             "descr": self.descr,
             "seqs": [asdict(seq) for seq in self.seqs]
         }
+
+    def get_dc_from_acc(self, acc: str) -> bool:
+
+        dc = [tp for tp in self.options["seq_types"] if tp["acc"] == acc and bool(int(tp["doc_dc"]) == self.doc_dc)][0]["dc"] == "1"
+
+        return dc
+
+
