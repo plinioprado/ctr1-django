@@ -25,8 +25,20 @@ def get_many() -> list[dict]:
     }
 
 
-def get_one(num: str) -> Invoice2:
-    invoice: Invoice2 | None = dao_invoice2.get_one(num)
+def get_one(num: str) -> dict:
+    """
+    Args:
+        num: valid invoice num or 'new' to get just the defaults for a new one
+
+    Returns:
+        dict with data for the REST response
+    """
+
+    if num is not None and num != "new":
+        invoice: Invoice2 | None = dao_invoice2.get_one(num)
+    else:
+        invoice = None
+
     if invoice is None:
         data = {}
     else:
