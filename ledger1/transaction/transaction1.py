@@ -30,7 +30,6 @@ class Transaction1Seq:
         """ return the Transaction seq as a dict """
 
         return {
-
             "account": self.account,
             "val": self.val,
             "dc": self.dc,

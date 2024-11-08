@@ -27,7 +27,7 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
             td.doc_type,
             td.doc_num
         FROM transaction1_detail td
-        INNER JOIN transaction1 t ON t.num = td.num
+            INNER JOIN transaction1 t ON t.num = td.num
         WHERE t.dt BETWEEN ? AND ?
         ORDER BY td.num, td.seq DESC
         """
@@ -95,9 +95,8 @@ def get_one(num: int) -> Transaction1 | None:
             td.doc_type,
             td.doc_num
         FROM transaction1_detail td
-        INNER JOIN transaction1 t ON t.num = td.num
+            INNER JOIN transaction1 t ON t.num = td.num
         WHERE td.num = ?
-        ORDER BY td.num, td.seq
         """
         query_data: tuple = (num,)
 

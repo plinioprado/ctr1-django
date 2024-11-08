@@ -3,7 +3,6 @@
 from ledger1.dao.sqlite import dao
 from ledger1.dao.sqlite import dao_account1
 from ledger1.dao.sqlite import dao_document_type
-from ledger1.dao.sqlite import dao_document
 from ledger1.dao.sqlite import dao_transaction1
 
 
@@ -18,7 +17,6 @@ def reset() -> dict:
 
     dao.reset()
     dao_document_type.reset()
-    dao_document.reset()
     dao_account1.reset()
     dao_transaction1.reset()
 
