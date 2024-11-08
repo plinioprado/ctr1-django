@@ -39,19 +39,21 @@ def reset() -> None:
 
         with open("./ledger1/dao/csv/document_type.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)
-            for account in reader:
+            for doc_type in reader:
                 cur.execute(
                     """
                     INSERT INTO document_type (
                         id,
                         name,
+                        traacc,
                         active
-                    ) VALUES (?, ?, ?);
+                    ) VALUES (?, ?, ?, ?);
                     """,
                     (
-                        str(account["id"]),
-                        str(account["name"]),
-                        int(account["active"]) == 1,
+                        str(doc_type["id"]),
+                        str(doc_type["name"]),
+                        int(doc_type["traacc"]) == 1,
+                        int(doc_type["active"]) == 1,
                     )
                 )
                 con.commit()

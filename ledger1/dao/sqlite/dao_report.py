@@ -48,42 +48,62 @@ def get_general_ledger(
 
     for row in con.execute(
         """
-        SELECT
-            td.account_num,
-            acc.name as account_name,
-            t.dt,
-            td.num,
-            t.descr,
-            td.doc_type,
-            td.doc_num,
-            td.seq,
-            td.val,
-            td.dc
-        FROM transaction1_detail td
-            INNER JOIN transaction1 t ON td.num = t.num
-            INNER JOIN account1 acc ON acc.num = td.account_num
-        WHERE (account_num BETWEEN ? AND ?) AND (t.dt BETWEEN ? AND ?)
+            SELECT
+                td.account_num,
+                acc.name as account_name,
+                ? AS dt,
+                0 AS num,
+                "opening balance" AS descr,
+                "" AS doc_type,
+                "" AS doc_num,
+                0 AS seq,
+                SUM(IIF(td.dc = 1, td.val, -td.val)) AS val,
+                1 AS dc
+            FROM transaction1_detail td
+                INNER JOIN transaction1 t ON td.num = t.num
+                INNER JOIN account1 acc ON acc.num = td.account_num
+            WHERE t.dt < ?
+            GROUP BY td.account_num
+
+        UNION
+            SELECT
+                td.account_num,
+                acc.name as account_name,
+                t.dt,
+                t.num,
+                t.descr,
+                td.doc_type,
+                td.doc_num,
+                td.seq,
+                td.val,
+                td.dc
+            FROM transaction1_detail td
+                INNER JOIN transaction1 t ON td.num = t.num
+                INNER JOIN account1 acc ON acc.num = td.account_num
+            WHERE (account_num BETWEEN ? AND ?) AND (t.dt BETWEEN ? AND ?)
         ORDER BY td.account_num, t.dt, t.num, td.seq
         """,
         (
+            datetime.datetime.fromisoformat(date_from).timestamp(),
+            datetime.datetime.fromisoformat(date_from).timestamp(),
             acc_from,
             acc_to,
             datetime.datetime.fromisoformat(date_from).timestamp(),
-            datetime.datetime.fromisoformat(date_to).timestamp()
+            datetime.datetime.fromisoformat(date_to).timestamp(),
         )
     ):
 
         report_rows.append({
-            "account_num": str(row[0]),
-            "account_name": str(row[1]),
-            "dt": datetime.datetime.fromtimestamp(row[2]).isoformat()[0:10],
-            "num": int(row[3]),
-            "descr": str(row[4]),
-            "doc_type": str(row[5]),
-            "doc_num": str(row[6]),
-            "seq": int(row[7]),
-            "val": float(row[8]),
-            "dc": bool(row[9])
+            "account_num": str(row["account_num"]),
+            "account_name": str(row["account_name"]),
+            "dt": datetime.datetime.fromtimestamp(row["dt"]).isoformat()[0:10],
+            "num": int(row["num"]),
+            "descr": str(row["descr"]),
+            "doc_type": str(row["doc_type"]),
+            "doc_num": str(row["doc_num"]),
+            "seq": int(row["seq"]),
+            "val": 0 if row["val"] is None else float(row["val"]),
+            "dc": bool(row["dc"] == 1)
         })
 
     return report_rows
@@ -165,20 +185,27 @@ def get_trial_balance(
             acc.num AS acc_num,
             acc.name AS acc_name,
             (
+                SELECT SUM(IIF(td.dc == 1, td.val, -td.val))
+                FROM transaction1_detail td
+                    INNER JOIN transaction1 t ON t.num = td.num
+                WHERE td.account_num = acc.num
+                    AND t.dt < ?
+            ) AS val_open,
+            (
                 SELECT SUM(td.val)
-                    FROM transaction1_detail td
-                        INNER JOIN transaction1 t ON t.num = td.num
-                    WHERE td.account_num = acc.num AND td.dc
-                        AND t.dt BETWEEN ? AND ?
-                    ORDER BY td.account_num
+                FROM transaction1_detail td
+                    INNER JOIN transaction1 t ON t.num = td.num
+                WHERE td.account_num = acc.num AND td.dc
+                    AND t.dt BETWEEN ? AND ?
+                ORDER BY td.account_num
             ) AS val_db,
             (
                 SELECT - SUM(td.val)
-                    FROM transaction1_detail td
-                        INNER JOIN transaction1 t ON t.num = td.num
-                    WHERE td.account_num = acc.num AND NOT td.dc
-                        AND t.dt BETWEEN ? AND ?
-                    ORDER BY td.account_num
+                FROM transaction1_detail td
+                    INNER JOIN transaction1 t ON t.num = td.num
+                WHERE td.account_num = acc.num AND NOT td.dc
+                    AND t.dt BETWEEN ? AND ?
+                ORDER BY td.account_num
             ) AS val_cr
         FROM account1 acc
         WHERE (acc_num BETWEEN ? AND ?)
@@ -186,59 +213,74 @@ def get_trial_balance(
         """,
         (
             datetime.datetime.fromisoformat(date_from).timestamp(),
+            datetime.datetime.fromisoformat(date_from).timestamp(),
             datetime.datetime.fromisoformat(date_to).timestamp(),
             datetime.datetime.fromisoformat(date_from).timestamp(),
             datetime.datetime.fromisoformat(date_to).timestamp(),
             acc_from,
             acc_to
-        )):
+    )):
 
-        val_db = 0 if row[2] is None else row[2]
-        val_cr = 0 if row[3] is None else row[3]
+        val_open = 0 if row["val_open"] is None else float(row["val_open"])
+        val_db = 0 if row["val_db"] is None else float(row["val_db"])
+        val_cr = 0 if row["val_cr"] is None else float(row["val_cr"])
 
         dao_rows.append({
-            "acc_num": str(row[0]),
-            "acc_name": str(row[1]),
+            "acc_num": str(row["acc_num"]),
+            "acc_name": str(row["acc_name"]),
+            "val_open": val_open,
             "val_db": val_db,
             "val_cr": val_cr,
             "val_bal": val_db + val_cr
             })
 
         # compute total by level
+        l1_open = 0
         l1_db = 0
         l1_cr = 0
+        l2_open = 0
         l2_db = 0
         l2_cr = 0
 
+        # reversed to better total the upper depths
         rows: list[dict] = []
         for dao_row in reversed(dao_rows):
             level = len(dao_row["acc_num"].replace(".0", "").split("."))
             acc_num = dao_row["acc_num"]
             acc_name = dao_row["acc_name"]
             if level == 3:
+                val_open = dao_row["val_open"]
                 val_db = dao_row["val_db"]
                 val_cr = dao_row["val_cr"]
+                l2_open += val_open
                 l2_db += val_db
                 l2_cr += val_cr
+                l1_open += val_open
                 l1_db += val_db
                 l1_cr += val_cr
             elif level == 2:
+                val_open = l2_open
                 val_db = l2_db
                 val_cr = l2_cr
+                l2_open = 0
                 l2_db = 0
                 l2_cr = 0
             elif level == 1:
+                val_open = l1_open
                 val_db = l1_db
                 val_cr = l1_cr
+                l1_open = 0
                 l1_db = 0
                 l1_cr = 0
             else:
+                val_open = 0
                 val_db = 0
                 val_cr = 0
 
             rows.append({
                 "acc_num": acc_num,
                 "acc_name": acc_name,
+                "val_open": val_open,
                 "val_db": val_db,
                 "val_cr": val_cr,
                 "val_bal": val_db + val_cr

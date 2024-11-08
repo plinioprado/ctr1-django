@@ -169,7 +169,6 @@ def reset() -> None:
     except sqlite3.DatabaseError as err:
         raise ValueError(f"reseting account {str(err)}") from err
     except Exception as err:
-        print(err)
         raise err
     finally:
         con.close()

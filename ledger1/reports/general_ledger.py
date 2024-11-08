@@ -58,8 +58,7 @@ def get(
             val_bal = 0
 
             rows.append([
-                dao_row["account_num"],
-                dao_row["account_name"]
+                f"{dao_row["account_num"]} - {dao_row["account_name"]}"
                 ])
 
         if dao_row["dc"]:
@@ -75,13 +74,13 @@ def get(
 
         rows.append([
             dao_row["dt"],
-            dao_row["num"],
+            dao_row["num"] if dao_row["num"] > 0 else "",
             dao_row["descr"],
-            dao_row["seq"],
+            dao_row["seq"] if dao_row["num"] > 0 else "",
             dao_row["doc_type"],
             dao_row["doc_num"],
-            val_db,
-            val_cr,
+            val_db if dao_row["num"] > 0 else "",
+            val_cr if dao_row["num"] > 0 else "",
             val_bal
             ])
 
