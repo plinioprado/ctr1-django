@@ -50,7 +50,7 @@ class Invoice2:
             raise ValueError("missing invoice descr")
         self.descr = data["descr"]
 
-        self.options["seq_types"] = fileutil.read_csv("./documents/dao/csv/document_seq_type.csv")
+        self.options["seq_types"] = fileutil.read_csv("./ledger1/dao/csv/document_seq_type.csv")
         doc_base_acc = data["seqs"][0]["account"]
         self.doc_dc = [tp for tp in self.options["seq_types"] if tp["acc"] == doc_base_acc][0]["doc_dc"] == 1
 

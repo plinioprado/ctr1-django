@@ -44,7 +44,7 @@ def get_one(num: str) -> dict:
     else:
         data = invoice.asdict()
 
-    seq_types = fileutil.read_csv("./documents/dao/csv/document_seq_type.csv")
+    seq_types = fileutil.read_csv("./ledger1/dao/csv/document_seq_type.csv")
 
     return {
         "code": 200,
