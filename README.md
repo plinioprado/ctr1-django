@@ -104,7 +104,7 @@ Transactions
 
 Documents
 
-* GET    http://localhost:8000/ledger/documents/{type}       Get transactions from a type
+* GET    http://localhost:8000/ledger/docs/{type}       Get transactions from a type
 
 Reports
 

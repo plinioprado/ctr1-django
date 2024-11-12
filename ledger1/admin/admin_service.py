@@ -6,7 +6,7 @@ from ledger1.dao.sqlite import dao
 from ledger1.dao.sqlite import dao_account1
 from ledger1.dao.sqlite import dao_document_type
 from ledger1.dao.sqlite import dao_transaction1
-from documents.dao.sqlite import dao_invoice2
+from ledger1.dao.sqlite import dao_invoice2
 
 
 def reset() -> dict:
@@ -26,7 +26,6 @@ def reset() -> dict:
     dao_transaction1.reset()
     dao_invoice2.restore(settings)
 
-
     return {
         "code": 200,
         "message": "reset ok"
@@ -34,6 +33,6 @@ def reset() -> dict:
 
 
 def get_settings() -> dict:
-    settings = fileio.read_json("./documents/settings.json")
+    settings = fileio.read_json("./ledger1/settings.json")
 
     return settings

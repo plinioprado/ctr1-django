@@ -1,8 +1,8 @@
 import csv
 import sqlite3
-from documents.invoice2.invoice2 import Invoice2
-from documents.util import dbutil
-from documents.util import dateutil
+from ledger1.document.invoice2 import Invoice2
+from ledger1.utils import dbutil
+from ledger1.utils import dateutil
 
 def get_many() -> list[dict]:
     con, cur = dbutil.get_connection()
@@ -206,6 +206,8 @@ def get_tra_num(doc_num: str) -> int:
 
 def restore(settings) -> None:
     """ Reset invoice2 table """
+
+    con, cur = dbutil.get_connection()
 
     try:
         csv_filename = settings["invoice2"]["file_csv"]

@@ -47,5 +47,3 @@ def get_one_seqs(acct):
 
 
     return data
-
-

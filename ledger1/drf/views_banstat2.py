@@ -12,7 +12,7 @@ Returns:
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from documents.banstat2 import banstats2
+from ledger1.document import banstats2
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def view(request: Request, acc: str = None):

@@ -1,6 +1,6 @@
 """ Functions to handle requests to bank statement doucments """
 
-from documents.banstat2.banstat2 import Banstat2
+from ledger1.document.banstat2 import Banstat2
 
 def get(num: str = None) -> dict:
     if num is None:

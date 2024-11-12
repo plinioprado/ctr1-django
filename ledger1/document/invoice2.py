@@ -4,8 +4,8 @@ Invoice2 is a simple invoice that can be stored in the tws double entry finance 
 """
 
 from  dataclasses import dataclass, asdict
-from documents.util import dateutil
-from documents.util import fileutil
+from ledger1.utils import dateutil
+from ledger1.utils import fileio
 
 @dataclass
 class Invoice2Seq:
@@ -50,9 +50,10 @@ class Invoice2:
             raise ValueError("missing invoice descr")
         self.descr = data["descr"]
 
-        self.options["seq_types"] = fileutil.read_csv("./ledger1/dao/csv/document_seq_type.csv")
+        self.options["seq_types"] = fileio.read_csv("./ledger1/dao/csv/document_seq_type.csv")
         doc_base_acc = data["seqs"][0]["account"]
-        self.doc_dc = [tp for tp in self.options["seq_types"] if tp["acc"] == doc_base_acc][0]["doc_dc"] == 1
+        self.doc_dc = [tp for tp in self.options["seq_types"] if
+        tp["acc"] == doc_base_acc][0]["doc_dc"] == 1
 
         seq_tot = 0
         self.seqs = []
