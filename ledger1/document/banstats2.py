@@ -1,6 +1,7 @@
 """ Functions to handle requests to bank statement doucments """
 
 from ledger1.document.banstat2 import Banstat2
+from ledger1.dao.sqlite import dao_document
 
 def get(num: str = None) -> dict:
     if num is None:
@@ -14,15 +15,8 @@ def get(num: str = None) -> dict:
 def get_many() -> dict:
     ## obs: acc_num up to 11 dig
 
-    data: list[dict] = [
-            {
-                "num": 1,
-                "institution": "003 - RBC",
-                'transit_num': "55555",
-                "acc_num": "7777777",
-                "descr": "rbc 55555-7777777 account",
-            },
-        ]
+    data = dao_document.get_many("banstat2")
+    print(data)
 
     return {
         "code": 200,

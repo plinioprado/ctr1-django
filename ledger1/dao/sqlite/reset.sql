@@ -42,6 +42,14 @@ CREATE TABLE IF NOT EXISTS transaction1_detail (
 
 -- invoice
 
+DROP TABLE IF EXISTS document;
+CREATE TABLE IF NOT EXISTS document (
+    doc_type TEXT NOT NULL,
+    doc_num TEXT NOT NULL,
+    acc_num TEXT,
+    PRIMARY KEY (doc_type, doc_num)
+);
+
 DROP TABLE IF EXISTS invoice2;
 CREATE TABLE IF NOT EXISTS invoice2 (
     num TEXT PRIMARY KEY,
@@ -49,13 +57,4 @@ CREATE TABLE IF NOT EXISTS invoice2 (
     "type" TEXT,
     cpart_name TEXT,
     descr TEXT
-);
-
-DROP TABLE IF EXISTS banstat2;
-CREATE TABLE IF NOT EXISTS banstat2 (
-    institution_num INT,
-    institution_name TEXT,
-    transit_num TEXT,
-    account_num TEXT,
-    tra_acc_num TEXT
 );

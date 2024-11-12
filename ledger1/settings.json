@@ -13,5 +13,13 @@
   },
   "invoice2": {
     "file_csv": "./ledger1/dao/csv/invoice2.csv"
+  },
+  "file": {
+    "sql": {
+      "reset": "./ledger1/dao/sqlite/reset.sql"
+    },
+    "csv": {
+      "document": "./ledger1/dao/csv/document.csv"
+    }
   }
 }
