@@ -2,7 +2,8 @@ import sqlite3
 import csv
 from ledger1.utils import dbutil
 
-def get_many(doc_type: str):
+
+def get_many(doc_type: str) -> list[dict]:
 
     con, cur = dbutil.get_connection()
 
@@ -22,6 +23,34 @@ def get_many(doc_type: str):
         rows = [dict(row) for row in cur.fetchall()]
 
         return rows
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting bank statements {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_one(doc_type: str, doc_num: str) -> dict:
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = """
+        SELECT
+            d.doc_type,
+            d.doc_num,
+            d.acc_num,
+            a.name
+        FROM document d
+            INNER JOIN account1 a ON a.num = d.acc_num
+        WHERE d.doc_type = ? AND d.doc_num = ?
+        """
+        query_params = (doc_type, doc_num)
+
+        cur.execute(query_text, query_params)
+        row = dict(cur.fetchone())
+
+        return row
 
     except sqlite3.DatabaseError as err:
         raise ValueError(f"getting bank statements {str(err)}") from err

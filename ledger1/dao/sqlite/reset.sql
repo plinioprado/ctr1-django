@@ -1,5 +1,14 @@
 --- reset db for ledger1
 
+-- admin
+
+DROP TABLE IF EXISTS setting;
+CREATE TABLE IF NOT EXISTS setting (
+    setting_key TEXT NOT NULL,
+    setting_value TEXT NOT NULL,
+    PRIMARY KEY (setting_key)
+);
+
 -- account
 
 DROP TABLE IF EXISTS account1;

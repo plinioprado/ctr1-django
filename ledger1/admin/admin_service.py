@@ -8,6 +8,7 @@ from ledger1.dao.sqlite import dao_document_type
 from ledger1.dao.sqlite import dao_transaction1
 from ledger1.dao.sqlite import dao_invoice2
 from ledger1.dao.sqlite import dao_document
+from ledger1.dao.sqlite import dao_setting
 
 
 def reset() -> dict:
@@ -27,11 +28,17 @@ def reset() -> dict:
     dao_transaction1.reset()
     dao_invoice2.restore(settings)
     dao_document.restore(settings["file"]["csv"]["document"])
+    dao_setting.restore(settings["file"]["csv"]["setting"])
 
     return {
         "code": 200,
         "message": "reset ok"
     }
+
+
+def get_db_settings(key: str) -> dict:
+    data: list[dict] = dao_setting.get_many(key)
+    return data
 
 
 def get_settings() -> dict:

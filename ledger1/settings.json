@@ -19,7 +19,8 @@
       "reset": "./ledger1/dao/sqlite/reset.sql"
     },
     "csv": {
-      "document": "./ledger1/dao/csv/document.csv"
+      "document": "./ledger1/dao/csv/document.csv",
+      "setting": "./ledger1/dao/csv/setting.csv"
     }
   }
 }

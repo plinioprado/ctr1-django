@@ -13,57 +13,40 @@ class Banstat2:
     institution_num: str = ""
     institution_short_name: str = ""
     transit_num: str = ""
+    account_num: str = ""
+    name: str = ""
     acc_num: str = ""
-    descr: str = ""
-    tra_acc: str = ""
     seqs = []
 
-    def __init__(self):
 
-        self.institution_num: str = "003"
+    def set_from_db(self, data):
+        doc_num: list[str] = data["doc_num"].split(".")
+        self.institution_num: str = doc_num[0]
         self.institution_short_name: str = "RBC"
-        self.transit_num: str = "55555"
-        self.acc_num: str = "7777777"
-        self.descr: str = "rbc 55555-7777777 account"
-        self.tra_acc_num = "1.1.2"
+        self.transit_num: str = doc_num[1]
+        self.account_num: str = doc_num[2]
+        self.name: str = data["name"]
+        self.acc_num = data["acc_num"]
 
+
+    def set_seqs(self, doc_seqs: list[dict]):
         self.seqs = []
-        self.seqs.append(BanstatSeq(
-            dt="2020-01-02",
-            descr="opening balance",
-            db=0,
-            cr=0,
-            bal=0
-        ))
-        self.seqs.append(BanstatSeq(
-            dt="2020-01-02",
-            descr="capital contribution",
-            cr=10000,
-            db=0,
-            bal=10000
-        ))
+        for doc_seq in doc_seqs:
+            self.seqs.append(BanstatSeq(
+                dt=doc_seq["dt"],
+                descr=doc_seq["descr"],
+                db=doc_seq["db"],
+                cr=doc_seq["cr"],
+                bal=doc_seq["bal"]
+            ))
 
-        self.seqs.append(BanstatSeq(
-            dt="2020-01-05",
-            descr="lawyer fees",
-            cr=0,
-            db=200,
-            bal=9800
-        ))
-        self.seqs.append(BanstatSeq(
-            dt="2020-01-21",
-            descr="receiving from cedar store ltd",
-            cr=0,
-            db=11050,
-            bal=10850,
-        ))
 
     def toresult(self):
         seqs = [asdict(seq) for seq in self.seqs]
         return {
-            "institution": f"{self.institution_num} - {self.institution_short_name}",
+            "institution_num": self.institution_num,
             "transit_num": self.transit_num,
-            "acc_num": self.acc_num,
-            "descr": self.descr,
+            "account_num": self.account_num,
+            "name": self.name,
             "seqs": seqs
         }

@@ -18,8 +18,6 @@ def get_connection() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
 def reset(file_name: str) -> None:
     """ Reset blank ledger1 tables """
 
-    print(file_name)
-
     try:
 
         query_text: str = read_text(file_name)
