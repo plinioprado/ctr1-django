@@ -80,7 +80,7 @@ def test_post():
 
     assert result == {
         "code": 200,
-        "message": "transaction 5 created"
+        "message": "transaction 6 created"
     }
 
     result2 = service.get(5)

@@ -9,6 +9,15 @@ CREATE TABLE IF NOT EXISTS setting (
     PRIMARY KEY (setting_key)
 );
 
+
+DROP TABLE IF EXISTS document_type;
+CREATE TABLE IF NOT EXISTS document_type (
+    id TEXT PRIMARY KEY,
+    "name" TEXT,
+    traacc INTEGER,
+    active INTEGER
+);
+
 -- account
 
 DROP TABLE IF EXISTS account1;
@@ -21,13 +30,9 @@ CREATE TABLE account1 (
     doc_num TEXT
 );
 
-DROP TABLE IF EXISTS document_type;
-CREATE TABLE IF NOT EXISTS document_type (
-    id TEXT PRIMARY KEY,
-    "name" TEXT,
-    traacc INTEGER,
-    active INTEGER
-);
+
+-- transaction
+
 
 DROP TABLE IF EXISTS transaction1;
 CREATE TABLE IF NOT EXISTS transaction1 (
@@ -35,8 +40,6 @@ CREATE TABLE IF NOT EXISTS transaction1 (
     dt REAL,
     descr TEXT
 );
-
--- transaction
 
 DROP TABLE IF EXISTS transaction1_detail;
 CREATE TABLE IF NOT EXISTS transaction1_detail (
@@ -49,7 +52,7 @@ CREATE TABLE IF NOT EXISTS transaction1_detail (
     doc_num TEXT
 );
 
--- invoice
+-- document
 
 DROP TABLE IF EXISTS document;
 CREATE TABLE IF NOT EXISTS document (
