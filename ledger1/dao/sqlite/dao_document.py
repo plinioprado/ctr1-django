@@ -1,3 +1,9 @@
+"""
+document table will complement transaction table to feed the document various objects
+linked by tra_seq.doc_type + tra_seqdoc.num
+"""
+
+
 import sqlite3
 import csv
 from ledger1.utils import dbutil
@@ -40,9 +46,10 @@ def get_one(doc_type: str, doc_num: str) -> dict:
             d.doc_type,
             d.doc_num,
             d.acc_num,
+            d.cpart_name,
             a.name
         FROM document d
-            INNER JOIN account1 a ON a.num = d.acc_num
+            LEFT JOIN account1 a ON a.num = d.acc_num
         WHERE d.doc_type = ? AND d.doc_num = ?
         """
         query_params = (doc_type, doc_num)
@@ -72,13 +79,15 @@ def restore(file_name) -> None:
                     INSERT INTO document (
                         doc_type,
                         doc_num,
-                        acc_num
-                    ) VALUES (?, ?, ?);
+                        acc_num,
+                        cpart_name
+                    ) VALUES (?, ?, ?, ?);
                     """,
                     (
                         str(row["doc_type"]),
                         str(row["doc_num"]),
-                        str(row["acc_num"])
+                        str(row["acc_num"]),
+                        str(row["cpart_name"])
                     )
                 )
                 con.commit()

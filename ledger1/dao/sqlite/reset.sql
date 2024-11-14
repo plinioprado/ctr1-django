@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS document (
     doc_type TEXT NOT NULL,
     doc_num TEXT NOT NULL,
     acc_num TEXT,
+    cpart_name TEXT,
     PRIMARY KEY (doc_type, doc_num)
 );
 

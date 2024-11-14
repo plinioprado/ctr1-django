@@ -82,7 +82,6 @@ def get_one(num: int) -> Transaction1 | None:
     con, cur = get_connection()
 
     try:
-
         query_text: str = """
         SELECT
             td.num,
@@ -127,6 +126,28 @@ def get_one(num: int) -> Transaction1 | None:
                 date,
                 descr=descr,
                 seqs=seqs)
+
+
+    except sqlite3.Error as err:
+        raise IOError(f"getting transaction: {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_num_by_doc(doc_type: str, doc_num: str) -> int:
+    con, cur = get_connection()
+
+    try:
+        query_text: str = """
+        SELECT num
+        FROM transaction1_detail
+        WHERE doc_type = ? AND doc_num = ? AND seq = 1
+        """
+        query_params = (doc_type, doc_num)
+        cur.execute(query_text, query_params)
+        row = cur.fetchone()
+
+        return int(row["num"])
 
 
     except sqlite3.Error as err:

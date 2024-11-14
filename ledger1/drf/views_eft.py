@@ -7,7 +7,7 @@ from ledger1.document import payments
 def view(request: Request, num: str = None):
     try:
         if request.method == "GET":
-            ret: dict = payments.get(num)
+            ret: dict = payments.get("eft", num)
 
         # elif request.method == "DELETE":
         #     ret = invoices2.delete(num)

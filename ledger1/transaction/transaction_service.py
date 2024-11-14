@@ -156,10 +156,17 @@ def get_defaults():
     }
 
 
-def get_one(num):
+def get_one_data(num) -> dict:
     result: Transaction1 | None = dao.get_one(num)
 
     data: dict = {} if result is None else result.asdict()
+
+    return data
+
+
+def get_one(num: int) -> dict:
+    data: dict = get_one_data(num)
+
     options_account = None if not data else get_options_acct()
     options_document_types = DocumentTypes().get_dict_options()
     options = {} if not options_account else {
@@ -236,3 +243,10 @@ def get_many(date: str, date_to: str):
         response["options"] = { "accounts": options_account}
 
     return response
+
+
+def get_by_doc(doc_type: str, doc_num: str):
+    num: int = dao.get_num_by_doc(doc_type, doc_num)
+    tra: dict = get_one_data(num)
+
+    return tra

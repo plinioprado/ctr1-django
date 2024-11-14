@@ -13,11 +13,15 @@ Attributes:
         debits and credits related, with the respective types, accounts and amounts
 """
 
-def get(num: str = None):
-    if num is None:
+from ledger1.dao.sqlite import dao_document
+from ledger1.document.payment import Payment
+from ledger1.transaction import transaction_service as transactions
+
+def get(doc_type: str = None, doc_num: str = None):
+    if doc_num is None:
         data = get_many()
     else:
-        data = get_one(num)
+        data = get_one(doc_type, doc_num)
 
     return {
         "data": data,
@@ -28,7 +32,7 @@ def get(num: str = None):
 
 def get_many():
     data: list[dict] = [{
-            "doc_type": "pmt",
+            "doc_type": "eft",
             "doc_num": "1.1",
             "doc_dc": True,
             "dt": "2020-01-05",
@@ -41,29 +45,12 @@ def get_many():
     return data
 
 
-def get_one(num: str):
-    data: dict = {
-            "doc_type": "eft",
-            "doc_num": num,
-            "doc_dc": True,
-            "dt": "2020-01-05",
-            "cpart_name": "Jack Black",
-            "descr": "Pmt for legal fees",
-            "tra_num": 2,
-            "seqs": [
-                {
-                    "type": "base",
-                    "text": "from acc 003.55555.7777777",
-                    "acc": "1.1.2",
-                    "val": 200.00,
-                },
-                {
-                    "type": "tot",
-                    "text": "to admin.expense",
-                    "acc": "1.1.2",
-                    "val": 200.00,
-                }
-            ]
-        }
+def get_one(doc_type: str, doc_num: str):
+    tra = transactions.get_by_doc(doc_type, doc_num)
+    pmt = Payment()
+    pmt.set_from_transaction(tra)
+    doc: dict = dao_document.get_one(doc_type, doc_num)
+    pmt.add_document_data(doc)
+    data = pmt.get_to_response()
 
     return data

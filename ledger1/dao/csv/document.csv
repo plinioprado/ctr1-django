@@ -1,2 +1,3 @@
-doc_type,doc_num,acc_num
-banstat2,"003.55555.7777777","1.1.2"
+doc_type,doc_num,acc_num,cpart_name
+banstat2,"003.55555.7777777","1.1.2",
+eft,"1.1",,"Jack Black"
