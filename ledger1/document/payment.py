@@ -1,5 +1,4 @@
 from ledger1.document.document_seq import DocumentSeq
-from ledger1.document.document_seqs import DocumentSeqs
 
 class Payment:
     doc_type: str = ""
@@ -9,7 +8,7 @@ class Payment:
     cpart_name: str = ""
     descr: str = ""
     tra_num: int = None
-    seqs: list[DocumentSeq] = [] # for now only 1 seqs (base and tot)
+    seqs: list[DocumentSeq] = []
 
     def set_from_transaction(self, tra: dict, op_seq_acc: dict):
         self.doc_type = tra["seqs"][0]["doc"]["type"]
