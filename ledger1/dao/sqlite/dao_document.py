@@ -46,8 +46,6 @@ def get_many_tra(doc_dc: bool, doc_type: str):
 
     con, cur = dbutil.get_connection()
 
-    print(doc_dc)
-
     try:
         query_text: str = """
         SELECT
@@ -78,14 +76,11 @@ def get_many_tra(doc_dc: bool, doc_type: str):
                 "val": row["val"],
             } for row in cur.fetchmany()]
 
-        print(data)
-
         return data
     except sqlite3.DatabaseError as err:
         raise ValueError(f"getting documents {str(err)}") from err
     finally:
         con.close()
-
 
 
 def get_one(doc_type: str, doc_num: str) -> dict:
@@ -130,15 +125,13 @@ def restore(file_name) -> None:
                     """
                     INSERT INTO document (
                         doc_type,
-                        doc_dc,
                         doc_num,
                         acc_num,
                         cpart_name
-                    ) VALUES (?, ?, ?, ?, ?);
+                    ) VALUES (?, ?, ?, ?);
                     """,
                     (
                         str(row["doc_type"]),
-                        (1 if row["doc_dc"] else 0),
                         str(row["doc_num"]),
                         str(row["acc_num"]),
                         str(row["cpart_name"])

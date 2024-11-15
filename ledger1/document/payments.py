@@ -15,7 +15,6 @@ from ledger1.transaction import transaction_service as transactions
 from ledger1.utils import fileio
 
 def get(doc_dc: bool, doc_type: str = None, doc_num: str = None):
-    print(1, doc_dc)
     if doc_num is None:
         response = {
             "data": get_many(doc_dc),
@@ -23,7 +22,7 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None):
             "code": 200,
         }
     else:
-        op_seq_acc = get_op_seq_acc()
+        op_seq_acc = get_op_seq_acc(doc_dc)
         response = {
             "data": get_one(doc_type, doc_num, op_seq_acc),
             "message": "ok",
@@ -37,9 +36,6 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None):
 
 
 def get_many(doc_dc: bool):
-
-
-
     data = dao_document.get_many_tra(doc_dc=doc_dc, doc_type="eft")
 
     return data
@@ -56,8 +52,9 @@ def get_one(doc_type: str, doc_num: str, op_seq_acc: list[dict]):
     data = pmt.get_to_response()
     return data
 
-def get_op_seq_acc() -> list[dict]:
+def get_op_seq_acc(doc_dc: bool) -> list[dict]:
+    print(1, doc_dc)
     op_seq_acc = fileio.read_csv('./ledger1/dao/csv/document_acc.csv')
-    options = [op for op in op_seq_acc if op["doc_type"] == "eft" and op["dc"] == "1"]
+    options = [op for op in op_seq_acc if op["doc_type"] == "eft" and (op["dc"] == "True") ==  doc_dc]
 
     return options
