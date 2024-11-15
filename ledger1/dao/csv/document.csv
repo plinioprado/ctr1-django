@@ -1,3 +1,4 @@
-doc_type,doc_num,acc_num,cpart_name
-banstat2,"003.55555.7777777","1.1.2",
-eft,"1.1",,"Jack Black"
+doc_type,doc_num,doc_dc,acc_num,cpart_name
+banstat2,"003.55555.7777777",True,"1.1.2",
+eft,"1.1",False,,"Jack Black"
+eft,"2.1357",True,,"Cedar Store Ltd"

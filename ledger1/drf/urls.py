@@ -8,6 +8,7 @@ from . import views_reset
 from . import views_banstat2
 from . import views_inv2
 from . import views_pmt
+from . import views_rec
 
 urlpatterns = [
     path("accounts/", views_account.view),
@@ -22,4 +23,6 @@ urlpatterns = [
     path("doc/inv2/<str:num>/", views_inv2.view),
     path("doc/pmt/", views_pmt.view),
     path("doc/pmt/<str:num>/", views_pmt.view),
+    path("doc/rec/", views_rec.view),
+    path("doc/rec/<str:num>/", views_rec.view),
 ]

@@ -7,13 +7,16 @@ linked by tra_seq.doc_type + tra_seqdoc.num
 import sqlite3
 import csv
 from ledger1.utils import dbutil
+from ledger1.utils import dateutil
 
 
-def get_many(doc_type: str) -> list[dict]:
+def get_many(doc_dc: bool, doc_type: str = None) -> list[dict]:
 
     con, cur = dbutil.get_connection()
 
+
     try:
+
         query_text = """
         SELECT
             d.doc_type,
@@ -21,9 +24,12 @@ def get_many(doc_type: str) -> list[dict]:
             a.name
         FROM document d
             INNER JOIN account1 a ON a.num = d.acc_num
-        WHERE d.doc_type = ?
+        WHERE d.doc_dc = ? AND d.doc_type LIKE ?
         """
-        query_params = (doc_type,)
+        #query_params = (doc_type,)
+        doc_type_param = "%" if doc_type is None else doc_type
+        doc_dc_param = 1 if doc_dc else 0
+        query_params = (doc_dc_param, doc_type_param,)
 
         cur.execute(query_text, query_params)
         rows = [dict(row) for row in cur.fetchall()]
@@ -34,6 +40,52 @@ def get_many(doc_type: str) -> list[dict]:
         raise ValueError(f"getting bank statements {str(err)}") from err
     finally:
         con.close()
+
+
+def get_many_tra(doc_dc: bool, doc_type: str):
+
+    con, cur = dbutil.get_connection()
+
+    print(doc_dc)
+
+    try:
+        query_text: str = """
+        SELECT
+            td.doc_type,
+            td.doc_num,
+            td.dc,
+            t.dt,
+            d.cpart_name,
+            t.descr,
+            td.val
+        FROM transaction1_detail td
+            INNER JOIN transaction1 t ON t.num = td.num
+            INNER JOIN document d
+                ON d.doc_type = td.doc_type AND d.doc_num = td.doc_num
+        WHERE td.doc_type = ? AND td.dc = ?
+        """
+
+        query_params: str = (doc_type, int(doc_dc))
+        cur.execute(query_text, query_params)
+
+        data = [{
+                "doc_type": row["doc_type"],
+                "doc_num": row["doc_num"],
+                "doc_dc": row["dc"] == 1,
+                "dt": dateutil.date_timestamp_to_iso(row["dt"]),
+                "cpart_name": row["cpart_name"],
+                "descr": row["descr"],
+                "val": row["val"],
+            } for row in cur.fetchmany()]
+
+        print(data)
+
+        return data
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting documents {str(err)}") from err
+    finally:
+        con.close()
+
 
 
 def get_one(doc_type: str, doc_num: str) -> dict:
@@ -78,13 +130,15 @@ def restore(file_name) -> None:
                     """
                     INSERT INTO document (
                         doc_type,
+                        doc_dc,
                         doc_num,
                         acc_num,
                         cpart_name
-                    ) VALUES (?, ?, ?, ?);
+                    ) VALUES (?, ?, ?, ?, ?);
                     """,
                     (
                         str(row["doc_type"]),
+                        (1 if row["doc_dc"] else 0),
                         str(row["doc_num"]),
                         str(row["acc_num"]),
                         str(row["cpart_name"])

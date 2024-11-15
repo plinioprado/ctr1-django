@@ -1,4 +1,7 @@
-""" Functions to handle requests to bank statement doucments """
+""" Functions to handle requests to bank statement doucments
+
+get_many() is only implemented for checking acc, therefore doc_dc == True
+ """
 
 from ledger1.document.banstat2 import Banstat2
 from ledger1.admin import admin_service
@@ -17,8 +20,9 @@ def get(num: str = None) -> dict:
 
 def get_many() -> dict:
     ## obs: acc_num up to 11 dig
+    doc_dc: bool = True
 
-    data = dao_document.get_many("banstat2")
+    data = dao_document.get_many(doc_dc, "banstat2")
 
     return {
         "code": 200,

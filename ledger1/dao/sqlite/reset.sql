@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS transaction1_detail (
 DROP TABLE IF EXISTS document;
 CREATE TABLE IF NOT EXISTS document (
     doc_type TEXT NOT NULL,
+    doc_dc INT,
     doc_num TEXT NOT NULL,
     acc_num TEXT,
     cpart_name TEXT,

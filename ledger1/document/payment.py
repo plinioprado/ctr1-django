@@ -1,3 +1,17 @@
+"""
+Payment is any money transfer from or to the tenant
+
+Attributes:
+    doc_dc: True if Payment and False if Receiving
+    doc_type : eft, cheque..., will drive the primary fields - TODO
+    doc_num: unique identifier for that type
+    dt: date of the sending (for now assumed to be the same of the receiving)
+    descr: description
+    tra_num: number of the transaction
+    doc_seqs:
+        debits and credits related, with the respective types, accounts and amounts
+"""
+
 from ledger1.document.document_seq import DocumentSeq
 
 class Payment:

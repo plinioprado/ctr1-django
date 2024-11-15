@@ -1,16 +1,12 @@
 """
-Payment is any money transfer from or to the tenant
+Payment feature handles payments and receivings
 
 Attributes:
-    doc_type: 'pmt'
-    doc_subtype : eft, cheque..., will drive the primary fields - TODO
+    doc_dc: True if Payment and False if Receiving
+    doc_type : eft, cheque..., will drive the primary fields - TODO
     doc_num: unique identifier for that type
-    doc_dc: True (debit) if made or  False (credit) if received
-    dt: date of the sending (for now assumed to be the same of the receiving)
-    descr: description
-    tra_num: number of the transaction
-    doc_seqs:
-        debits and credits related, with the respective types, accounts and amounts
+
+For get_one, doc_dc is not required because the doc_num structure: {person_num}.{doc_id}.
 """
 
 from ledger1.dao.sqlite import dao_document
@@ -18,10 +14,11 @@ from ledger1.document.payment import Payment
 from ledger1.transaction import transaction_service as transactions
 from ledger1.utils import fileio
 
-def get(doc_type: str = None, doc_num: str = None):
+def get(doc_dc: bool, doc_type: str = None, doc_num: str = None):
+    print(1, doc_dc)
     if doc_num is None:
         response = {
-            "data": get_many(),
+            "data": get_many(doc_dc),
             "message": "ok",
             "code": 200,
         }
@@ -39,17 +36,11 @@ def get(doc_type: str = None, doc_num: str = None):
     return response
 
 
-def get_many():
-    data: list[dict] = [{
-            "doc_type": "eft",
-            "doc_num": "1.1",
-            "doc_dc": True,
-            "dt": "2020-01-05",
-            "cpart_name": "Jack Black",
-            "descr": "Pmt for legal fees",
-            "val": 200
-        }
-    ]
+def get_many(doc_dc: bool):
+
+
+
+    data = dao_document.get_many_tra(doc_dc=doc_dc, doc_type="eft")
 
     return data
 
