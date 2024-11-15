@@ -18,7 +18,7 @@ inv2,1,1,add,2.1.3,pst
 inv2,1,0,tot,1.1.1,cash
 inv2,1,0,tot,1.1.2,checking account
 inv2,1,0,tot,3.2.1,account payable
-pmt,1,1,base,1.1.1
-pmt,1,1,base,1.1.2
+pmt,1,1,base,1.1.1,cash
+pmt,1,1,base,1.1.2,checking account
 pmt,1,0,tot,2.1
 pmt,1,0,tot,2.2

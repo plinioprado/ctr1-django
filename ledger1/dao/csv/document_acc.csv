@@ -1,0 +1,6 @@
+doc_type,dc,type,acc,text
+eft,1,base,2.1.1,account payable
+eft,1,base,2.1.2,credit card payable
+eft,1,add,4.3.2,(+)interest on payment
+eft,1,sub,4.3.3,(-)discount on payment
+eft,1,tot,1.1.2,from acc 003.55555.7777777

@@ -16,18 +16,27 @@ Attributes:
 from ledger1.dao.sqlite import dao_document
 from ledger1.document.payment import Payment
 from ledger1.transaction import transaction_service as transactions
+from ledger1.utils import fileio
 
 def get(doc_type: str = None, doc_num: str = None):
     if doc_num is None:
-        data = get_many()
+        response = {
+            "data": get_many(),
+            "message": "ok",
+            "code": 200,
+        }
     else:
-        data = get_one(doc_type, doc_num)
+        op_seq_acc = get_op_seq_acc()
+        response = {
+            "data": get_one(doc_type, doc_num, op_seq_acc),
+            "message": "ok",
+            "options": {
+                "doc_seq_acc": op_seq_acc
+            },
+            "code": 200,
+        }
 
-    return {
-        "data": data,
-        "message": "ok",
-        "code": 200,
-    }
+    return response
 
 
 def get_many():
@@ -45,12 +54,19 @@ def get_many():
     return data
 
 
-def get_one(doc_type: str, doc_num: str):
-    tra = transactions.get_by_doc(doc_type, doc_num)
+def get_one(doc_type: str, doc_num: str, op_seq_acc: list[dict]):
     pmt = Payment()
-    pmt.set_from_transaction(tra)
+    tra = transactions.get_by_doc(doc_type, doc_num)
+    pmt.set_from_transaction(tra, op_seq_acc)
+
     doc: dict = dao_document.get_one(doc_type, doc_num)
     pmt.add_document_data(doc)
-    data = pmt.get_to_response()
 
+    data = pmt.get_to_response()
     return data
+
+def get_op_seq_acc() -> list[dict]:
+    op_seq_acc = fileio.read_csv('./ledger1/dao/csv/document_acc.csv')
+    options = [op for op in op_seq_acc if op["doc_type"] == "eft" and op["dc"] == "1"]
+
+    return options
