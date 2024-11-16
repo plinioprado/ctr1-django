@@ -136,6 +136,26 @@ def post(data: dict):
         con.close()
 
 
+def delete(doc_type: str, doc_num: str):
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = """
+        DELETE FROM document
+        WHERE doc_type = ? AND doc_num = ?;
+        """
+        query_params = (doc_type, doc_num)
+        cur.execute(query_text, query_params)
+        con.commit()
+
+        return (doc_type,doc_num)
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"deleting document {doc_type} {doc_num}: {str(err)}") from err
+    finally:
+        con.close()
+
 def restore(file_name) -> None:
     """ Restore from CSV """
 

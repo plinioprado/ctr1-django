@@ -112,3 +112,15 @@ def post(data) -> dict:
         "code": 200,
         "message": f"document  {data["doc_type"]} {data["doc_num"]} created"
     }
+
+
+def delete(doc_type: str, doc_num: str) -> dict:
+
+    tra = transactions.get_by_doc(doc_type, doc_num)
+    transactions.delete(tra["num"])
+    deleted_type, deleted_num = dao_document.delete(doc_type, doc_num)
+
+    return {
+        "code": 200,
+        "message": f"document {deleted_type} {deleted_num} deleted"
+    }

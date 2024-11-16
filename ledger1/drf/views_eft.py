@@ -9,8 +9,8 @@ def view(request: Request, num: str = None):
         if request.method == "GET":
             ret: dict = payments.get(doc_dc=False, doc_type="eft", doc_num=num)
 
-        # elif request.method == "DELETE":
-        #     ret = invoices2.delete(num)
+        elif request.method == "DELETE":
+            ret = payments.delete(doc_type="eft", doc_num=num)
 
         elif request.method == "POST":
             ret = payments.post(data=request.data)
