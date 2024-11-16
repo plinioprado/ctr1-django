@@ -56,12 +56,19 @@ def get_many(doc_dc: bool):
 
 def get_one(doc_type: str, doc_num: str, op_seq_acc: list[dict]):
     pmt = Payment()
-    tra = transactions.get_by_doc(doc_type, doc_num)
+    tra: dict = transactions.get_by_doc(doc_type, doc_num)
     pmt.set_from_transaction(tra, op_seq_acc)
 
     doc: dict = dao_document.get_one(doc_type, doc_num)
     pmt.add_document_data(doc)
     data = pmt.get_to_response()
+
+    # Because initially doc_type was in doc.seqs[0]
+    if data["doc_type"] != doc_type:
+        data["doc_type"] = doc_type
+        data["doc_num"] = doc_num
+        data["doc_dc"] = False
+
     return data
 
 
@@ -100,17 +107,34 @@ def get_op_seq_acc(doc_dc: bool) -> list[dict]:
 
 def post(data) -> dict:
     """ create new payment """
-
     pmt: Payment = Payment()
-    op_seq_acc = get_op_seq_acc(data["doc_dc"])
+    op_seq_acc = get_op_seq_acc(False)
     pmt.set_from_request(data, op_seq_acc)
-
     transactions.post(pmt.get_to_transaction())
     dao_document.post(pmt.get_to_document())
 
     return {
         "code": 200,
         "message": f"document  {data["doc_type"]} {data["doc_num"]} created"
+    }
+
+
+def put( data: dict) -> dict:
+    """ create new payment """
+
+    pmt: Payment = Payment()
+    op_seq_acc = get_op_seq_acc(False)
+
+    pmt.set_from_request(data, op_seq_acc)
+    tra = transactions.get_by_doc(data["doc_type"], data["doc_num"])
+    pmt.tra_num = tra["num"]
+
+    transactions.put(pmt.get_to_transaction())
+    dao_document.put(pmt.get_to_document())
+
+    return {
+        "code": 200,
+        "message": f"document  {data["doc_type"]} {data["doc_num"]} updated"
     }
 
 

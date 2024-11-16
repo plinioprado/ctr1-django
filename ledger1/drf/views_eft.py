@@ -15,9 +15,8 @@ def view(request: Request, num: str = None):
         elif request.method == "POST":
             ret = payments.post(data=request.data)
 
-        # elif request.method == "PUT":
-
-        #     ret = invoices2.put(data=request.data)
+        elif request.method == "PUT":
+            ret = payments.put(data=request.data)
 
         else:
             raise ValueError("invalid method")

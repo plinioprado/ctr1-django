@@ -136,6 +136,30 @@ def post(data: dict):
         con.close()
 
 
+
+def put(data: dict):
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text: str = """
+        UPDATE document
+        SET
+            cpart_name = ?
+        WHERE doc_type = ? AND doc_num = ?;
+        """
+        query_params = (data["cpart_name"],data["doc_type"],data["doc_num"])
+        cur.execute(query_text, query_params)
+        con.commit()
+
+        return {"doc_type": data["doc_type"],"doc_num": data["doc_num"]}
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"updating document {data["doc_type"]} {data["doc_num"]}: {str(err)}") from err
+    finally:
+        con.close()
+
+
 def delete(doc_type: str, doc_num: str):
 
     con, cur = dbutil.get_connection()

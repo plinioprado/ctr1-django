@@ -46,16 +46,20 @@ class Payment:
                 val=tra_seq[0]["val"]
             ))
 
+        self.doc_type = tra["seqs"][0]["doc"]["type"]
+        self.doc_num = tra["seqs"][0]["doc"]["num"]
+        self.doc_dc = tra["seqs"][0]["dc"]
+
 
     def set_from_request(self, data: dict, op_seq_acc: list[dict]):
         self.cpart_name = data["cpart_name"]
         self.doc_type = data["doc_type"]
         self.doc_num = data["doc_num"]
         self.doc_dc = data["doc_dc"]
+
         self.dt = data["dt"]
         self.descr = data["descr"]
-        self.tra_num = "new"
-
+        self.tra_num = None
         self.seqs = []
         for op in op_seq_acc:
             doc_seq: list[dict] = [seq for seq in data["seqs"] if seq["acc"] == op["acc"]]
@@ -105,6 +109,7 @@ class Payment:
             })
 
         return {
+            "num": self.tra_num,
             "date": self.dt,
             "descr": self.descr,
             "seqs": tra_seqs
