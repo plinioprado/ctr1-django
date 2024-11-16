@@ -141,7 +141,7 @@ def get_num_by_doc(doc_type: str, doc_num: str) -> int:
         query_text: str = """
         SELECT num
         FROM transaction1_detail
-        WHERE doc_type = ? AND doc_num = ? AND seq = 1
+        WHERE doc_type = ? AND doc_num = ?
         """
         query_params = (doc_type, doc_num)
         cur.execute(query_text, query_params)
@@ -195,6 +195,7 @@ def post(tra: Transaction1) -> int | None:
             seq.doc.type,
             seq.doc.num
             ) for (k, seq) in enumerate(tra.seqs, )]
+
         cur.executemany(query_text, query_data)
 
         con.commit()

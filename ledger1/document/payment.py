@@ -3,16 +3,16 @@ Payment is any money transfer from or to the tenant
 
 Attributes:
     doc_dc: True if Payment and False if Receiving
-    doc_type : eft, cheque..., will drive the primary fields - TODO
-    doc_num: unique identifier for that type
+    doc_type : eft, cheque..., drive the primary fields
+    doc_num: unique identifier for that doc_type
     dt: date of the sending (for now assumed to be the same of the receiving)
-    descr: description
-    tra_num: number of the transaction
+    descr: description, from transaction
+    tra_num: transaction number
     doc_seqs:
         debits and credits related, with the respective types, accounts and amounts
 """
-
 from ledger1.document.document_seq import DocumentSeq
+
 
 class Payment:
     doc_type: str = ""
@@ -47,6 +47,30 @@ class Payment:
             ))
 
 
+    def set_from_request(self, data: dict, op_seq_acc: list[dict]):
+        self.cpart_name = data["cpart_name"]
+        self.doc_type = data["doc_type"]
+        self.doc_num = data["doc_num"]
+        self.doc_dc = data["doc_dc"]
+        self.dt = data["dt"]
+        self.descr = data["descr"]
+        self.tra_num = "new"
+
+        self.seqs = []
+        for op in op_seq_acc:
+            doc_seq: list[dict] = [seq for seq in data["seqs"] if seq["acc"] == op["acc"]]
+
+            if not doc_seq:
+                continue
+
+            self.seqs.append(DocumentSeq(
+                type=str(op["type"]),
+                text=str(op["text"]),
+                acc=str(op["acc"]),
+                val=float(doc_seq[0]["val"])
+            ))
+
+
     def add_document_data(self, data):
         self.cpart_name = data["cpart_name"]
 
@@ -61,4 +85,35 @@ class Payment:
             "descr": self.descr,
             "tra_num": self.tra_num,
             "seqs": [seq.asdict() for seq in self.seqs]
+        }
+
+
+    def get_to_transaction(self):
+        tra_seqs = []
+        for doc_seq in self.seqs:
+            seq = doc_seq.asdict()
+            dc = self.doc_dc if seq["type"] in ["add","tot"] else not self.doc_dc
+
+            tra_seqs.append({
+                "account": seq["acc"],
+                "val": seq["val"],
+                "dc": dc,
+                "doc": {
+                    "type": self.doc_type if seq["type"] == "tot" else "",
+                    "num": self.doc_num if seq["type"] == "tot" else "",
+                }
+            })
+
+        return {
+            "date": self.dt,
+            "descr": self.descr,
+            "seqs": tra_seqs
+        }
+
+
+    def get_to_document(self):
+        return {
+            "doc_type": self.doc_type,
+            "doc_num": self.doc_num,
+            "cpart_name": self.cpart_name
         }

@@ -7,13 +7,13 @@ from ledger1.document import payments
 def view(request: Request, num: str = None):
     try:
         if request.method == "GET":
-            ret: dict = payments.get(doc_dc=True, doc_type="eft", doc_num=num)
+            ret: dict = payments.get(doc_dc=False, doc_type="eft", doc_num=num)
 
         # elif request.method == "DELETE":
         #     ret = invoices2.delete(num)
 
-        # elif request.method == "POST":
-        #     ret = invoices2.post(data=request.data)
+        elif request.method == "POST":
+            ret = payments.post(data=request.data)
 
         # elif request.method == "PUT":
 

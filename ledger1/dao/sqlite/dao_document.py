@@ -10,10 +10,9 @@ from ledger1.utils import dbutil
 from ledger1.utils import dateutil
 
 
-def get_many(doc_dc: bool, doc_type: str = None) -> list[dict]:
+def get_many(doc_type: str = None) -> list[dict]:
 
     con, cur = dbutil.get_connection()
-
 
     try:
 
@@ -24,12 +23,11 @@ def get_many(doc_dc: bool, doc_type: str = None) -> list[dict]:
             a.name
         FROM document d
             INNER JOIN account1 a ON a.num = d.acc_num
-        WHERE d.doc_dc = ? AND d.doc_type LIKE ?
+        WHERE d.doc_type LIKE ?
         """
         #query_params = (doc_type,)
         doc_type_param = "%" if doc_type is None else doc_type
-        doc_dc_param = 1 if doc_dc else 0
-        query_params = (doc_dc_param, doc_type_param,)
+        query_params = (doc_type_param,)
 
         cur.execute(query_text, query_params)
         rows = [dict(row) for row in cur.fetchall()]
@@ -66,7 +64,9 @@ def get_many_tra(doc_dc: bool, doc_type: str):
         query_params: str = (doc_type, int(doc_dc))
         cur.execute(query_text, query_params)
 
-        data = [{
+        data = []
+        for row in cur.execute(query_text, query_params):
+            data.append({
                 "doc_type": row["doc_type"],
                 "doc_num": row["doc_num"],
                 "doc_dc": row["dc"] == 1,
@@ -74,7 +74,7 @@ def get_many_tra(doc_dc: bool, doc_type: str):
                 "cpart_name": row["cpart_name"],
                 "descr": row["descr"],
                 "val": row["val"],
-            } for row in cur.fetchmany()]
+            })
 
         return data
     except sqlite3.DatabaseError as err:
@@ -100,7 +100,6 @@ def get_one(doc_type: str, doc_num: str) -> dict:
         WHERE d.doc_type = ? AND d.doc_num = ?
         """
         query_params = (doc_type, doc_num)
-
         cur.execute(query_text, query_params)
         row = dict(cur.fetchone())
 
@@ -108,6 +107,31 @@ def get_one(doc_type: str, doc_num: str) -> dict:
 
     except sqlite3.DatabaseError as err:
         raise ValueError(f"getting bank statements {str(err)}") from err
+    finally:
+        con.close()
+
+
+def post(data: dict):
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text: str = """
+        INSERT INTO document (
+            doc_type,
+            doc_num,
+            cpart_name
+        )
+        VALUES (?, ?, ?);
+        """
+        query_params = (data["doc_type"],data["doc_num"],data["cpart_name"])
+        cur.execute(query_text, query_params)
+        con.commit()
+
+        return {"doc_type": data["doc_type"],"doc_num": data["doc_num"]}
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"creating document {data["doc_type"]} {data["doc_num"]}: {str(err)}") from err
     finally:
         con.close()
 

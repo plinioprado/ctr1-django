@@ -22,7 +22,7 @@ def get_many() -> dict:
     ## obs: acc_num up to 11 dig
     doc_dc: bool = True
 
-    data = dao_document.get_many(doc_dc, "banstat2")
+    data = dao_document.get_many("banstat2")
 
     return {
         "code": 200,

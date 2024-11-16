@@ -1,55 +1,6 @@
 Example Ltd.
-chart of accounts
+documents
 
-acc,1.0.0,acc_to,9.9.9
-num,name,Dc
-1.0.0,assets,D
-1.1.0,current assets,D
-1.1.1,cash,D
-1.1.2,checking account,D
-1.1.3,account receivables,D
-1.2.0,long term assets,D
-1.2.1,long term investments,D
-1.3.0,capital assets,D
-1.3.1,equipments,D
-1.3.2,depreciation and ammortization,D
-2.0.0,liabilities,C
-2.1.0,current liabilities,C
-2.1.1,accounts payable,C
-2.1.2,credit card payable,C
-2.1.3,taxes payable,C
-2.1.4,business loans,C
-2.2.0,long term debt,C
-2.2.1,long term financing,C
-2.3.0,equity,C
-2.3.1,capital,C
-2.3.2,retained earnings,C
-2.3.3,preferred stocks,C
-3.0.0,revenues,C
-3.1.0,sales,C
-3.1.1,sales of services,C
-3.1.2,sales of products,C
-3.2.0,deductions,C
-3.2.1,discounts on sales,C
-3.3.0,non operational revenues,C
-3.3.1,interest revenues,C
-3.3.2,interest on receiving,C
-3.3.3,discount on receiving,C
-3.3.9,other finance revenues,C
-4.0.0,costs and expenses,D
-4.1.0,cost of goods sold,D
-4.1.1,service costs,D
-4.1.8,discount on purchases,D
-4.2.0,operating expenses,D
-4.2.1,rent expense,D
-4.2.2,utilities expense,D
-4.2.3,payroll expense,D
-4.2.4,administration expense,D
-4.2.5,travel fees,D
-4.2.6,bank fee,D
-4.2.8,discounts on expenses,D
-4.3.0,non operational expenses,C
-4.3.1,interest paid,C
-4.3.2,interest on payment,C
-4.3.3,discount on payment,C
-4.3.9,other finance expenses,C
+doc_type,eft,date,2020-01-01,date_to,2020-01-31
+num,date,transaction,account,history,val_db,val_cr
+1.1,2020-01-05,pmt lawyer fees,3.1,1.1.2 checking account,0,190.0

@@ -2,4 +2,4 @@ id,name,traacc,active
 "accban1","checking acc",1,1
 "bstat1","bank statement",1,1
 "inv2","invoice",1,1
-"pmt2","eft",1,1
+"eft","eft",1,1

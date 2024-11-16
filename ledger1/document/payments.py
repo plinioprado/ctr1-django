@@ -9,6 +9,7 @@ Attributes:
 For get_one, doc_dc is not required because the doc_num structure: {person_num}.{doc_id}.
 """
 
+
 from ledger1.dao.sqlite import dao_document
 from ledger1.document.payment import Payment
 from ledger1.transaction import transaction_service as transactions
@@ -21,10 +22,22 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None):
             "message": "ok",
             "code": 200,
         }
-    else:
+    elif doc_num == "new":
         op_seq_acc = get_op_seq_acc(doc_dc)
         response = {
-            "data": get_one(doc_type, doc_num, op_seq_acc),
+            "data": get_new(doc_dc),
+            "message": "ok",
+            "options": {
+                "doc_seq_acc": op_seq_acc
+            },
+            "code": 200,
+        }
+    else:
+        op_seq_acc = get_op_seq_acc(doc_dc)
+        data = get_one(doc_type, doc_num, op_seq_acc)
+
+        response = {
+            "data": data,
             "message": "ok",
             "options": {
                 "doc_seq_acc": op_seq_acc
@@ -48,13 +61,54 @@ def get_one(doc_type: str, doc_num: str, op_seq_acc: list[dict]):
 
     doc: dict = dao_document.get_one(doc_type, doc_num)
     pmt.add_document_data(doc)
-
     data = pmt.get_to_response()
     return data
 
+
+def get_new(doc_dc: bool):
+    return {
+        "doc_type": "eft",
+        "doc_num": "",
+        "doc_dc": doc_dc,
+        "dt": "",
+        "cpart_name": "",
+        "descr": "",
+        "tra_num": "new",
+        "seqs": [
+            {
+                "type": "base",
+                "text": "",
+                "acc": "",
+                "val": 0.0
+            },
+            {
+                "type": "tot",
+                "text": "",
+                "acc": "",
+                "val": 0.0
+            }
+        ]
+    }
+
+
 def get_op_seq_acc(doc_dc: bool) -> list[dict]:
-    print(1, doc_dc)
-    op_seq_acc = fileio.read_csv('./ledger1/dao/csv/document_acc.csv')
+    op_seq_acc = fileio.read_csv('./ledger1/dao/csv/document_acc_type.csv')
     options = [op for op in op_seq_acc if op["doc_type"] == "eft" and (op["dc"] == "True") ==  doc_dc]
 
     return options
+
+
+def post(data) -> dict:
+    """ create new payment """
+
+    pmt: Payment = Payment()
+    op_seq_acc = get_op_seq_acc(data["doc_dc"])
+    pmt.set_from_request(data, op_seq_acc)
+
+    transactions.post(pmt.get_to_transaction())
+    dao_document.post(pmt.get_to_document())
+
+    return {
+        "code": 200,
+        "message": f"document  {data["doc_type"]} {data["doc_num"]} created"
+    }

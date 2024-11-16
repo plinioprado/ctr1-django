@@ -65,7 +65,8 @@ def post(data: dict) -> dict:
 
     return {
         "code": 200,
-        "message": f"transaction {tra_num} created"
+        "message": f"transaction {tra_num} created",
+        "id": tra_num
     }
 
 
