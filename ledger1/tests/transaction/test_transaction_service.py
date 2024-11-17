@@ -3,11 +3,11 @@
 # pylint: disable=missing-function-docstring
 
 import ledger1.transaction.transaction_service as service
-from ledger1.utils.dbutil import reset_db
+from ledger1.admin.admin_service import reset
 
 def test_get_one():
 
-    reset_db()
+    reset()
 
     result = service.get(1)
 
@@ -23,8 +23,8 @@ def test_get_one():
                 "val": 10000.,
                 "dc": True,
                 "doc": {
-                    "type": "bstat1",
-                    "num": "1",
+                    "type": "",
+                    "num": "",
                 }
             },
             {
@@ -62,8 +62,8 @@ def test_post():
                     "val": 1000.,
                     "dc": True,
                     "doc": {
-                        "type": "bstat1",
-                        "num": "1",
+                        "type": "",
+                        "num": "",
                     }
                 },
                 {
@@ -80,15 +80,16 @@ def test_post():
 
     assert result == {
         "code": 200,
-        "message": "transaction 6 created"
+        "data": { "id": 7 },
+        "message": "transaction 7 created"
     }
 
-    result2 = service.get(5)
+    result2 = service.get(7)
 
     assert result2["code"] == 200
     assert result2["message"] == "ok"
     assert result2["data"] == {
-            "num": 5,
+            "num": 7,
             "date": "2020-01-25",
             "descr": "sale to test ltd",
             "seqs": [
@@ -97,8 +98,8 @@ def test_post():
                     "val": 1000.,
                     "dc": True,
                     "doc": {
-                        "type": "bstat1",
-                        "num": "1",
+                        "type": "",
+                        "num": "",
                     }
                 },
                 {
@@ -117,7 +118,7 @@ def test_post():
 def test_update():
 
     result = service.put({
-        "num": 5,
+        "num": 7,
         "date": "2020-01-25",
         "descr": "sale to test ltdxxx",
         "seqs": [
@@ -126,8 +127,8 @@ def test_update():
                 "val": 1001.,
                 "dc": True,
                 "doc": {
-                    "type": "bstat1",
-                    "num": "1",
+                    "type": "",
+                    "num": "",
                 }
             },
             {
@@ -144,15 +145,15 @@ def test_update():
 
     assert result == {
         "code": 200,
-        "message": "transaction 5 updated"
+        "message": "transaction 7 updated"
     }
 
-    result2 = service.get(5)
+    result2 = service.get(7)
 
     assert result2["code"] == 200
     assert result2["message"] == "ok"
     assert result2["data"] == {
-        "num": 5,
+        "num": 7,
         "date": "2020-01-25",
         "descr": "sale to test ltdxxx",
         "seqs": [
@@ -161,8 +162,8 @@ def test_update():
                 "val": 1001.,
                 "dc": True,
                 "doc": {
-                    "type": "bstat1",
-                    "num": "1",
+                    "type": "",
+                    "num": "",
                 }
             },
             {
@@ -179,14 +180,14 @@ def test_update():
 
 def test_delete():
 
-    result = service.delete(5)
+    result = service.delete(7)
 
     assert result == {
         "code": 200,
-        "message": "transaction 5 deleted"
+        "message": "transaction 7 deleted"
     }
 
-    result2 = service.get(5)
+    result2 = service.get(7)
 
     assert result2 == {
         "code": 200,

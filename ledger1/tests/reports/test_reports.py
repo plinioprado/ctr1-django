@@ -3,12 +3,12 @@
 # pylint: disable=missing-function-docstring
 
 from ledger1.reports.reports_service import service
-from ledger1.utils.dbutil import reset_db
+from ledger1.admin.admin_service import reset
 
 def test_chart_accounts():
     """ test chart of accunts """
 
-    reset_db()
+    reset()
 
     result = service("chart_accounts")
     assert isinstance(result, dict)
@@ -33,7 +33,7 @@ def test_journal():
     assert result["data"]["header"]["title"] == "journal"
     assert isinstance(result["data"]["table"], list)
     assert result["data"]["table"][0] == ['dt', 'num', 'descr', 'seq', 'acc_num', 'acc_name', 'doc_type', 'doc_num', 'val', 'dc']
-    assert result["data"]["table"][1] == ['2020-01-02', 1, 'capital contribution', 1, '1.1.2', 'checking account', 'bstat1', "1", 10000.0, 'D']
+    assert result["data"]["table"][1] == ['2020-01-02', 1, 'capital contribution', 1, '1.1.2', 'checking account', '', "", 10000.0, 'D']
 
 
 def test_general_ledger():
@@ -51,8 +51,8 @@ def test_general_ledger():
         'date': '2020-01-01',
         'date_to': '2020-01-31'}
     assert  result["data"]["table"][0] == ['dt', 'num', 'descr', 'seq', 'doc_type', 'doc_num', 'val_db', 'val_cr', 'val_bal']
-    assert result["data"]["table"][1] == ['1.1.2', 'checking account']
-    assert result["data"]["table"][2] == ['2020-01-02', 1, 'capital contribution', 1, 'bstat1', "1", 10000.0, 0, 10000.0]
+    assert result["data"]["table"][1] == ['1.1.2 - checking account']
+    assert result["data"]["table"][2] == ['2020-01-02', 1, 'capital contribution', 1, '', "", 10000.0, 0, 10000.0]
 
 
 def test_trial_balance():
@@ -68,8 +68,8 @@ def test_trial_balance():
         'acc_to': '9.9.9',
         'date': '2020-01-01',
         'date_to': '2020-01-31'}
-    assert result["data"]["table"][0] == ['acc_num', 'acc_name', 'val_db', 'val_cr', 'val_bal']
-    assert result["data"]["table"][1] == ['1.0.0', 'assets', 12000.0, -1200.0, 10800.0]
-    assert result["data"]["table"][2] == ['1.1.0', 'current assets', 12000.0, -1200.0, 10800.0]
-    assert result["data"]["table"][3] == ['1.1.1', 'cash', 0, 0, 0]
-    assert result["data"]["table"][4] == ['1.1.2', 'checking account', 11000, -200.0, 10800]
+    assert result["data"]["table"][0] == ['acc_num', 'acc_name', 'val_open', 'val_db', 'val_cr', 'val_bal']
+    assert result["data"]["table"][1] == ['1.0.0', 'assets', 0, 12625.0, -1240.0, 11385.0]
+    assert result["data"]["table"][2] == ['1.1.0', 'current assets', 0, 12625.0, -1240.0, 11385.0]
+    assert result["data"]["table"][3] == ['1.1.1', 'cash', 0, 0, 0, 0]
+    assert result["data"]["table"][4] == ['1.1.2', 'checking account', 0, 11050.0, -190.0, 10860.0]
