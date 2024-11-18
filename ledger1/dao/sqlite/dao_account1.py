@@ -144,7 +144,6 @@ def reset() -> None:
         with open("./ledger1/dao/csv/account.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)
             for account in reader:
-                print(account["num"])
                 cur.execute(
                     """
                     INSERT INTO account1 (

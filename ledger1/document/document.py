@@ -5,10 +5,10 @@ class Document:
     # primary
     doc_type: str = ""
     doc_num: str = ""
-    tra_num: int = "new"
     dt: str = ""
     descr: str = ""
     doc_dc: bool = None
+    tra_num: int = "new"
     seqs: list[DocumentSeq] = []
 
     # secondary
@@ -45,3 +45,45 @@ class Document:
         self.doc_type = tra["seqs"][0]["doc"]["type"]
         self.doc_num = tra["seqs"][0]["doc"]["num"]
         self.doc_dc = tra["seqs"][0]["dc"]
+
+
+    def add_document_data(self, data):
+        self.cpart_name = data["cpart_name"]
+
+
+    def get_new(self):
+        return {
+            "doc_type": self.doc_type,
+            "doc_num": "",
+            "doc_dc": self.doc_dc,
+            "dt": "",
+            "cpart_name": "",
+            "descr": "",
+            "tra_num": "new",
+            "seqs": [
+                {
+                    "type": "base",
+                    "text": "",
+                    "acc": "",
+                    "val": 0.0
+                },
+                {
+                    "type": "tot",
+                    "text": "",
+                    "acc": "",
+                    "val": 0.0
+                }
+            ]
+        }
+
+    def get_to_response(self):
+        return {
+            "doc_type": self.doc_type,
+            "doc_num": self.doc_num,
+            "doc_dc": self.doc_dc,
+            "dt": self.dt,
+            "cpart_name": self.cpart_name,
+            "descr": self.descr,
+            "tra_num": self.tra_num,
+            "seqs": [seq.asdict() for seq in self.seqs]
+        }

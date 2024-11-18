@@ -1,6 +1,6 @@
 from ledger1.document.document import Document
 
-def test_get():
+def test_ini():
     doc_type = "eft"
     doc_dc: bool = True
     doc = Document(doc_type, doc_dc)

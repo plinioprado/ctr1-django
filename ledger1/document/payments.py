@@ -15,7 +15,7 @@ from ledger1.document.payment import Payment
 from ledger1.transaction import transaction_service as transactions
 from ledger1.utils import fileio
 
-def get(doc_dc: bool, doc_type: str = None, doc_num: str = None):
+def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
     if doc_num is None:
         response = {
             "data": get_many(doc_dc),

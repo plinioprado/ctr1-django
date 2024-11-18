@@ -33,7 +33,7 @@ def test_journal():
     assert result["data"]["header"]["title"] == "journal"
     assert isinstance(result["data"]["table"], list)
     assert result["data"]["table"][0] == ['dt', 'num', 'descr', 'seq', 'acc_num', 'acc_name', 'doc_type', 'doc_num', 'val', 'dc']
-    assert result["data"]["table"][1] == ['2020-01-02', 1, 'capital contribution', 1, '1.1.2', 'checking account', '', "", 10000.0, 'D']
+    assert result["data"]["table"][1] == ['2020-01-02', 1, 'capital contribution john doe', 1, '1.1.2', 'checking account', '', "", 10000.0, 'D']
 
 
 def test_general_ledger():
@@ -52,7 +52,7 @@ def test_general_ledger():
         'date_to': '2020-01-31'}
     assert  result["data"]["table"][0] == ['dt', 'num', 'descr', 'seq', 'doc_type', 'doc_num', 'val_db', 'val_cr', 'val_bal']
     assert result["data"]["table"][1] == ['1.1.2 - checking account']
-    assert result["data"]["table"][2] == ['2020-01-02', 1, 'capital contribution', 1, '', "", 10000.0, 0, 10000.0]
+    assert result["data"]["table"][2] == ['2020-01-02', 1, 'capital contribution john doe', 1, '', "", 10000.0, 0, 10000.0]
 
 
 def test_trial_balance():
@@ -69,7 +69,7 @@ def test_trial_balance():
         'date': '2020-01-01',
         'date_to': '2020-01-31'}
     assert result["data"]["table"][0] == ['acc_num', 'acc_name', 'val_open', 'val_db', 'val_cr', 'val_bal']
-    assert result["data"]["table"][1] == ['1.0.0', 'assets', 0, 12625.0, -1240.0, 11385.0]
-    assert result["data"]["table"][2] == ['1.1.0', 'current assets', 0, 12625.0, -1240.0, 11385.0]
+    assert result["data"]["table"][1] == ['1.0.0', 'assets', 0, 22625.0, -1240.0, 21385.0]
+    assert result["data"]["table"][2] == ['1.1.0', 'current assets', 0, 22625.0, -1240.0, 21385.0]
     assert result["data"]["table"][3] == ['1.1.1', 'cash', 0, 0, 0, 0]
-    assert result["data"]["table"][4] == ['1.1.2', 'checking account', 0, 11050.0, -190.0, 10860.0]
+    assert result["data"]["table"][4] == ['1.1.2', 'checking account', 0, 21050.0, -190.0, 20860.0]

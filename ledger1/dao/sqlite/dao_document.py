@@ -25,7 +25,6 @@ def get_many(doc_type: str = None) -> list[dict]:
             INNER JOIN account1 a ON a.num = d.acc_num
         WHERE d.doc_type LIKE ?
         """
-        #query_params = (doc_type,)
         doc_type_param = "%" if doc_type is None else doc_type
         query_params = (doc_type_param,)
 
@@ -41,6 +40,7 @@ def get_many(doc_type: str = None) -> list[dict]:
 
 
 def get_many_tra(doc_dc: bool, doc_type: str):
+    print(11, doc_dc, doc_type)
 
     con, cur = dbutil.get_connection()
 
@@ -134,7 +134,6 @@ def post(data: dict):
         raise IOError(f"creating document {data["doc_type"]} {data["doc_num"]}: {str(err)}") from err
     finally:
         con.close()
-
 
 
 def put(data: dict):

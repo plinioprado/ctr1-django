@@ -4,6 +4,11 @@
 
 import ledger1.transaction.transaction_service as service
 from ledger1.admin.admin_service import reset
+from ledger1.tests.utils import test_util
+
+
+next_num = test_util.get_last_tra_num() + 1
+
 
 def test_get_one():
 
@@ -16,7 +21,7 @@ def test_get_one():
     assert result["data"] == {
         'num': 1,
         'date': "2020-01-02",
-        'descr': "capital contribution",
+        'descr': "capital contribution john doe",
         "seqs": [
             {
                 "account": "1.1.2",
@@ -53,6 +58,8 @@ def test_get_one():
 
 def test_post():
 
+    print(11, next_num)
+
     result = service.post({
             "date": "2020-01-25",
             "descr": "sale to test ltd",
@@ -80,16 +87,16 @@ def test_post():
 
     assert result == {
         "code": 200,
-        "data": { "id": 7 },
-        "message": "transaction 7 created"
+        "data": { "id": next_num },
+        "message": f"transaction {next_num} created"
     }
 
-    result2 = service.get(7)
+    result2 = service.get(next_num)
 
     assert result2["code"] == 200
     assert result2["message"] == "ok"
     assert result2["data"] == {
-            "num": 7,
+            "num": next_num,
             "date": "2020-01-25",
             "descr": "sale to test ltd",
             "seqs": [
@@ -118,7 +125,7 @@ def test_post():
 def test_update():
 
     result = service.put({
-        "num": 7,
+        "num": next_num,
         "date": "2020-01-25",
         "descr": "sale to test ltdxxx",
         "seqs": [
@@ -145,15 +152,15 @@ def test_update():
 
     assert result == {
         "code": 200,
-        "message": "transaction 7 updated"
+        "message": f"transaction {next_num} updated"
     }
 
-    result2 = service.get(7)
+    result2 = service.get(next_num)
 
     assert result2["code"] == 200
     assert result2["message"] == "ok"
     assert result2["data"] == {
-        "num": 7,
+        "num": next_num,
         "date": "2020-01-25",
         "descr": "sale to test ltdxxx",
         "seqs": [
@@ -180,14 +187,14 @@ def test_update():
 
 def test_delete():
 
-    result = service.delete(7)
+    result = service.delete(next_num)
 
     assert result == {
         "code": 200,
-        "message": "transaction 7 deleted"
+        "message": f"transaction {next_num} deleted"
     }
 
-    result2 = service.get(7)
+    result2 = service.get(next_num)
 
     assert result2 == {
         "code": 200,
