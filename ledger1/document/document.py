@@ -56,6 +56,7 @@ class Document:
         self.dt = data["dt"]
         self.descr = data["descr"]
         self.tra_num = None
+
         self.seqs = []
         for op in op_seq_acc:
             doc_seq: list[dict] = [seq for seq in data["seqs"] if seq["acc"] == op["acc"]]

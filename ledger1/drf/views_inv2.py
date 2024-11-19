@@ -14,19 +14,20 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view #, permission_classes
 # from rest_framework.permissions import IsAuthenticated
 from ledger1.document import invoices2
+from ledger1.document import documents
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 # @permission_classes([IsAuthenticated])
 def view(request: Request, num: str = None):
     try:
         if request.method == "GET":
-            ret: dict = invoices2.get(num)
+            ret: dict = documents.get(doc_dc=False, doc_type="inv2", doc_num=num)
 
         elif request.method == "DELETE":
             ret = invoices2.delete(num)
 
         elif request.method == "POST":
-            ret = invoices2.post(data=request.data)
+            ret = documents.post(doc_type="inv2", data=request.data)
 
         elif request.method == "PUT":
 
@@ -35,7 +36,7 @@ def view(request: Request, num: str = None):
         else:
             raise ValueError("invalid method")
 
-        status_code = ret.pop("code")
+        status_code = ret.pop("status")
         response: Response = Response(ret)
         response.status_code = status_code
         return response

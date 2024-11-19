@@ -1,5 +1,4 @@
-id,name,traacc,active
-"accban1","checking acc",1,1
-"bstat1","bank statement",1,1
-"inv2","invoice",1,1
-"eft","eft",1,1
+id,name,traacc,num_on_base,active
+"bstat2","bank statement",0,0,1
+"inv2","invoice",1,0,1
+"eft","eft",1,1,1

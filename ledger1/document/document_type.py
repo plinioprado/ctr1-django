@@ -15,6 +15,7 @@ from dataclasses import dataclass
 class DocumentType:
     id: str
     name: str
+    num_on_base: bool
     active: bool
 
     def __post_init__(self):
@@ -25,6 +26,8 @@ class DocumentType:
         if not self.name:
             raise ValueError('missing document type name')
         if not isinstance(self.id, str) or len(self.id) > 30:
+            raise ValueError('invalid document type name')
+        if self.num_on_base not in [True, False]:
             raise ValueError('invalid document type name')
         if self.active not in [True, False]:
             self.active = True

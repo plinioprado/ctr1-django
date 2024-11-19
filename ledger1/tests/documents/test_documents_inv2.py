@@ -94,3 +94,30 @@ def test_get_new_inv2():
             }
         ]
     }
+
+
+def test_post_inv2_sell():
+
+    response = documents.post(
+        doc_type="eft",
+        data={
+            "doc_type": "inv2",
+            "doc_num": "9.1",
+            "doc_dc": False,
+            "dt": "2020-01-22",
+            "cpart_name": "Ccc Ltd",
+            "descr": "sale to Ccc Ltd",
+            "tra_num": "new",
+            "seqs": [
+                { "type": "base", "text": "", "acc": "3.1.1", "val": 100 },
+                { "type": "add", "text": "", "acc": "2.1.3", "val": 5 },
+                { "type": "tot", "text": "", "acc": "1.1.3", "val": 105 }
+            ]
+        })
+
+    assert response['message'] == "document eft 9.1 created"
+    assert response['status'] == 200
+
+    response2 = documents.get(doc_dc=False, doc_type="inv2", doc_num="9.1")
+
+    assert response2['data']["descr"] == "some payment"
