@@ -2,6 +2,7 @@ from ledger1.utils import fileio
 from ledger1.dao.sqlite import dao_document
 from ledger1.document.document import Document
 from ledger1.transaction import transaction_service as transactions
+from ledger1.document.document_types import DocumentTypes
 
 # get
 
@@ -18,7 +19,7 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
 
     elif doc_num == "new":
         op_seq_acc = get_op_seq_acc(doc_dc, doc_type)
-        doc = Document(doc_dc=doc_dc, doc_type=doc_type)
+        doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
         data = doc.get_new()
 
         response = {
@@ -51,7 +52,7 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
 
 
 def get_one(doc_dc: str, doc_type: str, doc_num: str, op_seq_acc: list[dict]):
-    doc = Document(doc_dc=doc_dc, doc_type=doc_type)
+    doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
     tra: dict = transactions.get_by_doc(doc_type, doc_num)
     doc.set_from_transaction(tra, op_seq_acc)
 
@@ -78,7 +79,7 @@ def get_many(doc_dc: bool, doc_type: str):
 
 
 def post(doc_type: str, data) -> dict:
-    doc: Document = Document(doc_dc=data["doc_dc"], doc_type=doc_type)
+    doc: Document = get_document(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
     op_seq_acc = get_op_seq_acc(data["doc_dc"], doc_type)
     doc.set_from_request(data, op_seq_acc)
 
@@ -97,15 +98,15 @@ def post(doc_type: str, data) -> dict:
 def put(doc_type: str, data: dict) -> dict:
     """ create new payment """
 
-    pmt: Document = Document(doc_dc=data["doc_dc"], doc_type=doc_type)
+    doc = get_document(doc_dc=data["doc_dc"], doc_type=doc_type)
     op_seq_acc = get_op_seq_acc(data["doc_dc"], doc_type)
 
-    pmt.set_from_request(data, op_seq_acc)
+    doc.set_from_request(data, op_seq_acc)
     tra = transactions.get_by_doc(data["doc_type"], data["doc_num"])
-    pmt.tra_num = tra["num"]
+    doc.tra_num = tra["num"]
 
-    transactions.put(pmt.get_to_transaction())
-    dao_document.put(pmt.get_to_document())
+    transactions.put(doc.get_to_transaction())
+    dao_document.put(doc.get_to_document())
 
     return {
         "status": 200,
@@ -138,3 +139,9 @@ def get_op_seq_acc(doc_dc: bool, doc_type: str) -> list[dict]:
     ]
 
     return options
+
+
+def get_document(doc_dc: bool, doc_type: str) -> Document:
+    document_type: dict = DocumentTypes().get(doc_type)
+
+    return Document(doc_dc=doc_dc, document_type=document_type)

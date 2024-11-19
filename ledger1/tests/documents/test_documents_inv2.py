@@ -32,7 +32,7 @@ def test_get_many_inv2_buy():
 
 
 def test_get_one_inv2_sell():
-    response = documents.get(doc_dc=False, doc_type="inv2", doc_num=1.1)
+    response = documents.get(doc_dc=False, doc_type="inv2", doc_num="1.1")
 
     assert response['message'] == 'wip'
     assert response['status'] == 200
@@ -72,26 +72,15 @@ def test_get_new_inv2():
     assert response['message'] == 'wip'
     assert response['status'] == 200
     assert response["data"] == {
+        "cpart_name": "",
+        "descr": "",
         "doc_type": "inv2",
         "doc_num": "",
         "doc_dc": False,
         "dt": "",
-        "cpart_name": "",
-        "descr": "",
-        "tra_num": "new",
         "seqs": [
-            {
-                "type": "base",
-                "text": "",
-                "acc": "",
-                "val": 0.0
-            },
-            {
-                "type": "tot",
-                "text": "",
-                "acc": "",
-                "val": 0.0
-            }
+            {"type": "base", "text": "", "acc": "", "val": 0.0},
+            {"type": "tot", "text": "", "acc": "", "val": 0.0}
         ]
     }
 
@@ -99,15 +88,14 @@ def test_get_new_inv2():
 def test_post_inv2_sell():
 
     response = documents.post(
-        doc_type="eft",
+        doc_type="inv2",
         data={
-            "doc_type": "inv2",
-            "doc_num": "9.1",
-            "doc_dc": False,
-            "dt": "2020-01-22",
             "cpart_name": "Ccc Ltd",
             "descr": "sale to Ccc Ltd",
-            "tra_num": "new",
+            "doc_dc": False,
+            "doc_num": "9.1",
+            "doc_type": "inv2",
+            "dt": "2020-01-22",
             "seqs": [
                 { "type": "base", "text": "", "acc": "3.1.1", "val": 100 },
                 { "type": "add", "text": "", "acc": "2.1.3", "val": 5 },
@@ -115,9 +103,9 @@ def test_post_inv2_sell():
             ]
         })
 
-    assert response['message'] == "document eft 9.1 created"
+    assert response['message'] == "document inv2 9.1 created"
     assert response['status'] == 200
 
     response2 = documents.get(doc_dc=False, doc_type="inv2", doc_num="9.1")
 
-    assert response2['data']["descr"] == "some payment"
+    assert response2['data']["descr"] == "sale to Ccc Ltd"

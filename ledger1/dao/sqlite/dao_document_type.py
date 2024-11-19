@@ -9,7 +9,7 @@ def get():
             SELECT
                 id,
                 name,
-                num_on_base,
+                num_on_seq,
                 active
             FROM document_type;
             """
@@ -21,7 +21,7 @@ def get():
             types.append(DocumentType(
                 id=str(row["id"]),
                 name=str(row["name"]),
-                num_on_base=int(row["num_on_base"]) == 1,
+                num_on_seq=str(row["num_on_seq"]),
                 active=int(row["active"]) == 1
             ))
 
@@ -48,15 +48,15 @@ def reset() -> None:
                         id,
                         name,
                         traacc,
-                        num_on_base,
+                        num_on_seq,
                         active
-                    ) VALUES (? ?, ?, ?, ?);
+                    ) VALUES (?, ?, ?, ?, ?);
                     """,
                     (
                         str(doc_type["id"]),
                         str(doc_type["name"]),
-                        int(doc_type["num_on_base"]) == 1,
                         int(doc_type["traacc"]) == 1,
+                        str(doc_type["num_on_seq"]),
                         int(doc_type["active"]) == 1,
                     )
                 )

@@ -9,12 +9,12 @@ CREATE TABLE IF NOT EXISTS setting (
     PRIMARY KEY (setting_key)
 );
 
-
 DROP TABLE IF EXISTS document_type;
 CREATE TABLE IF NOT EXISTS document_type (
     id TEXT PRIMARY KEY,
     "name" TEXT,
     traacc INTEGER,
+    num_on_seq TEXT,
     active INTEGER
 );
 

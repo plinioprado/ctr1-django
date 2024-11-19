@@ -1,4 +1,4 @@
-id,name,traacc,num_on_base,active
-"bstat2","bank statement",0,0,1
-"inv2","invoice",1,0,1
-"eft","eft",1,1,1
+id,name,traacc,num_on_seq,active
+"bstat2","bank statement",0,base,1
+"inv2","invoice",1,base,1
+"eft","eft",1,tot,1

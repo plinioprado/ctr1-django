@@ -64,7 +64,6 @@ def test_get_new_eft_pay():
         "dt": "",
         "cpart_name": "",
         "descr": "",
-        "tra_num": "new",
         "seqs": [
             {
                 "type": "base",
@@ -93,7 +92,6 @@ def test_post_eft_pay():
             "dt": "2020-01-22",
             "cpart_name": "ccc",
             "descr": "some payment",
-            "tra_num": "new",
             "seqs": [
                 { "type": "base", "text": "", "acc": "2.1.1", "val": "100" },
                 { "type": "tot", "text": "", "acc": "1.1.2", "val": 100 }

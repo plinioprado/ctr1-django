@@ -8,6 +8,7 @@ class Document:
     dt: str = ""
     descr: str = ""
     doc_dc: bool = None
+    num_on_seq: str = "base"
     tra_num: int = "new"
     seqs: list[DocumentSeq] = []
 
@@ -17,17 +18,13 @@ class Document:
     # options
     doc_types: list[dict] = []
 
-    def __init__(self, doc_type: str, doc_dc: bool):
-        self.doc_type = doc_type
+    def __init__(self, doc_dc: bool, document_type: str):
+        self.doc_type = document_type["id"]
         self.doc_dc = doc_dc
+        self.num_on_seq = document_type["num_on_seq"]
+
 
     def set_from_transaction(self, tra: dict, op_seq_acc: dict):
-        self.doc_type = tra["seqs"][0]["doc"]["type"]
-        self.doc_num = tra["seqs"][0]["doc"]["num"]
-        self.doc_dc = tra["seqs"][0]["dc"]
-        self.dt = tra["date"]
-        self.descr = tra["descr"]
-        self.tra_num = tra["num"]
 
         self.seqs = []
         for op in op_seq_acc:
@@ -41,6 +38,13 @@ class Document:
                 acc=tra_seq[0]["account"],
                 val=tra_seq[0]["val"]
             ))
+
+        self.doc_type = tra["seqs"][0]["doc"]["type"]
+        self.doc_num = tra["seqs"][0]["doc"]["num"]
+        self.doc_dc = tra["seqs"][0]["dc"]
+        self.dt = tra["date"]
+        self.descr = tra["descr"]
+        self.tra_num = tra["num"]
 
         self.doc_type = tra["seqs"][0]["doc"]["type"]
         self.doc_num = tra["seqs"][0]["doc"]["num"]
@@ -84,7 +88,6 @@ class Document:
             "dt": "",
             "cpart_name": "",
             "descr": "",
-            "tra_num": "new",
             "seqs": [
                 {
                     "type": "base",
@@ -106,15 +109,18 @@ class Document:
         tra_seqs = []
         for doc_seq in self.seqs:
             seq = doc_seq.asdict()
-            dc = self.doc_dc if seq["type"] in ["add","tot"] else not self.doc_dc
+            if self.num_on_seq == "base":
+                dc = self.doc_dc if seq["type"] in ["base","add"] else not self.doc_dc
+            else:
+                dc = self.doc_dc if seq["type"] in ["sub","tot"] else not self.doc_dc
 
             tra_seqs.append({
                 "account": seq["acc"],
                 "val": seq["val"],
                 "dc": dc,
                 "doc": {
-                    "type": self.doc_type if seq["type"] == "tot" else "",
-                    "num": self.doc_num if seq["type"] == "tot" else "",
+                    "type": self.doc_type if seq["type"] == self.num_on_seq else "",
+                    "num": self.doc_num if seq["type"] == self.num_on_seq else "",
                 }
             })
 
