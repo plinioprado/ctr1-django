@@ -24,14 +24,14 @@ def view(request: Request, num: str = None):
             ret: dict = documents.get(doc_dc=False, doc_type="inv2", doc_num=num)
 
         elif request.method == "DELETE":
-            ret = invoices2.delete(num)
+            ret = documents.delete(doc_type="inv2", doc_num=num)
 
         elif request.method == "POST":
             ret = documents.post(doc_type="inv2", data=request.data)
 
         elif request.method == "PUT":
 
-            ret = invoices2.put(data=request.data)
+            ret = documents.put(doc_type="inv2", data=request.data)
 
         else:
             raise ValueError("invalid method")

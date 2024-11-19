@@ -93,7 +93,7 @@ def test_post_eft_pay():
             "cpart_name": "ccc",
             "descr": "some payment",
             "seqs": [
-                { "type": "base", "text": "", "acc": "2.1.1", "val": "100" },
+                { "type": "base", "text": "", "acc": "2.1.1", "val": 100 },
                 { "type": "tot", "text": "", "acc": "1.1.2", "val": 100 }
             ]
         })
