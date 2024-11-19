@@ -40,7 +40,6 @@ def get_many(doc_type: str = None) -> list[dict]:
 
 
 def get_many_tra(doc_dc: bool, doc_type: str):
-    print(11, doc_dc, doc_type)
 
     con, cur = dbutil.get_connection()
 

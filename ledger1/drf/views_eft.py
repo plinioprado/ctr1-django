@@ -1,27 +1,27 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from ledger1.document import payments
+from ledger1.document import documents
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def view(request: Request, num: str = None):
     try:
         if request.method == "GET":
-            ret: dict = payments.get(doc_dc=False, doc_type="eft", doc_num=num)
+            ret: dict = documents.get(doc_dc=False, doc_type="eft", doc_num=num)
 
         elif request.method == "DELETE":
-            ret = payments.delete(doc_type="eft", doc_num=num)
+            ret = documents.delete(doc_type="eft", doc_num=num)
 
         elif request.method == "POST":
-            ret = payments.post(data=request.data)
+            ret = documents.post(doc_type="eft", data=request.data)
 
         elif request.method == "PUT":
-            ret = payments.put(data=request.data)
+            ret = documents.put(doc_type="eft", data=request.data)
 
         else:
             raise ValueError("invalid method")
 
-        status_code = ret.pop("code")
+        status_code = ret.pop("status")
         response: Response = Response(ret)
         response.status_code = status_code
         return response

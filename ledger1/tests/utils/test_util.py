@@ -31,8 +31,6 @@ def get_last_tra_num():
 
         row = cur.fetchone()
 
-        print(111, dict(row))
-
         return row["num"]
 
     except sqlite3.DatabaseError as err:

@@ -58,8 +58,6 @@ def test_get_one():
 
 def test_post():
 
-    print(11, next_num)
-
     result = service.post({
             "date": "2020-01-25",
             "descr": "sale to test ltd",
