@@ -36,26 +36,29 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
             "message": "wip",
             "options": {
                 "op_seq_acc": op_seq_acc,
-                "doc_dc": doc_dc
+                "doc_dc": document_options.get_op_doc_dc(doc_type),
             },
             "status": 200,
         }
 
     else:
-        op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=doc_dc)
+        tra: dict = transactions.get_by_doc(doc_type, doc_num)
+        tra_doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
+        op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
 
-        data: dict = get_one(
-            doc_dc=doc_dc,
-            doc_type=doc_type,
-            doc_num=doc_num,
-            op_seq_acc=op_seq_acc)
+        doc: Document = get_document(doc_dc=tra_doc_dc, doc_type=doc_type)
+        doc.set_from_transaction(tra, op_seq_acc)
+
+        res: dict = dao_document.get_one(doc_type, doc_num)
+        doc.add_document_data(res)
+        data = doc.get_to_response()
 
         response = {
             "data": data,
             "message": "wip",
             "options": {
                 "op_seq_acc": op_seq_acc,
-                "doc_dc": doc_dc
+                "doc_dc": document_options.get_op_doc_dc(doc_type),
             },
             "status": 200,
         }
@@ -63,9 +66,12 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
     return response
 
 
-def get_one(doc_dc: str, doc_type: str, doc_num: str, op_seq_acc: list[dict]):
-    doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
+def get_one(doc_type: str, doc_num: str, op_seq_acc: list[dict]):
     tra: dict = transactions.get_by_doc(doc_type, doc_num)
+    doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
+
+    doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
+
     doc.set_from_transaction(tra, op_seq_acc)
 
     res: dict = dao_document.get_one(doc_type, doc_num)

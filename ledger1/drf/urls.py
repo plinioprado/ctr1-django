@@ -19,7 +19,7 @@ urlpatterns = [
     path("doc/banstat/", views_banstat2.view),
     path("doc/banstat/<str:acc>/", views_banstat2.view),
     path("doc/inv2", views_inv2.view),
-    path("doc/inv2/<str:num>/", views_inv2.view),
+    path("doc/inv2/<str:num>", views_inv2.view),
     path("doc/eft", views_eft.view),
-    path("doc/eft/<str:num>/", views_eft.view),
+    path("doc/eft/<str:num>", views_eft.view),
 ]

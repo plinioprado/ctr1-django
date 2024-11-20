@@ -20,4 +20,4 @@ inv2,True,base,4.2.6,bank fee
 inv2,True,add,2.1.3,gst
 inv2,True,tot,1.1.1,cash
 inv2,True,tot,1.1.2,checking account
-inv2,True,tot,3.2.1,account payable
+inv2,True,tot,2.1.1,account payable
