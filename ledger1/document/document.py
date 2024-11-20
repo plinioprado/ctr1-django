@@ -18,7 +18,7 @@ class Document:
     # options
     doc_types: list[dict] = []
 
-    def __init__(self, doc_dc: bool, document_type: str):
+    def __init__(self, doc_dc: bool, document_type: dict):
         self.doc_type = document_type["id"]
         self.doc_dc = doc_dc
         self.num_on_seq = document_type["num_on_seq"]

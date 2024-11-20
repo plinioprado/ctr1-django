@@ -10,17 +10,17 @@ def get_many() -> list[dict]:
     try:
 
         query_text = """
-            SELECT
-                d.num,
-                t.dt,
-                d.cpart_name,
-                d.descr,
-                td.val as val_sale
-                FROM invoice2 d
-                    INNER JOIN transaction1_detail td ON
-                        td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
-                    INNER JOIN transaction1 t ON t.num = td.num
-                ORDER BY d.num
+        SELECT
+            d.num,
+            t.dt,
+            d.cpart_name,
+            d.descr,
+            td.val as val_sale
+            FROM invoice2 d
+                INNER JOIN transaction1_detail td ON
+                    td.seq = 1 AND td.doc_type = "inv2" AND td.doc_num = d.num
+                INNER JOIN transaction1 t ON t.num = td.num
+            ORDER BY d.num
             """
 
         cur.execute(query_text)
