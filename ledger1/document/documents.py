@@ -1,11 +1,12 @@
-from ledger1.utils import fileio
 from ledger1.dao.sqlite import dao_document
 from ledger1.document.document import Document
 from ledger1.document import document_options
 from ledger1.transaction import transaction_service as transactions
 from ledger1.document.document_types import DocumentTypes
 
+
 # get
+
 
 def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
 
@@ -16,34 +17,46 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
             "data": data,
             "message": "wip",
             "status": 200,
+            "options": {
+                "doc_dc": document_options.get_op_doc_dc(doc_type),
+            },
+            "filters": {
+                "doc_dc": doc_dc
+            }
         }
 
     elif doc_num == "new":
 
         doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
         data = doc.get_new()
-        options = document_options.get(doc_type=doc_type, doc_dc=doc_dc)
+        op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=doc_dc)
 
         response = {
             "data": data,
             "message": "wip",
-            "options": options,
+            "options": {
+                "op_seq_acc": op_seq_acc,
+                "doc_dc": doc_dc
+            },
             "status": 200,
         }
 
     else:
-        options = document_options.get(doc_type=doc_type, doc_dc=doc_dc)
+        op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=doc_dc)
 
         data: dict = get_one(
             doc_dc=doc_dc,
             doc_type=doc_type,
             doc_num=doc_num,
-            op_seq_acc=options["op_seq_acc"])
+            op_seq_acc=op_seq_acc)
 
         response = {
             "data": data,
             "message": "wip",
-            "options": options,
+            "options": {
+                "op_seq_acc": op_seq_acc,
+                "doc_dc": doc_dc
+            },
             "status": 200,
         }
 
@@ -59,12 +72,6 @@ def get_one(doc_dc: str, doc_type: str, doc_num: str, op_seq_acc: list[dict]):
     doc.add_document_data(res)
     data = doc.get_to_response()
 
-    # Because initially doc_type was in doc.seqs[0]
-    if data["doc_type"] != doc_type:
-        data["doc_type"] = doc_type
-        data["doc_num"] = doc_num
-        data["doc_dc"] = False
-
     return data
 
 
@@ -76,11 +83,11 @@ def get_many(doc_dc: bool, doc_type: str):
 
 # post
 
-def post(doc_type: str, data) -> dict:
-    options = document_options.get(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+def post(data) -> dict:
+    op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
 
     doc: Document = get_document(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
-    doc.set_from_request(data, options["op_seq_acc"])
+    doc.set_from_request(data, op_seq_acc)
 
     transactions.post(doc.get_to_transaction())
     dao_document.post(doc.get_to_document())
@@ -94,11 +101,11 @@ def post(doc_type: str, data) -> dict:
 # put
 
 
-def put(doc_type: str, data: dict) -> dict:
-    options = document_options.get(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+def put(data: dict) -> dict:
+    op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
 
-    doc = get_document(doc_dc=data["doc_dc"], doc_type=doc_type)
-    doc.set_from_request(data, options["op_seq_acc"])
+    doc = get_document(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+    doc.set_from_request(data, op_seq_acc)
 
     tra = transactions.get_by_doc(data["doc_type"], data["doc_num"])
     doc.tra_num = tra["num"]
@@ -128,15 +135,6 @@ def delete(doc_type: str, doc_num: str) -> dict:
 
 
 ## helpers
-
-
-# def get_op_seq_acc(doc_dc: bool, doc_type: str) -> list[dict]:
-#     op_seq_acc = fileio.read_csv('./ledger1/dao/csv/document_acc_type.csv')
-#     options = [
-#         op for op in op_seq_acc if op["doc_type"] == doc_type and (op["dc"] == "True") ==  doc_dc
-#     ]
-
-#     return options
 
 
 def get_document(doc_dc: bool, doc_type: str) -> Document:

@@ -19,18 +19,22 @@ from ledger1.document import documents
 # @permission_classes([IsAuthenticated])
 def view(request: Request, num: str = None):
     try:
+
         if request.method == "GET":
-            ret: dict = documents.get(doc_dc=False, doc_type="inv2", doc_num=num)
+            ret: dict = documents.get(
+                doc_dc=request.query_params.get("dc") == 'true',
+                doc_type="inv2",
+                doc_num=num)
 
         elif request.method == "DELETE":
             ret = documents.delete(doc_type="inv2", doc_num=num)
 
         elif request.method == "POST":
-            ret = documents.post(doc_type="inv2", data=request.data)
+            ret = documents.post(data=request.data)
 
         elif request.method == "PUT":
 
-            ret = documents.put(doc_type="inv2", data=request.data)
+            ret = documents.put(data=request.data)
 
         else:
             raise ValueError("invalid method")
