@@ -10,6 +10,8 @@ def get():
                 id,
                 name,
                 num_on_seq,
+                dc_false_name,
+                dc_true_name,
                 active
             FROM document_type;
             """
@@ -22,9 +24,10 @@ def get():
                 id=str(row["id"]),
                 name=str(row["name"]),
                 num_on_seq=str(row["num_on_seq"]),
+                dc_false_name=str(row["dc_false_name"]),
+                dc_true_name=str(row["dc_true_name"]),
                 active=int(row["active"]) == 1
             ))
-
         return types
 
     except sqlite3.DatabaseError as err:
@@ -49,14 +52,18 @@ def reset() -> None:
                         name,
                         traacc,
                         num_on_seq,
+                        dc_true_name,
+                        dc_false_name,
                         active
-                    ) VALUES (?, ?, ?, ?, ?);
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?);
                     """,
                     (
                         str(doc_type["id"]),
                         str(doc_type["name"]),
                         int(doc_type["traacc"]) == 1,
                         str(doc_type["num_on_seq"]),
+                        str(doc_type["dc_true_name"]),
+                        str(doc_type["dc_false_name"]),
                         int(doc_type["active"]) == 1,
                     )
                 )

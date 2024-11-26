@@ -15,8 +15,11 @@ CREATE TABLE IF NOT EXISTS document_type (
     "name" TEXT,
     traacc INTEGER,
     num_on_seq TEXT,
+    dc_true_name TEXT,
+    dc_false_name TEXT,
     active INTEGER
 );
+
 
 -- account
 
@@ -49,7 +52,8 @@ CREATE TABLE IF NOT EXISTS transaction1_detail (
     val real,
     dc BOOL,
     doc_type TEXT,
-    doc_num TEXT
+    doc_num TEXT,
+    PRIMARY KEY (num, seq)
 );
 
 -- document
@@ -61,6 +65,17 @@ CREATE TABLE IF NOT EXISTS document (
     acc_num TEXT,
     cpart_name TEXT,
     PRIMARY KEY (doc_type, doc_num)
+);
+
+DROP TABLE IF EXISTS document_field;
+CREATE TABLE IF NOT EXISTS document_field (
+    doc_type TEXT,
+    doc_num TEXT,
+    field_group TEXT,
+    field_name TEXT,
+    field_value TEXT,
+    PRIMARY KEY (doc_type, doc_num, field_group, field_name),
+    FOREIGN KEY (doc_type, doc_num) REFERENCES document (doc_type, doc_num) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS invoice2;

@@ -125,6 +125,29 @@ def post(data: dict):
         """
         query_params = (data["doc_type"],data["doc_num"],data["cpart_name"])
         cur.execute(query_text, query_params)
+
+        query_text2: str = """
+        INSERT INTO document_field (
+            doc_type,
+            doc_num,
+            field_group,
+            field_name,
+            field_value
+        )
+        VALUES (?, ?, ?, ?, ?);
+        """
+
+        for field_group in data["fields"]:
+            for field_name in data["fields"][field_group]:
+                query_params2 = (
+                    data["doc_type"],
+                    data["doc_num"],
+                    field_group,
+                    field_name,
+                    data["fields"][field_group][field_name]
+                )
+                cur.execute(query_text2, query_params2)
+
         con.commit()
 
         return {"doc_type": data["doc_type"],"doc_num": data["doc_num"]}
@@ -148,6 +171,28 @@ def put(data: dict):
         """
         query_params = (data["cpart_name"],data["doc_type"],data["doc_num"])
         cur.execute(query_text, query_params)
+
+        query_text2: str = """
+        UPDATE document_field
+        SET
+            field_value = ?
+        WHERE
+            doc_type = ? AND
+            doc_num = ? AND
+            field_group = ? AND
+            field_name = ?
+        """
+        for field_group in data["fields"]:
+            for field_name in data["fields"][field_group]:
+                query_params2 = (
+                    data["fields"][field_group][field_name],
+                    data["doc_type"],
+                    data["doc_num"],
+                    field_group,
+                    field_name,
+                )
+                cur.execute(query_text2, query_params2)
+
         con.commit()
 
         return {"doc_type": data["doc_type"],"doc_num": data["doc_num"]}
@@ -169,6 +214,13 @@ def delete(doc_type: str, doc_num: str):
         """
         query_params = (doc_type, doc_num)
         cur.execute(query_text, query_params)
+
+        query_text2 = """
+        DELETE FROM document_field
+        WHERE doc_type = ? AND doc_num = ?;
+        """
+        cur.execute(query_text2, query_params)
+
         con.commit()
 
         return (doc_type,doc_num)
@@ -177,6 +229,7 @@ def delete(doc_type: str, doc_num: str):
         raise IOError(f"deleting document {doc_type} {doc_num}: {str(err)}") from err
     finally:
         con.close()
+
 
 def restore(file_name) -> None:
     """ Restore from CSV """

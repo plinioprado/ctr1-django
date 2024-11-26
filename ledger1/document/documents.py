@@ -1,4 +1,5 @@
 from ledger1.dao.sqlite import dao_document
+from ledger1.dao.sqlite import dao_document_field
 from ledger1.document.document import Document
 from ledger1.document import document_options
 from ledger1.transaction import transaction_service as transactions
@@ -27,9 +28,16 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
 
     elif doc_num == "new":
 
+        # set primary attributes
         doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
-        data = doc.get_new()
+        #data = doc.get_new()
         op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=doc_dc)
+
+        # set terciary attributes
+        fields: dict = dao_document_field.get_one(doc_type, doc_num)
+        doc.add_fields_data(fields)
+
+        data = doc.get_to_response()
 
         response = {
             "data": data,
@@ -46,11 +54,18 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
         tra_doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
         op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
 
+        # set primary attributes
         doc: Document = get_document(doc_dc=tra_doc_dc, doc_type=doc_type)
         doc.set_from_transaction(tra, op_seq_acc)
 
+        # set secondary attributes
         res: dict = dao_document.get_one(doc_type, doc_num)
         doc.add_document_data(res)
+
+        # set terciary attributes
+        fields: dict = dao_document_field.get_one(doc_type, doc_num)
+        doc.add_fields_data(fields)
+
         data = doc.get_to_response()
 
         response = {
@@ -109,13 +124,10 @@ def post(data) -> dict:
 
 def put(data: dict) -> dict:
     op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
-
     doc = get_document(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
     doc.set_from_request(data, op_seq_acc)
-
     tra = transactions.get_by_doc(data["doc_type"], data["doc_num"])
     doc.tra_num = tra["num"]
-
     transactions.put(doc.get_to_transaction())
     dao_document.put(doc.get_to_document())
 
@@ -144,6 +156,10 @@ def delete(doc_type: str, doc_num: str) -> dict:
 
 
 def get_document(doc_dc: bool, doc_type: str) -> Document:
-    document_type: dict = DocumentTypes().get(doc_type)
 
-    return Document(doc_dc=doc_dc, document_type=document_type)
+    document_types: DocumentTypes = DocumentTypes()
+    document_type: dict = document_types.get(doc_type)
+
+    return Document(
+        doc_dc=doc_dc,
+        document_type=document_type)

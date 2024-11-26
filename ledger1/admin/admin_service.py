@@ -9,6 +9,7 @@ from ledger1.dao.sqlite import dao_transaction1
 from ledger1.dao.sqlite import dao_invoice2
 from ledger1.dao.sqlite import dao_document
 from ledger1.dao.sqlite import dao_setting
+from ledger1.dao.sqlite import dao_document_field
 
 
 def reset() -> dict:
@@ -28,6 +29,7 @@ def reset() -> dict:
     dao_transaction1.reset()
     dao_invoice2.restore(settings)
     dao_document.restore(settings["file"]["csv"]["document"])
+    dao_document_field.restore(settings["file"]["csv"]["document_field"])
     dao_setting.restore(settings["file"]["csv"]["setting"])
 
     return {

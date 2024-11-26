@@ -1,4 +1,5 @@
 from ledger1.utils import fileio
+from ledger1.document.document_types import DocumentTypes
 
 
 def get_op_seq_acc(doc_dc: bool, doc_type: str) -> list[dict]:
@@ -12,12 +13,10 @@ def get_op_seq_acc(doc_dc: bool, doc_type: str) -> list[dict]:
 
 def get_op_doc_dc(doc_type: str):
 
-    if doc_type == "inv2":
-        options: list[dict] = [
-            { "value": False, "text": "Sell"},
-            { "value": True, "text": "Buy"}
-        ]
-    else:
-        options = [{ "value": True, "text": "Pay"}]
+    document_type = DocumentTypes().get(doc_type=doc_type)
+    options: list[dict] = [
+        { "value": False, "text": document_type["dc_false_name"]},
+        { "value": True, "text": document_type["dc_true_name"]}
+    ]
 
     return options

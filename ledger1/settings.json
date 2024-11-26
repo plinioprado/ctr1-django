@@ -20,6 +20,7 @@
     },
     "csv": {
       "document": "./ledger1/dao/csv/document.csv",
+      "document_field": "./ledger1/dao/csv/document_field.csv",
       "setting": "./ledger1/dao/csv/setting.csv"
     }
   }

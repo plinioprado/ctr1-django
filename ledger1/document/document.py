@@ -7,16 +7,33 @@ class Document:
     doc_num: str = ""
     dt: str = ""
     descr: str = ""
-    doc_dc: bool = None
+    doc_dc: bool = True
     num_on_seq: str = "base"
-    tra_num: int = "new"
-    seqs: list[DocumentSeq] = []
+    tra_num: str = "new"
+    seqs: list[DocumentSeq] = [
+        DocumentSeq(
+            type="base",
+            text="",
+            acc="",
+            val=0.0
+        ),
+        DocumentSeq(
+            type="tot",
+            text="",
+            acc="",
+            val=0.0
+        ),
+    ]
 
     # secondary
     cpart_name: str = ""
 
+    # tertiary
+    fields = {}
+
     # options
-    doc_types: list[dict] = []
+    options: dict = {}
+
 
     def __init__(self, doc_dc: bool, document_type: dict):
         self.doc_type = document_type["id"]
@@ -39,16 +56,14 @@ class Document:
                 val=tra_seq[0]["val"]
             ))
 
-        self.doc_type = tra["seqs"][0]["doc"]["type"]
-        self.doc_num = tra["seqs"][0]["doc"]["num"]
-        self.doc_dc = tra["seqs"][0]["dc"]
+            if self.num_on_seq == op["type"]:
+                self.doc_type = tra_seq[0]["doc"]["type"]
+                self.doc_num = tra_seq[0]["doc"]["num"]
+                self.doc_dc = tra_seq[0]["dc"]
+
         self.dt = tra["date"]
         self.descr = tra["descr"]
         self.tra_num = tra["num"]
-
-        self.doc_type = tra["seqs"][0]["doc"]["type"]
-        self.doc_num = tra["seqs"][0]["doc"]["num"]
-        self.doc_dc = tra["seqs"][0]["dc"]
 
 
     def set_from_request(self, data: dict, op_seq_acc: list[dict]):
@@ -60,6 +75,7 @@ class Document:
         self.dt = data["dt"]
         self.descr = data["descr"]
         self.tra_num = None
+        self.fields = data["fields"]
 
         self.seqs = []
         for op in op_seq_acc:
@@ -76,8 +92,12 @@ class Document:
             ))
 
 
-    def add_document_data(self, data):
+    def add_document_data(self, data) -> None:
         self.cpart_name = data["cpart_name"]
+
+
+    def add_fields_data(self, data: dict) -> None:
+        self.fields = data
 
 
     def get_new(self):
@@ -136,7 +156,8 @@ class Document:
         return {
             "doc_type": self.doc_type,
             "doc_num": self.doc_num,
-            "cpart_name": self.cpart_name
+            "cpart_name": self.cpart_name,
+            "fields": self.fields,
         }
 
 
@@ -148,5 +169,6 @@ class Document:
             "dt": self.dt,
             "cpart_name": self.cpart_name,
             "descr": self.descr,
-            "seqs": [seq.asdict() for seq in self.seqs]
+            "seqs": [seq.asdict() for seq in self.seqs],
+            "fields": self.fields,
         }

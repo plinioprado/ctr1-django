@@ -23,7 +23,7 @@ class DocumentSeq:
             raise ValueError("invalid doc_seq type")
         if (not isinstance(self.text, str)) or (not (3 <= len(self.type) <= 20)):
             raise ValueError("invalid doc_seq descr")
-        if not isinstance(self.acc, str) or self.acc == "":
+        if not isinstance(self.acc, str):
             raise ValueError("invalid doc_seq acc")
         if not isinstance(self.val, float) or self.val < 0:
             raise ValueError("invalid doc_seq val")

@@ -16,6 +16,8 @@ class DocumentType:
     id: str
     name: str
     num_on_seq: str
+    dc_true_name: str
+    dc_false_name: str
     active: bool
 
     def __post_init__(self):
@@ -38,6 +40,8 @@ class DocumentType:
             "id": self.id,
             "name": self.name,
             "num_on_seq": self.num_on_seq,
+            "dc_true_name": self.dc_true_name,
+            "dc_false_name": self.dc_false_name,
             "active": self.active
         }
 
