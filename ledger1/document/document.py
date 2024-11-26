@@ -5,6 +5,7 @@ class Document:
     # primary
     doc_type: str = ""
     doc_num: str = ""
+    doc_type_name: str = ""
     dt: str = ""
     descr: str = ""
     doc_dc: bool = True
@@ -38,7 +39,9 @@ class Document:
     def __init__(self, doc_dc: bool, document_type: dict):
         self.doc_type = document_type["id"]
         self.doc_dc = doc_dc
+        self.doc_type_name = document_type["name"]
         self.num_on_seq = document_type["num_on_seq"]
+        self.cpart_role = document_type["cpart_role_d"] if self.doc_type else document_type["cpart_role_c"]
 
 
     def set_from_transaction(self, tra: dict, op_seq_acc: dict):
@@ -75,7 +78,8 @@ class Document:
         self.dt = data["dt"]
         self.descr = data["descr"]
         self.tra_num = None
-        self.fields = data["fields"]
+        if "fields" in data.keys():
+            self.fields = data["fields"]
 
         self.seqs = []
         for op in op_seq_acc:
@@ -166,8 +170,10 @@ class Document:
             "doc_type": self.doc_type,
             "doc_num": self.doc_num,
             "doc_dc": self.doc_dc,
+            "doc_type_name": self.doc_type_name,
             "dt": self.dt,
             "cpart_name": self.cpart_name,
+            "cpart_role": self.cpart_role,
             "descr": self.descr,
             "seqs": [seq.asdict() for seq in self.seqs],
             "fields": self.fields,

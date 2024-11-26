@@ -9,17 +9,6 @@ CREATE TABLE IF NOT EXISTS setting (
     PRIMARY KEY (setting_key)
 );
 
-DROP TABLE IF EXISTS document_type;
-CREATE TABLE IF NOT EXISTS document_type (
-    id TEXT PRIMARY KEY,
-    "name" TEXT,
-    traacc INTEGER,
-    num_on_seq TEXT,
-    dc_true_name TEXT,
-    dc_false_name TEXT,
-    active INTEGER
-);
-
 
 -- account
 
@@ -58,6 +47,19 @@ CREATE TABLE IF NOT EXISTS transaction1_detail (
 
 -- document
 
+DROP TABLE IF EXISTS document_type;
+CREATE TABLE IF NOT EXISTS document_type (
+    id TEXT PRIMARY KEY,
+    "name" TEXT,
+    traacc INTEGER,
+    num_on_seq TEXT,
+    dc_true_name TEXT,
+    dc_false_name TEXT,
+    cpart_role_d TEXT,
+    cpart_role_c TEXT,
+    active INTEGER
+);
+
 DROP TABLE IF EXISTS document;
 CREATE TABLE IF NOT EXISTS document (
     doc_type TEXT NOT NULL,
@@ -76,13 +78,4 @@ CREATE TABLE IF NOT EXISTS document_field (
     field_value TEXT,
     PRIMARY KEY (doc_type, doc_num, field_group, field_name),
     FOREIGN KEY (doc_type, doc_num) REFERENCES document (doc_type, doc_num) ON DELETE CASCADE
-);
-
-DROP TABLE IF EXISTS invoice2;
-CREATE TABLE IF NOT EXISTS invoice2 (
-    num TEXT PRIMARY KEY,
-    dt INT,
-    "type" TEXT,
-    cpart_name TEXT,
-    descr TEXT
 );

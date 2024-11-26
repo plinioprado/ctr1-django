@@ -126,27 +126,28 @@ def post(data: dict):
         query_params = (data["doc_type"],data["doc_num"],data["cpart_name"])
         cur.execute(query_text, query_params)
 
-        query_text2: str = """
-        INSERT INTO document_field (
-            doc_type,
-            doc_num,
-            field_group,
-            field_name,
-            field_value
-        )
-        VALUES (?, ?, ?, ?, ?);
-        """
+        if data["fields"]:
+            query_text2: str = """
+            INSERT INTO document_field (
+                doc_type,
+                doc_num,
+                field_group,
+                field_name,
+                field_value
+            )
+            VALUES (?, ?, ?, ?, ?);
+            """
 
-        for field_group in data["fields"]:
-            for field_name in data["fields"][field_group]:
-                query_params2 = (
-                    data["doc_type"],
-                    data["doc_num"],
-                    field_group,
-                    field_name,
-                    data["fields"][field_group][field_name]
-                )
-                cur.execute(query_text2, query_params2)
+            for field_group in data["fields"]:
+                for field_name in data["fields"][field_group]:
+                    query_params2 = (
+                        data["doc_type"],
+                        data["doc_num"],
+                        field_group,
+                        field_name,
+                        data["fields"][field_group][field_name]
+                    )
+                    cur.execute(query_text2, query_params2)
 
         con.commit()
 

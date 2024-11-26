@@ -1,4 +1,14 @@
 doc_type,doc_num,field_group,field_name,field_value
+inv2,new,payment,account_num,
+inv2,new,payment,institution_num,
+inv2,new,payment,transit_num,
+inv2,new,payment,type,
+inv2,new,person,address,
+inv2,new,person,city,
+inv2,new,person,country,
+inv2,new,person,name,
+inv2,new,person,pcode,
+inv2,new,person,province,
 eft,new,payment,account_num,
 eft,new,payment,institution_num,
 eft,new,payment,transit_num,
@@ -9,15 +19,43 @@ eft,new,person,country,
 eft,new,person,name,
 eft,new,person,pcode,
 eft,new,person,province,
-eft,new,person,role,
-eft,1.1,payment,account_num,111222333
+inv2,1.1,payment,account_num,111222333
+inv2,1.1,payment,institution_num,003
+inv2,1.1,payment,transit_num,12345
+inv2,1.1,payment,type,eft
+inv2,1.1,person,address,"333 Seymour st, suite 201"
+inv2,1.1,person,city,Vancouver
+inv2,1.1,person,country,CAN
+inv2,1.1,person,name,Cedar Store Ltd.
+inv2,1.1,person,pcode,V6B5A6
+inv2,1.1,person,province,BC
+inv2,1.2,payment,account_num,111222333
+inv2,1.2,payment,institution_num,003
+inv2,1.2,payment,transit_num,12345
+inv2,1.2,payment,type,eft
+inv2,1.2,person,address,"333 Seymour st, suite 302"
+inv2,1.2,person,city,Vancouver
+inv2,1.2,person,country,CAN
+inv2,1.2,person,name,Aspen Industries Ltd
+inv2,1.2,person,pcode,V7X1M8
+inv2,1.2,person,province,BC
+inv2,2.135,payment,account_num,111222333
+inv2,2.135,payment,institution_num,003
+inv2,2.135,payment,transit_num,12345
+inv2,2.135,payment,type,eft
+inv2,2.135,person,address,"555, Burrard St, suite 201"
+inv2,2.135,person,city,Vancouver
+inv2,2.135,person,country,CAN
+inv2,2.135,person,name,Jack Black
+inv2,2.135,person,pcode,V7X1M8
+inv2,2.135,person,province,BC
+eft,1.1,payment,account_num,222333444
 eft,1.1,payment,institution_num,003
-eft,1.1,payment,transit_num,12345
+eft,1.1,payment,transit_num,23456
 eft,1.1,payment,type,eft
-eft,1.1,person,address,"101, Main St"
+eft,1.1,person,address,"555, Burrard St, suite 1001"
 eft,1.1,person,city,Vancouver
 eft,1.1,person,country,CAN
 eft,1.1,person,name,Jack Black
-eft,1.1,person,pcode,V6A2S5
+eft,1.1,person,pcode,V7X1M8
 eft,1.1,person,province,BC
-eft,1.1,person,role,Client

@@ -18,6 +18,8 @@ class DocumentType:
     num_on_seq: str
     dc_true_name: str
     dc_false_name: str
+    cpart_role_d: str
+    cpart_role_c: str
     active: bool
 
     def __post_init__(self):
@@ -42,6 +44,8 @@ class DocumentType:
             "num_on_seq": self.num_on_seq,
             "dc_true_name": self.dc_true_name,
             "dc_false_name": self.dc_false_name,
+            "cpart_role_d": self.cpart_role_d,
+            "cpart_role_c": self.cpart_role_c,
             "active": self.active
         }
 

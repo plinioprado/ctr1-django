@@ -86,7 +86,6 @@ def get_one(doc_type: str, doc_num: str, op_seq_acc: list[dict]):
     doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
 
     doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
-
     doc.set_from_transaction(tra, op_seq_acc)
 
     res: dict = dao_document.get_one(doc_type, doc_num)

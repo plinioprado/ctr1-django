@@ -12,6 +12,8 @@ def get():
                 num_on_seq,
                 dc_false_name,
                 dc_true_name,
+                cpart_role_d,
+                cpart_role_c,
                 active
             FROM document_type;
             """
@@ -26,6 +28,8 @@ def get():
                 num_on_seq=str(row["num_on_seq"]),
                 dc_false_name=str(row["dc_false_name"]),
                 dc_true_name=str(row["dc_true_name"]),
+                cpart_role_d=str(row["cpart_role_d"]),
+                cpart_role_c=str(row["cpart_role_c"]),
                 active=int(row["active"]) == 1
             ))
         return types
@@ -54,8 +58,10 @@ def reset() -> None:
                         num_on_seq,
                         dc_true_name,
                         dc_false_name,
+                        cpart_role_d,
+                        cpart_role_c,
                         active
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?);
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
                     """,
                     (
                         str(doc_type["id"]),
@@ -64,6 +70,8 @@ def reset() -> None:
                         str(doc_type["num_on_seq"]),
                         str(doc_type["dc_true_name"]),
                         str(doc_type["dc_false_name"]),
+                        str(doc_type["cpart_role_d"]),
+                        str(doc_type["cpart_role_c"]),
                         int(doc_type["active"]) == 1,
                     )
                 )
