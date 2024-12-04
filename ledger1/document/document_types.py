@@ -13,6 +13,10 @@ class DocumentTypes:
         return [type.asdict() for type in self.types]
 
 
+    def get(self, doc_type) -> dict:
+        return [tp.asdict() for tp in self.types if tp.id == doc_type][0]
+
+
     def get_dict_options(self) -> list[dict]:
         return [{ "value": type.id, "text": type.name} for type in self.types if type.active]
 

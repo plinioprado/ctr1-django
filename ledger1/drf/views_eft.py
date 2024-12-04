@@ -1,41 +1,31 @@
-""" reset DRF view
-
-resets ledger1 db on the path ledger/reset
-
-Arguments:
-    request (Request): DRF REST request object
-
-Returns:
-    Response: DRF REST response reset confirmation
-"""
-
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import api_view #, permission_classes
-# from rest_framework.permissions import IsAuthenticated
-from documents.invoice2 import invoices2
+from rest_framework.decorators import api_view
+from ledger1.document import documents
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
-# @permission_classes([IsAuthenticated])
 def view(request: Request, num: str = None):
     try:
         if request.method == "GET":
-            ret: dict = invoices2.get(num)
+
+            ret: dict = documents.get(
+                doc_dc=request.query_params.get("dc") == 'true',
+                doc_type="eft",
+                doc_num=num)
 
         elif request.method == "DELETE":
-            ret = invoices2.delete(num)
+            ret = documents.delete(doc_type="eft", doc_num=num)
 
         elif request.method == "POST":
-            ret = invoices2.post(data=request.data)
+            ret = documents.post(data=request.data)
 
         elif request.method == "PUT":
-
-            ret = invoices2.put(data=request.data)
+            ret = documents.put(data=request.data)
 
         else:
             raise ValueError("invalid method")
 
-        status_code = ret.pop("code")
+        status_code = ret.pop("status")
         response: Response = Response(ret)
         response.status_code = status_code
         return response

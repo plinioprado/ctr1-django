@@ -1,6 +1,6 @@
 """ reset DRF view
 
-resets ledger1 db on the path ledger/reset
+resets ledger1 db on the path documents/banstat
 
 Arguments:
     request (Request): DRF REST request object
@@ -11,16 +11,25 @@ Returns:
 
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import api_view #, permission_classes
-# from rest_framework.permissions import IsAuthenticated
-from documents.admin.admin import service
+from rest_framework.decorators import api_view
+from ledger1.document import banstats2
 
-@api_view(["GET"])
-# @permission_classes([IsAuthenticated])
-def view(request: Request, op: str):
+@api_view(["GET", "POST", "PUT", "DELETE"])
+def view(request: Request, acc: str = None):
     try:
         if request.method == "GET":
-            ret: dict = service(op)
+            ret: dict = banstats2.get(acc)
+
+        # elif request.method == "DELETE":
+        #     ret = invoices2.delete(num)
+
+        # elif request.method == "POST":
+        #     ret = invoices2.post(data=request.data)
+
+        # elif request.method == "PUT":
+
+        #     ret = invoices2.put(data=request.data)
+
         else:
             raise ValueError("invalid method")
 
@@ -36,5 +45,6 @@ def view(request: Request, op: str):
 
     except Exception as err: # pylint: disable=broad-exception-caught
         res: Response = Response({ "message": f"Error: {str(err)}" })
+        print(str(err))
         res.status_code = 500
         return res

@@ -15,12 +15,12 @@ def get_connection() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
     return con, cur
 
 
-def reset() -> None:
-    """ Reset blank ledger1tables """
+def reset(file_name: str) -> None:
+    """ Reset blank ledger1 tables """
 
     try:
 
-        query_text: str = read_text("./ledger1/dao/sqlite/reset.sql")
+        query_text: str = read_text(file_name)
 
         con, cur = get_connection()
         cur.executescript(query_text)

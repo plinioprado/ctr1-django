@@ -1,0 +1,23 @@
+doc_type,dc,type,acc,text
+eft,False,base,2.1.1,account payable
+eft,False,base,2.1.2,credit card payable
+eft,False,add,4.3.2,(+)interest on payment
+eft,False,sub,4.3.3,(-)discount on payment
+eft,False,tot,1.1.2,from acc 003.55555.7777777
+inv2,False,base,3.1.1,sale of services
+inv2,False,base,3.1.2,sale of products
+inv2,False,add,2.1.3,gst
+inv2,False,tot,1.1.1,cash
+inv2,False,tot,1.1.2,checking acc.
+inv2,False,tot,1.1.3,receivable
+inv2,True,base,4.1.1,service costs
+inv2,True,base,4.2.1,rent expense
+inv2,True,base,4.2.2,utilities expense
+inv2,True,base,4.2.3,payroll expense
+inv2,True,base,4.2.4,admin. expense
+inv2,True,base,4.2.5,travel fees
+inv2,True,base,4.2.6,bank fee
+inv2,True,add,2.1.3,gst
+inv2,True,tot,1.1.1,cash
+inv2,True,tot,1.1.2,checking account
+inv2,True,tot,2.1.1,account payable

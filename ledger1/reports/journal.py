@@ -35,8 +35,8 @@ def get(
             seq,
             dao_row["acc_num"],
             dao_row["acc_name"],
-            dao_row["doc_type"] if seq == 1 else "",
-            dao_row["doc_num"] if seq == 1 else "",
+            dao_row["doc_type"],
+            dao_row["doc_num"],
             dao_row["val"],
             dao_row["dc"]
         ])

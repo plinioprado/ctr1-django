@@ -42,3 +42,18 @@ def write_csv(filename: str, rows: list) -> None:
 
     except OSError as err:
         raise OSError(f"Error writing csv file {filename}:", err) from err
+
+
+def read_csv(filename: str) -> list[dict]:
+    """ Save the report as csv file """
+
+    try:
+
+        with open(filename, "r", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile)
+            rows = list(reader)
+
+        return rows
+
+    except OSError as err:
+        raise OSError(f"Error reading csv file {filename}:", err) from err

@@ -1,6 +1,8 @@
 num,dt,descr
-1,"2020-01-02","capital contribution"
-2,"2020-01-05","lawyer fees"
-3,"2020-01-20","sale to cedar store ltd"
-4,"2020-01-21","receiving from cedar store ltd"
-5,"2020-01-22","sale to aspen industries ltd"
+1,"2020-01-02","capital contribution john doe"
+2,"2020-01-02","capital contribution jane doe"
+3,"2020-01-05","lawyer fees"
+4,"2020-01-05","pmt lawyer fees"
+5,"2020-01-20","sale to cedar store ltd"
+6,"2020-01-21","receiving from cedar store ltd"
+7,"2020-01-22","sale to aspen industries ltd"

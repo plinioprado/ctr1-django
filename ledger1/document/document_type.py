@@ -15,6 +15,11 @@ from dataclasses import dataclass
 class DocumentType:
     id: str
     name: str
+    num_on_seq: str
+    dc_true_name: str
+    dc_false_name: str
+    cpart_role_d: str
+    cpart_role_c: str
     active: bool
 
     def __post_init__(self):
@@ -26,6 +31,8 @@ class DocumentType:
             raise ValueError('missing document type name')
         if not isinstance(self.id, str) or len(self.id) > 30:
             raise ValueError('invalid document type name')
+        if self.num_on_seq not in ["base","tot"]:
+            raise ValueError('invalid document type num_on_seq')
         if self.active not in [True, False]:
             self.active = True
 
@@ -34,6 +41,11 @@ class DocumentType:
         return {
             "id": self.id,
             "name": self.name,
+            "num_on_seq": self.num_on_seq,
+            "dc_true_name": self.dc_true_name,
+            "dc_false_name": self.dc_false_name,
+            "cpart_role_d": self.cpart_role_d,
+            "cpart_role_c": self.cpart_role_c,
             "active": self.active
         }
 
