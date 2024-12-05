@@ -2,6 +2,18 @@
 
 -- admin
 
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+    id INT PRIMARY KEY,
+    user_name TEXT,
+    email TEXT,
+    pass TEXT,
+    user_role TEXT,
+    entities TEXT,
+    entity TEXT,
+    active INT
+);
+
 DROP TABLE IF EXISTS setting;
 CREATE TABLE IF NOT EXISTS setting (
     setting_key TEXT NOT NULL,

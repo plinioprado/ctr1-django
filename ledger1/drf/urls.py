@@ -8,10 +8,12 @@ from . import views_reset
 from . import views_banstat2
 from . import views_inv2
 from . import views_eft
+from . import views_login
 
 urlpatterns = [
     path("accounts/", views_account.view),
     path("accounts/<str:acc>", views_account.view),
+    path("login", views_login.view),
     path("report/<str:name>", views_report.view),
     path("reset/", views_reset.view),
     path("transactions/", views_transaction.view),

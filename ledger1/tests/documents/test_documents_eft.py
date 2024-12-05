@@ -1,7 +1,7 @@
 from ledger1.document import documents
-from ledger1.admin import admin_service
+from ledger1.admin import admin
 
-admin_service.reset()
+admin.reset()
 
 def test_get_many_eft_pay():
     response = documents.get(doc_dc=False, doc_type="eft", doc_num=None)
@@ -84,7 +84,6 @@ def test_get_new_eft_pay():
 def test_post_eft_pay():
 
     response = documents.post(
-        doc_type="eft",
         data={
             "doc_type": "eft",
             "doc_num": "1.99",
@@ -109,7 +108,6 @@ def test_post_eft_pay():
 def test_put_eft_pay():
 
     response = documents.put(
-        doc_type="eft",
         data={
             "doc_type": "eft",
             "doc_num": "1.99",
