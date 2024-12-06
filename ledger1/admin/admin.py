@@ -15,7 +15,7 @@ def login(data: dict):
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
             raise ValueError("400")
 
-        user: dict = users.get_by_email(data["user_email"])
+        user: dict = users.get_by_field("email", data["user_email"])
 
         if not user or data["user_pass"] != user["pass"] or data["entity"] not in user["entities"]:
             raise ValueError("401")
@@ -38,10 +38,31 @@ def login(data: dict):
         }
 
 
+def get(param: str, record_id: int = None):
+    if param == "user":
+        response = get_user(record_id)
+    elif param == "reset":
+        response = reset()
+    else:
+        raise ValueError(f"invalid param {param}")
+
+    return response
+
+
+def get_user(record_id: int):
+    data = users.get(record_id)
+
+    return {
+        "data": data,
+        "message": "ok",
+        "status_code": 200
+    }
+
+
 def reset() -> dict:
     reset_service.reset()
 
     return {
-        "code": 200,
+        "status_code": 200,
         "message": "reset ok"
     }

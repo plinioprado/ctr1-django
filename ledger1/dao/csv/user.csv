@@ -1,3 +1,4 @@
 id,name,email,pass,role,entities,entity,active
-1,John Doe,john.doe@example.com,admin,"example",example,1
-2,Jane Doe,john.doe@example.com,user,"example",example,1
+int,str,str,str,str,str,str,bool
+1,"John Doe","john.doe@example.com","12345","admin","example","example",true
+2,"Jane Doe","john.doe@example.com","12345","user","example","example",true

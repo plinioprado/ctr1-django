@@ -11,20 +11,18 @@ Returns:
 
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.decorators import api_view #, permission_classes
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from ledger1.admin import admin
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
-def view(request: Request):
+def view(request: Request, param: str = ""):
     try:
         if request.method == "GET":
-            ret: dict = admin.reset()
+            ret: dict = admin.get(param)
         else:
             raise ValueError("invalid method")
 
-        status_code = ret.pop("code")
+        status_code = ret.pop("status_code")
         response: Response = Response(ret)
         response.status_code = status_code
         return response

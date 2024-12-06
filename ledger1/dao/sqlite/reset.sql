@@ -5,10 +5,10 @@
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
     id INT PRIMARY KEY,
-    user_name TEXT,
+    "name" TEXT,
     email TEXT,
     pass TEXT,
-    user_role TEXT,
+    "role" TEXT,
     entities TEXT,
     entity TEXT,
     active INT
