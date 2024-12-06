@@ -9,6 +9,7 @@ from ledger1.dao.sqlite import dao_document
 from ledger1.dao.sqlite import dao_setting
 from ledger1.dao.sqlite import dao_document_field
 from ledger1.dao.sqlite import dao_aux
+from ledger1.admin.user import User
 
 
 def reset() -> None:
@@ -25,4 +26,4 @@ def reset() -> None:
     dao_document.restore(settings["file"]["csv"]["document"])
     dao_document_field.restore(settings["file"]["csv"]["document_field"])
     dao_setting.restore(settings["file"]["csv"]["setting"])
-    dao_aux.restore("user", settings["file"]["csv"]["user"])
+    dao_aux.restore(table_name="user", file_name=settings["file"]["csv"]["user"], db_format=User.get_db_format())

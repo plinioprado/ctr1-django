@@ -15,12 +15,15 @@ def login(data: dict):
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
             raise ValueError("400")
 
-        user: dict = users.get_by_field("email", data["user_email"])
+        user: dict = users.get_by_field(field_name="email", field_value=data["user_email"])
 
-        if not user or data["user_pass"] != user["pass"] or data["entity"] not in user["entities"]:
+        if (not user or
+            data["user_pass"] != user["password"] or
+            data["entity"] not in user["entities"]):
+
             raise ValueError("401")
 
-        api_key: str = "1q2w3e4r5t6y7u8i9o0p"
+        api_key: str = user["api_key"]
         data = session.get_session(user, data["entity"], api_key)
 
         response = {

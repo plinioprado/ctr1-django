@@ -15,10 +15,10 @@ from rest_framework.decorators import api_view
 from ledger1.admin import admin
 
 @api_view(["GET"])
-def view(request: Request, param: str = ""):
+def view(request: Request, param: str = "", record_id: str = None):
     try:
         if request.method == "GET":
-            ret: dict = admin.get(param)
+            ret: dict = admin.get(param, record_id)
         else:
             raise ValueError("invalid method")
 

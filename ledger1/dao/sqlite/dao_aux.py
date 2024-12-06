@@ -9,19 +9,59 @@ from ledger1.utils import dbutil
 
 
 def get_many(table_name: str):
-    print(f"will select from {table_name}")
 
-    return []
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = f"SELECT * FROM {table_name};"
+
+        cur.execute(query_text)
+        rows = [dict(row) for row in cur.fetchall()]
+
+        return rows
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting {table_name}: {str(err)}") from err
+    finally:
+        con.close()
 
 
-def get_one(table_name: str, aux_id: int):
-    print(f"will select {aux_id} from {table_name}")
+def get_one(table_name: str, record_id: int):
 
-    return {}
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = f"SELECT * FROM {table_name} WHERE id = ?"
+        query_params = (record_id,)
+        cur.execute(query_text, query_params)
+        row = dict(cur.fetchone())
+
+        return row
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting {table_name}: {str(err)}") from err
+    finally:
+        con.close()
 
 
+def get_by_field(table_name: str, field_name: str, field_value: str | int):
+    con, cur = dbutil.get_connection()
 
-def restore(table_name: str, file_name: str)-> None:
+    try:
+        query_text = f"SELECT * FROM {table_name} WHERE {field_name} = ?"
+        query_params = (field_value,)
+        cur.execute(query_text, query_params)
+        row = dict(cur.fetchone())
+
+        return row
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting {table_name}: {str(err)}") from err
+    finally:
+        con.close()
+
+
+def restore(table_name: str, file_name: str, db_format: dict)-> None:
     """ Restore from CSV """
 
     con, cur = dbutil.get_connection()
@@ -31,12 +71,7 @@ def restore(table_name: str, file_name: str)-> None:
         with open(file_name, "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)
 
-            field_formats: dict = {}
             for key, row in enumerate(reader):
-
-                if key == 0:
-                    field_formats = row
-                    continue
 
                 query_text1 = f"INSERT INTO {table_name} ("
 
@@ -50,7 +85,7 @@ def restore(table_name: str, file_name: str)-> None:
                 query_text = query_text1 + query_text2 + query_text3
 
                 query_params = tuple(
-                    [format_value(name, row[name], field_formats) for name in row.keys()]
+                    [format_value(name, row[name], db_format) for name in row.keys()]
                 )
 
                 cur.execute(query_text, query_params)
@@ -62,9 +97,9 @@ def restore(table_name: str, file_name: str)-> None:
         con.close()
 
 
-def format_value(name: str, value: str, field_formats: dict):
+def format_value(name: str, value: str, db_format: dict):
 
-    field_format: str = field_formats[name]
+    field_format: str = db_format[name]
     if field_format == "bool":
         return 1 if value == "true" else 0
     elif field_format == "int":
