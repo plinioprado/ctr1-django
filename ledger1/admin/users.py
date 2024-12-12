@@ -11,8 +11,6 @@ def get(user_id: str, obj: object):
             obj.set_from_db(row)
             data.append(obj.get_to_response_list())
 
-        return data
-
     else:
         db_data: dict = dao_aux.get_one(obj.table_name, user_id)
 
@@ -22,25 +20,23 @@ def get(user_id: str, obj: object):
     return data
 
 
-def post(param: str, data: dict):
-    user: User = User()
-    user.set_from_request(data)
+def post(data: dict, obj: object):
+    obj.set_from_request(data)
     db_data = User.get_db_format()
-    user_id = dao_aux.post(
-        table_name=param,
-        data=user.get_to_db(),
+    record_id = dao_aux.post(
+        table_name=obj.table_name,
+        data=obj.get_to_db(),
         db_format=db_data)
 
-    return user_id
+    return record_id
 
 
-def put(param: str, data: dict):
-    user: User = User()
-    user.set_from_request(data)
+def put(data: dict, obj: object):
+    obj.set_from_request(data)
     db_data = User.get_db_format()
     user_id = dao_aux.put(
-        table_name=param,
-        data=user.get_to_db(),
+        table_name=obj.table_name,
+        data=obj.get_to_db(),
         db_format=db_data)
 
     return user_id

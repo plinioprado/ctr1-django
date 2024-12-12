@@ -67,7 +67,13 @@ def get(param: str, record_id: str = None):
 
 
 def post(param: str, data: dict):
-    record_id = users.post(param,  data)
+    if param == "user":
+        obj: User = User()
+        record_id = users.post(data, obj)
+
+    else:
+        raise ValueError(f"invalid param {param}")
+
     return {
         "status_code": 200,
         "message": f"{param} {record_id} created",
@@ -78,7 +84,14 @@ def post(param: str, data: dict):
 
 
 def put(param: str, data: dict):
-    record_id = users.put(param,  data)
+
+    if param == "user":
+        obj: User = User()
+        record_id = users.put(data, obj)
+
+    else:
+        raise ValueError(f"invalid param {param}")
+
     return {
         "status_code": 200,
         "message": f"{param} {record_id} updated",
