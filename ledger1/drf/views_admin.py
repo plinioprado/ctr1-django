@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from ledger1.admin import admin
 
-@api_view(["GET", "POST","PUT"])
+@api_view(["GET", "POST","PUT","DELETE"])
 def view(request: Request, param: str = "", record_id: str = None):
     try:
         if request.method == "GET":
@@ -23,6 +23,8 @@ def view(request: Request, param: str = "", record_id: str = None):
             ret: dict = admin.post(param, data=request.data)
         elif request.method == "PUT":
             ret: dict = admin.put(param, data=request.data)
+        elif request.method == "DELETE":
+            ret: dict = admin.delete(param, record_id)
         else:
             raise ValueError("invalid method")
 

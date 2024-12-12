@@ -45,6 +45,14 @@ def put(param: str, data: dict):
     return user_id
 
 
+def delete(param: str, record_id: str):
+    user_id = dao_aux.delete(
+        table_name=param,
+        record_id=record_id)
+
+    return user_id
+
+
 def get_by_field(field_name: str, field_value: str | int):
 
     data: dict = dao_aux.get_by_field("user", field_name,  field_value)

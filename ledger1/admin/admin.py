@@ -51,6 +51,7 @@ def get(param: str, record_id: str = None):
 
     return response
 
+
 def post(param: str, data: dict):
     record_id = users.post(param,  data)
     return {
@@ -79,6 +80,17 @@ def get_user(record_id: int):
         "data": data,
         "message": "ok",
         "status_code": 200
+    }
+
+
+def delete(param: str, record_id: str = None):
+    record_id = users.delete(param, record_id)
+    return {
+        "status_code": 200,
+        "message": f"{param} {record_id} deleted",
+        "data": {
+            "id": record_id
+        }
     }
 
 

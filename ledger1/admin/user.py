@@ -45,6 +45,7 @@ class User:
             "name": self.name,
             "email": self.email,
             "password": self.password,
+            "api_key": self.api_key,
             "role": self.role,
             "entities": self.entities,
             "entity": self.entity,

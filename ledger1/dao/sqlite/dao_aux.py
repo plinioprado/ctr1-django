@@ -122,6 +122,25 @@ def put(table_name: str, data: dict, db_format: dict) -> int:
         con.close()
 
 
+def delete(table_name: str, record_id: str):
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = f"DELETE FROM {table_name} WHERE id = ?;"
+        query_params = (record_id,)
+
+        cur.execute(query_text, query_params)
+        con.commit()
+
+        return record_id
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"deleting {table_name} {record_id}") from err
+    finally:
+        con.close()
+
+
 def restore(table_name: str, file_name: str, db_format: dict)-> None:
     """ Restore from CSV """
 
