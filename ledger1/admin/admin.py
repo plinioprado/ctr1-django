@@ -62,6 +62,16 @@ def post(param: str, data: dict):
     }
 
 
+def put(param: str, data: dict):
+    record_id = users.put(param,  data)
+    return {
+        "status_code": 200,
+        "message": f"{param} {record_id} updated",
+        "data": {
+            "id": record_id
+        }
+    }
+
 def get_user(record_id: int):
     data = users.get(record_id)
 

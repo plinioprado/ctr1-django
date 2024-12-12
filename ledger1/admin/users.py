@@ -33,6 +33,18 @@ def post(param: str, data: dict):
     return user_id
 
 
+def put(param: str, data: dict):
+    user: User = User()
+    user.set_from_request(data)
+    db_data = User.get_db_format()
+    user_id = dao_aux.put(
+        table_name=param,
+        data=user.get_to_db(),
+        db_format=db_data)
+
+    return user_id
+
+
 def get_by_field(field_name: str, field_value: str | int):
 
     data: dict = dao_aux.get_by_field("user", field_name,  field_value)

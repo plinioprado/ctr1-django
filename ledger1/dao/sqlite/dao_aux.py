@@ -91,6 +91,37 @@ def post(table_name: str, data: dict, db_format: dict) -> int:
         con.close()
 
 
+
+def put(table_name: str, data: dict, db_format: dict) -> int:
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text1 = f"UPDATE {table_name} SET "
+        query_text2 = ""
+        for k, name in enumerate(data.keys()):
+            if name == "id":
+                continue
+            if k > 1:
+                query_text2 += ", "
+            query_text2 += f"{name} = ?"
+        query_text3 = " WHERE id = ?;"
+        query_text = query_text1 + query_text2 + query_text3
+
+        values: list = list(data.values())[1:] + [data["id"]]
+        query_params = tuple(values)
+
+        cur.execute(query_text, query_params)
+        con.commit()
+
+        return data["id"]
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"updating {table_name} {data["id"]}") from err
+    finally:
+        con.close()
+
+
 def restore(table_name: str, file_name: str, db_format: dict)-> None:
     """ Restore from CSV """
 
