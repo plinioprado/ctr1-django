@@ -41,7 +41,7 @@ def login(data: dict):
         }
 
 
-def get(param: str, record_id: int = None):
+def get(param: str, record_id: str = None):
     if param == "user":
         response = get_user(record_id)
     elif param == "reset":
@@ -50,6 +50,16 @@ def get(param: str, record_id: int = None):
         raise ValueError(f"invalid param {param}")
 
     return response
+
+def post(param: str, data: dict):
+    record_id = users.post(param,  data)
+    return {
+        "status_code": 200,
+        "message": f"{param} {record_id} created",
+        "data": {
+            "id": record_id
+        }
+    }
 
 
 def get_user(record_id: int):

@@ -26,4 +26,7 @@ def reset() -> None:
     dao_document.restore(settings["file"]["csv"]["document"])
     dao_document_field.restore(settings["file"]["csv"]["document_field"])
     dao_setting.restore(settings["file"]["csv"]["setting"])
-    dao_aux.restore(table_name="user", file_name=settings["file"]["csv"]["user"], db_format=User.get_db_format())
+    dao_aux.restore(
+        table_name="user",
+        file_name=settings["file"]["csv"]["user"],
+        db_format=User.get_db_format())

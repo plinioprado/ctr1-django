@@ -26,7 +26,7 @@ def get_many(table_name: str):
         con.close()
 
 
-def get_one(table_name: str, record_id: int):
+def get_one(table_name: str, record_id: str):
 
     con, cur = dbutil.get_connection()
 
@@ -44,7 +44,7 @@ def get_one(table_name: str, record_id: int):
         con.close()
 
 
-def get_by_field(table_name: str, field_name: str, field_value: str | int):
+def get_by_field(table_name: str, field_name: str, field_value: str | int) -> dict:
     con, cur = dbutil.get_connection()
 
     try:
@@ -61,6 +61,36 @@ def get_by_field(table_name: str, field_name: str, field_value: str | int):
         con.close()
 
 
+def post(table_name: str, data: dict, db_format: dict) -> int:
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text1 = f"INSERT INTO {table_name} ("
+        query_text2 = ""
+        for k, name in enumerate(data.keys()):
+            if k != 0:
+                query_text2 += " ,"
+            query_text2 += name
+        query_text3 = f") VALUES (?{", ?" * (len(data.keys()) - 1)});"
+        query_text = query_text1 + query_text2 + query_text3
+
+        query_params = tuple(
+            [format_value(name, data[name], db_format) for name in data.keys()])
+
+        cur.execute(query_text, query_params)
+        con.commit()
+
+        last_num = cur.lastrowid
+
+        return last_num
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"creating document {data["doc_type"]} {data["doc_num"]}: {str(err)}") from err
+    finally:
+        con.close()
+
+
 def restore(table_name: str, file_name: str, db_format: dict)-> None:
     """ Restore from CSV """
 
@@ -71,28 +101,27 @@ def restore(table_name: str, file_name: str, db_format: dict)-> None:
         with open(file_name, "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)
 
-            for key, row in enumerate(reader):
+            for row in reader:
+                # if id is None, autonum
+                names = [name for name in db_format.keys() if (name != "id" or name in row)]
 
                 query_text1 = f"INSERT INTO {table_name} ("
-
                 query_text2 = ""
-                for k, name in enumerate(row.keys()):
-                    if k != 0:
-                        query_text2 += " ,"
+                for name in names:
+                    if query_text2 != "":
+                        query_text2 += ", "
                     query_text2 += name
-
-                query_text3 = f") VALUES (?{", ?" * (len(row.keys()) - 1)});"
+                query_text3 = f") VALUES (?{", ?" * (len(names) - 1)});"
                 query_text = query_text1 + query_text2 + query_text3
 
                 query_params = tuple(
-                    [format_value(name, row[name], db_format) for name in row.keys()]
+                    [format_value(name, row[name], db_format) for name in names]
                 )
-
                 cur.execute(query_text, query_params)
                 con.commit()
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"restoring document {str(err)}") from err
+        raise ValueError(f"restoring {table_name} {str(err)}") from err
     finally:
         con.close()
 
@@ -100,7 +129,9 @@ def restore(table_name: str, file_name: str, db_format: dict)-> None:
 def format_value(name: str, value: str, db_format: dict):
 
     field_format: str = db_format[name]
-    if field_format == "bool":
+    if value is None:
+        return None
+    elif field_format == "bool":
         return 1 if value == "true" else 0
     elif field_format == "int":
         return int(value)

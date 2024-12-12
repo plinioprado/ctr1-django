@@ -14,11 +14,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from ledger1.admin import admin
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def view(request: Request, param: str = "", record_id: str = None):
     try:
         if request.method == "GET":
             ret: dict = admin.get(param, record_id)
+        elif request.method == "POST":
+            ret: dict = admin.post(param, data=request.data)
         else:
             raise ValueError("invalid method")
 

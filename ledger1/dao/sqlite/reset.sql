@@ -4,7 +4,7 @@
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     "name" TEXT,
     email TEXT,
     "password" TEXT,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS transaction1_detail (
 
 DROP TABLE IF EXISTS document_type;
 CREATE TABLE IF NOT EXISTS document_type (
-    id TEXT PRIMARY KEY,
+    id INT PRIMARY KEY,
     "name" TEXT,
     traacc INTEGER,
     num_on_seq TEXT,
