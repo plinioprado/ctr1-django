@@ -7,7 +7,9 @@ and return the requests
 
 from ledger1.admin import reset as reset_service
 from ledger1.admin import session
+from ledger1.admin import settings
 from ledger1.admin import users
+from ledger1.admin.user import User
 
 def login(data: dict):
     try:
@@ -43,9 +45,32 @@ def login(data: dict):
 
 def get(param: str, record_id: str = None):
     if param == "user":
-        response = get_user(record_id)
+        obj = User()
+        data: list[object] | object = users.get(record_id, obj)
+
+        response = {
+            "data": data,
+            "message": "ok",
+            "status_code": 200
+        }
+
+    elif param == "setting":
+        data: list[dict] = settings.get()
+
+        response = {
+            "data": data,
+            "message": "ok",
+            "status_code": 200
+        }
+
+
     elif param == "reset":
-        response = reset()
+        reset_service.reset()
+
+        response = {
+        "status_code": 200,
+        "message": "reset ok"
+    }
     else:
         raise ValueError(f"invalid param {param}")
 
@@ -53,7 +78,13 @@ def get(param: str, record_id: str = None):
 
 
 def post(param: str, data: dict):
-    record_id = users.post(param,  data)
+    if param == "user":
+        obj: User = User()
+        record_id = users.post(data, obj)
+
+    else:
+        raise ValueError(f"invalid param {param}")
+
     return {
         "status_code": 200,
         "message": f"{param} {record_id} created",
@@ -64,22 +95,20 @@ def post(param: str, data: dict):
 
 
 def put(param: str, data: dict):
-    record_id = users.put(param,  data)
+
+    if param == "user":
+        obj: User = User()
+        record_id = users.put(data, obj)
+
+    else:
+        raise ValueError(f"invalid param {param}")
+
     return {
         "status_code": 200,
         "message": f"{param} {record_id} updated",
         "data": {
             "id": record_id
         }
-    }
-
-def get_user(record_id: int):
-    data = users.get(record_id)
-
-    return {
-        "data": data,
-        "message": "ok",
-        "status_code": 200
     }
 
 
@@ -91,13 +120,4 @@ def delete(param: str, record_id: str = None):
         "data": {
             "id": record_id
         }
-    }
-
-
-def reset() -> dict:
-    reset_service.reset()
-
-    return {
-        "status_code": 200,
-        "message": "reset ok"
     }
