@@ -3,7 +3,7 @@
 # pylint: disable=missing-function-docstring
 
 import ledger1.transaction.transaction_service as service
-from ledger1.admin.admin_service import reset
+from ledger1.admin.admin import reset
 from ledger1.tests.utils import test_util
 
 

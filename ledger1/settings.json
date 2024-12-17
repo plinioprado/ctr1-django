@@ -18,7 +18,8 @@
     "csv": {
       "document": "./ledger1/dao/csv/document.csv",
       "document_field": "./ledger1/dao/csv/document_field.csv",
-      "setting": "./ledger1/dao/csv/setting.csv"
+      "setting": "./ledger1/dao/csv/setting.csv",
+      "user": "./ledger1/dao/csv/user.csv"
     }
   }
 }

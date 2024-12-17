@@ -4,7 +4,7 @@ get_many() is only implemented for checking acc, therefore doc_dc == True
  """
 
 from ledger1.document.banstat2 import Banstat2
-from ledger1.admin import admin_service
+from ledger1.admin import settings
 from ledger1.reports import general_ledger
 from ledger1.dao.sqlite import dao_document
 from ledger1.utils import dateutil
@@ -20,7 +20,6 @@ def get(num: str = None) -> dict:
 
 def get_many() -> dict:
     ## obs: acc_num up to 11 dig
-    doc_dc: bool = True
 
     data = dao_document.get_many("banstat2")
 
@@ -33,7 +32,7 @@ def get_many() -> dict:
 
 def get_one(num: str, date: str = None, date_to: str = None):
 
-    settings_date: list[dict] = admin_service.get_db_settings("field_date_")
+    settings_date: list[dict] = settings.get_db_settings("field_date_")
 
     dt = dateutil.get_date_from(date, settings_date)
     dt_to = dateutil.get_date_to(date_to, settings_date)
@@ -58,7 +57,7 @@ def get_one(num: str, date: str = None, date_to: str = None):
         })
     stat.set_seqs(doc_seqs)
 
-    settings_db: list[dict] = admin_service.get_db_settings("institution_name_")
+    settings_db: list[dict] = settings.get_db_settings("institution_name_")
     institutions = []
     for setting in settings_db:
         institutions.append({

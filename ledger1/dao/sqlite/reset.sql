@@ -2,6 +2,19 @@
 
 -- admin
 
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+    id INTEGER PRIMARY KEY,
+    "name" TEXT,
+    email TEXT,
+    "password" TEXT,
+    api_key TEXT,
+    "role" TEXT,
+    entities TEXT,
+    entity TEXT,
+    active INT
+);
+
 DROP TABLE IF EXISTS setting;
 CREATE TABLE IF NOT EXISTS setting (
     setting_key TEXT NOT NULL,
@@ -49,7 +62,7 @@ CREATE TABLE IF NOT EXISTS transaction1_detail (
 
 DROP TABLE IF EXISTS document_type;
 CREATE TABLE IF NOT EXISTS document_type (
-    id TEXT PRIMARY KEY,
+    id INT PRIMARY KEY,
     "name" TEXT,
     traacc INTEGER,
     num_on_seq TEXT,
