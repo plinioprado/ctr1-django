@@ -7,6 +7,7 @@ and return the requests
 
 from ledger1.admin import reset as reset_service
 from ledger1.admin import session
+from ledger1.admin import settings
 from ledger1.admin import users
 from ledger1.admin.user import User
 
@@ -52,6 +53,16 @@ def get(param: str, record_id: str = None):
             "message": "ok",
             "status_code": 200
         }
+
+    elif param == "setting":
+        data: list[dict] = settings.get()
+
+        response = {
+            "data": data,
+            "message": "ok",
+            "status_code": 200
+        }
+
 
     elif param == "reset":
         reset_service.reset()

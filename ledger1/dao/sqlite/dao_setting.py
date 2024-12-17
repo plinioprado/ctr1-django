@@ -3,7 +3,34 @@ import csv
 from ledger1.utils import dbutil
 
 
-def get_many(key: str) -> list[dict]:
+def get_one(key: str):
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = """
+        SELECT
+            setting_key,
+            setting_value
+        FROM setting
+        WHERE setting_key = ?
+        """
+        query_params = (key,)
+
+        cur.execute(query_text, query_params)
+        row: dict = dict(cur.fetchone())
+
+        print(row)
+
+        return row
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting setting {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_many(key: str= "") -> list[dict]:
 
     con, cur = dbutil.get_connection()
 
@@ -28,7 +55,7 @@ def get_many(key: str) -> list[dict]:
         return rows
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting bank statements {str(err)}") from err
+        raise ValueError(f"getting settings {str(err)}") from err
     finally:
         con.close()
 
@@ -57,6 +84,6 @@ def restore(file_name) -> None:
                 con.commit()
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"restoring document {str(err)}") from err
+        raise ValueError(f"restoring setting {str(err)}") from err
     finally:
         con.close()
