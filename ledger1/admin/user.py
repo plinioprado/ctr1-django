@@ -19,8 +19,6 @@ class User:
     table_name: str = "user"
 
     def set_from_db(self, data):
-        print(11)
-        print(12, data)
         self.id = int(data["id"]) if data["id"] is not None else None
         self.name = str(data["name"])
         self.email = str(data["email"])

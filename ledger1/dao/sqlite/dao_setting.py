@@ -3,34 +3,9 @@ import csv
 from ledger1.utils import dbutil
 
 
-def get_one(key: str):
+def get_many(query: dict) -> list[dict]:
 
-    con, cur = dbutil.get_connection()
-
-    try:
-        query_text = """
-        SELECT
-            setting_key,
-            setting_value
-        FROM setting
-        WHERE setting_key = ?
-        """
-        query_params = (key,)
-
-        cur.execute(query_text, query_params)
-        row: dict = dict(cur.fetchone())
-
-        print(row)
-
-        return row
-
-    except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting setting {str(err)}") from err
-    finally:
-        con.close()
-
-
-def get_many(key: str= "") -> list[dict]:
+    key = query["key"] if "key" in query.keys() else ""
 
     con, cur = dbutil.get_connection()
 
@@ -56,6 +31,33 @@ def get_many(key: str= "") -> list[dict]:
 
     except sqlite3.DatabaseError as err:
         raise ValueError(f"getting settings {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_one(key: str):
+
+    con, cur = dbutil.get_connection()
+
+    try:
+        query_text = """
+        SELECT
+            setting_key,
+            setting_value
+        FROM setting
+        WHERE setting_key = ?
+        """
+        query_params = (key,)
+
+        cur.execute(query_text, query_params)
+        row: dict = dict(cur.fetchone())
+
+        print(row)
+
+        return row
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting setting {str(err)}") from err
     finally:
         con.close()
 

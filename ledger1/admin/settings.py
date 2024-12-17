@@ -2,9 +2,12 @@ from ledger1.utils import fileio
 from ledger1.dao.sqlite import dao_setting
 
 
-def get() -> dict:
-    print("will get settings")
-    data = dao_setting.get_many()
+def get(record_id: str,  query: dict) -> dict:
+    if record_id is None:
+        data = dao_setting.get_many(query)
+    else:
+        data = dao_setting.get_one(record_id)
+
     return data
 
 

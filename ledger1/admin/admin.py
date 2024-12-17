@@ -43,7 +43,7 @@ def login(data: dict):
         }
 
 
-def get(param: str, record_id: str = None):
+def get(param: str, query: dict, record_id: str = None):
     if param == "user":
         obj = User()
         data: list[object] | object = users.get(record_id, obj)
@@ -55,7 +55,7 @@ def get(param: str, record_id: str = None):
         }
 
     elif param == "setting":
-        data: list[dict] = settings.get()
+        data: list[dict] = settings.get(record_id,  query)
 
         response = {
             "data": data,

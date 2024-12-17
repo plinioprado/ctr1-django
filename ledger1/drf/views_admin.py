@@ -18,7 +18,20 @@ from ledger1.admin import admin
 def view(request: Request, param: str = "", record_id: str = None):
     try:
         if request.method == "GET":
-            ret: dict = admin.get(param, record_id)
+
+            if param == "setting":
+                query: dict = {
+                    "key": request.query_params.get("key"),
+                }
+            else:
+                query = {}
+
+
+            ret: dict = admin.get(
+                param=param,
+                query= query,
+                record_id=record_id)
+
         elif request.method == "POST":
             ret: dict = admin.post(param, data=request.data)
         elif request.method == "PUT":
