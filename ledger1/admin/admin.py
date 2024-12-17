@@ -10,6 +10,7 @@ from ledger1.admin import session
 from ledger1.admin import settings
 from ledger1.admin import users
 from ledger1.admin.user import User
+from ledger1.utils import fileio
 
 def login(data: dict):
     try:
@@ -43,7 +44,7 @@ def login(data: dict):
         }
 
 
-def get(param: str, query: dict, record_id: str = None):
+def get(param: str, filters: dict, record_id: str = None):
     if param == "user":
         obj = User()
         data: list[object] | object = users.get(record_id, obj)
@@ -55,10 +56,19 @@ def get(param: str, query: dict, record_id: str = None):
         }
 
     elif param == "setting":
-        data: list[dict] = settings.get(record_id,  query)
+        if record_id is None:
+            data: list[dict] | dict = settings.get_many(filters)
+            settings_data = fileio.get_file_settings()
+            data_format: dict = fileio.read_json(f"{settings_data["file"]["format"]}/settings_format.json")
+
+        else:
+            data = settings.get_one(record_id)
+            data_format = ""
 
         response = {
             "data": data,
+            "filters": filters,
+            "format": data_format,
             "message": "ok",
             "status_code": 200
         }

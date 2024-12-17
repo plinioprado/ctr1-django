@@ -20,16 +20,16 @@ def view(request: Request, param: str = "", record_id: str = None):
         if request.method == "GET":
 
             if param == "setting":
-                query: dict = {
+                filters: dict = {
                     "key": request.query_params.get("key"),
                 }
             else:
-                query = {}
+                filters = None
 
 
             ret: dict = admin.get(
                 param=param,
-                query= query,
+                filters= filters,
                 record_id=record_id)
 
         elif request.method == "POST":

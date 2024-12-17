@@ -3,9 +3,12 @@ import csv
 from ledger1.utils import dbutil
 
 
-def get_many(query: dict) -> list[dict]:
+def get_many(filters: dict) -> list[dict]:
 
-    key = query["key"] if "key" in query.keys() else ""
+    key = filters["key"] if (
+        "key" in filters.keys() and
+        filters["key"] is not None
+        ) else ""
 
     con, cur = dbutil.get_connection()
 

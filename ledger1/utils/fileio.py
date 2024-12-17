@@ -57,3 +57,9 @@ def read_csv(filename: str) -> list[dict]:
 
     except OSError as err:
         raise OSError(f"Error reading csv file {filename}:", err) from err
+
+
+def get_file_settings() -> dict:
+    settings = read_json("./ledger1/settings.json")
+
+    return settings

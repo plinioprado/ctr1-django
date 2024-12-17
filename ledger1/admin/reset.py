@@ -10,6 +10,7 @@ from ledger1.dao.sqlite import dao_setting
 from ledger1.dao.sqlite import dao_document_field
 from ledger1.dao.sqlite import dao_aux
 from ledger1.admin.user import User
+from ledger1.utils import fileio
 
 
 def reset() -> None:
@@ -18,7 +19,7 @@ def reset() -> None:
     The order or the calls is important to establish the relations
     """
 
-    settings: dict = settings_service.get_file_settings()
+    settings: dict = fileio.get_file_settings()
     dao.reset(settings["file"]["sql"]["reset"])
     dao_document_type.reset()
     dao_account1.reset()
