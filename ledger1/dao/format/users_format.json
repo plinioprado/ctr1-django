@@ -4,6 +4,7 @@
     {
       "header": "Id",
       "name": "id",
+      "primary": true,
       "type": "string"
     },
     {

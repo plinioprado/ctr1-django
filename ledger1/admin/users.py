@@ -1,21 +1,23 @@
 from ledger1.dao.sqlite import dao_aux
 from ledger1.admin.user import User
 
-def get(user_id: str, obj: object):
 
-    if user_id is None:
-        db_data: list[dict] = dao_aux.get_many(obj.table_name)
+def get_many(obj: object):
+    db_data: list[dict] = dao_aux.get_many(obj.table_name)
 
-        data = []
-        for row in db_data:
-            obj.set_from_db(row)
-            data.append(obj.get_to_response_list())
+    data = []
+    for row in db_data:
+        obj.set_from_db(row)
+        data.append(obj.get_to_response_list())
 
-    else:
-        db_data: dict = dao_aux.get_one(obj.table_name, user_id)
+    return data
 
-        obj.set_from_db(db_data)
-        data = obj.get_to_response()
+
+def get_one(user_id: str, obj: object):
+    db_data: dict = dao_aux.get_one(obj.table_name, user_id)
+
+    obj.set_from_db(db_data)
+    data = obj.get_to_response()
 
     return data
 

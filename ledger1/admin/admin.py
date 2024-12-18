@@ -46,11 +46,16 @@ def login(data: dict):
 
 def get(param: str, filters: dict, record_id: str = None):
     settings_data = fileio.get_file_settings()
+    obj = User()
 
     if param == "user":
-        obj = User()
-        data: list[object] | object = users.get(record_id, obj)
-        data_format: dict = fileio.read_json(f"{settings_data["file"]["format"]}/users_format.json")
+        if record_id is None:
+            data: list[dict] = users.get_many(obj)
+            data_format: dict = fileio.read_json(f"{settings_data["file"]["format"]}/users_format.json")
+
+        else:
+            data: dict = users.get_one(record_id, obj)
+            data_format: dict = fileio.read_json(f"{settings_data["file"]["format"]}/user_format.json")
 
         response = {
             "data": data,
