@@ -45,12 +45,16 @@ def login(data: dict):
 
 
 def get(param: str, filters: dict, record_id: str = None):
+    settings_data = fileio.get_file_settings()
+
     if param == "user":
         obj = User()
         data: list[object] | object = users.get(record_id, obj)
+        data_format: dict = fileio.read_json(f"{settings_data["file"]["format"]}/users_format.json")
 
         response = {
             "data": data,
+            "format": data_format,
             "message": "ok",
             "status_code": 200
         }
@@ -58,7 +62,6 @@ def get(param: str, filters: dict, record_id: str = None):
     elif param == "setting":
         if record_id is None:
             data: list[dict] | dict = settings.get_many(filters)
-            settings_data = fileio.get_file_settings()
             data_format: dict = fileio.read_json(f"{settings_data["file"]["format"]}/settings_format.json")
 
         else:
