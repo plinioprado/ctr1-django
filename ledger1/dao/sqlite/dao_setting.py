@@ -78,12 +78,14 @@ def restore(file_name) -> None:
                     """
                     INSERT INTO setting (
                         setting_key,
-                        setting_value
-                    ) VALUES (?, ?);
+                        setting_value,
+                        denied
+                    ) VALUES (?, ?, ?);
                     """,
                     (
                         str(row["setting_key"]),
-                        str(row["setting_value"])
+                        str(row["setting_value"]),
+                        str(row["denied"])
                     )
                 )
                 con.commit()

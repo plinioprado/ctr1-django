@@ -22,7 +22,7 @@ def reset() -> None:
     settings: dict = fileio.get_file_settings()
     dao.reset(settings["file"]["sql"]["reset"])
     dao_document_type.reset()
-    dao_account1.reset()
+    dao_account1.restore()
     dao_transaction1.reset()
     dao_document.restore(settings["file"]["csv"]["document"])
     dao_document_field.restore(settings["file"]["csv"]["document_field"])
