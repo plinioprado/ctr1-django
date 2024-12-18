@@ -3,12 +3,12 @@
 # pylint: disable=missing-function-docstring
 
 from ledger1.reports.reports_service import service
-from ledger1.admin.admin import reset
+from ledger1.admin import admin
 
 def test_chart_accounts():
     """ test chart of accunts """
 
-    reset()
+    admin.get("reset")
 
     result = service("chart_accounts")
     assert isinstance(result, dict)

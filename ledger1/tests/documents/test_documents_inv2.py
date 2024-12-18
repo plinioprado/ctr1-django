@@ -38,10 +38,12 @@ def test_get_one_inv2_sell():
     assert response['status'] == 200
     assert response["data"] == {
         "cpart_name": "Cedar Store Ltd",
+        "cpart_role": "Supplier",
         "descr": 'sale to cedar store ltd',
         "doc_type": "inv2",
         "doc_num": "1.1",
         "doc_dc": False,
+        "doc_type_name": "Invoice",
         "dt": "2020-01-20",
         "seqs": [
             {
@@ -63,6 +65,22 @@ def test_get_one_inv2_sell():
                 "val": 1050.00
             }
         ],
+        "fields": {
+            "payment": {
+                "account_num": "111222333",
+                "institution_num": "003",
+                "transit_num": "12345",
+                "type": "eft"
+            },
+            "person": {
+                "address": "333 Seymour st, suite 201",
+                "city": "Vancouver",
+                "country": "CAN",
+                "name": "Cedar Store Ltd.",
+                "pcode": "V6B5A6",
+                "province": "BC"
+            }
+        },
     }
 
 
@@ -73,22 +91,39 @@ def test_get_new_inv2():
     assert response['status'] == 200
     assert response["data"] == {
         "cpart_name": "",
+        "cpart_role": "Supplier",
         "descr": "",
         "doc_type": "inv2",
+        "doc_type_name": "Invoice",
         "doc_num": "",
         "doc_dc": False,
         "dt": "",
         "seqs": [
             {"type": "base", "text": "", "acc": "", "val": 0.0},
             {"type": "tot", "text": "", "acc": "", "val": 0.0}
-        ]
+        ],
+        "fields": {
+            "payment": {
+                "account_num": "",
+                "institution_num": "",
+                "transit_num": "",
+                "type": ""
+            },
+            "person": {
+                "address": "",
+                "city": "",
+                "country": "",
+                "name": "",
+                "pcode": "",
+                "province": ""
+            }
+        }
     }
 
 
 def test_post_inv2_sell():
 
     response = documents.post(
-        doc_type="inv2",
         data={
             "cpart_name": "Ccc Ltd",
             "descr": "sale to Ccc Ltd",

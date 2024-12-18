@@ -3,16 +3,15 @@
 # pylint: disable=missing-function-docstring
 
 import ledger1.transaction.transaction_service as service
-from ledger1.admin.admin import reset
+from ledger1.admin import admin
 from ledger1.tests.utils import test_util
-
 
 next_num = test_util.get_last_tra_num() + 1
 
 
 def test_get_one():
 
-    reset()
+    admin.get("reset")
 
     result = service.get(1)
 

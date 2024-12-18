@@ -1,7 +1,8 @@
 from ledger1.document import documents
 from ledger1.admin import admin
 
-admin.reset()
+admin.get("reset")
+
 
 def test_get_many_eft_pay():
     response = documents.get(doc_dc=False, doc_type="eft", doc_num=None)
@@ -22,8 +23,10 @@ def test_get_one_eft_pay():
     response = documents.get(doc_dc=False, doc_type="eft", doc_num=1.1)
     assert response["data"] == {
         "cpart_name": "Jack Black",
+        "cpart_role": "Payer",
         "descr": "pmt lawyer fees",
         "doc_type": "eft",
+        "doc_type_name": "EFT",
         "doc_num": "1.1",
         "doc_dc": False,
         "dt": "2020-01-05",
@@ -47,6 +50,22 @@ def test_get_one_eft_pay():
                 "val": 190.0
             }
         ],
+        "fields": {
+            "payment": {
+                "account_num": "222333444",
+                "institution_num": "003",
+                "transit_num": "23456",
+                "type": "eft"
+            },
+            "person": {
+                "address": "555, Burrard St, suite 1001",
+                "city": "Vancouver",
+                "country": "CAN",
+                "name": "Jack Black",
+                "pcode": "V7X1M8",
+                "province": "BC"
+            }
+        },
     }
     assert response['message'] == 'wip'
     assert response['status'] == 200
@@ -61,8 +80,10 @@ def test_get_new_eft_pay():
         "doc_type": "eft",
         "doc_num": "",
         "doc_dc": False,
+        "doc_type_name": "EFT",
         "dt": "",
         "cpart_name": "",
+        "cpart_role": "Payer",
         "descr": "",
         "seqs": [
             {
@@ -77,7 +98,23 @@ def test_get_new_eft_pay():
                 "acc": "",
                 "val": 0.0
             }
-        ]
+        ],
+        "fields": {
+            "payment": {
+                "account_num": "",
+                "institution_num": "",
+                "transit_num": "",
+                "type": ""
+            },
+            "person": {
+                "address": "",
+                "city": "",
+                "country": "",
+                "name": "",
+                "pcode": "",
+                "province": ""
+            }
+        }
     }
 
 

@@ -44,7 +44,7 @@ def login(data: dict):
         }
 
 
-def get(param: str, filters: dict, record_id: str = None):
+def get(param: str, filters: dict = None, record_id: str = None):
     settings_data = fileio.get_file_settings()
     obj = User()
     file_format_path = settings_data["file"]["format"]
