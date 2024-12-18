@@ -14,6 +14,6 @@ def get_one(record_id: str) -> dict:
 
 
 def get_db_settings(key: str) -> dict:
-    data: list[dict] = dao_setting.get_many(key)
+    data: list[dict] = dao_setting.get_many({"key": key})
 
     return data

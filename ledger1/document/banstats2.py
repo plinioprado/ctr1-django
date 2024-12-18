@@ -32,7 +32,7 @@ def get_many() -> dict:
 
 def get_one(num: str, date: str = None, date_to: str = None):
 
-    settings_date: list[dict] = settings.get_db_settings("field_date_")
+    settings_date: dict = settings.get_db_settings("field_date_")
 
     dt = dateutil.get_date_from(date, settings_date)
     dt_to = dateutil.get_date_to(date_to, settings_date)

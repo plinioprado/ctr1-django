@@ -1,0 +1,721 @@
+{
+	"info": {
+		"_postman_id": "5bb2ec32-1d07-42d3-8d36-f43e9dff9d19",
+		"name": "tws1.document",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14675761",
+		"_collection_link": "https://warped-trinity-715604.postman.co/workspace/ctr~2fc9ccce-c4d8-4167-aa27-12260dc6cb3c/collection/14675761-5bb2ec32-1d07-42d3-8d36-f43e9dff9d19?action=share&source=collection_link&creator=14675761"
+	},
+	"item": [
+		{
+			"name": "get many inv2 sell",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2?dc=false",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2"
+					],
+					"query": [
+						{
+							"key": "dc",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get many inv2 buy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2?dc=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2"
+					],
+					"query": [
+						{
+							"key": "dc",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get one inv2 sell",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2/1.1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2",
+						"1.1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get one inv2 buy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2/2.135",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2",
+						"2.135"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get new inv2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create inv2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cpart_name\": \"Ccc Ltd\",\n  \"descr\": \"ddd\",\n  \"doc_dc\": false,\n  \"doc_num\": \"9.1\",\n  \"doc_type\": \"inv2\",\n  \"dt\": \"2020-01-22\",\n\n  \"seqs\": [\n        { \"type\": \"base\", \"text\": \"\", \"acc\": \"3.1.1\", \"val\": 100 },\n        { \"type\": \"add\", \"text\": \"\", \"acc\": \"2.1.3\", \"val\": 5 },\n        { \"type\": \"tot\", \"text\": \"\", \"acc\": \"1.1.3\", \"val\": 105 }\n  ]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update inv2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cpart_name\": \"Ccccc Ltd\",\n  \"descr\": \"ddd\",\n  \"doc_dc\": false,\n  \"doc_num\": \"9.1\",\n  \"doc_type\": \"inv2\",\n  \"dt\": \"2020-01-23\",\n  \"seqs\": [\n        { \"type\": \"base\", \"text\": \"\", \"acc\": \"3.1.1\", \"val\": 200 },\n        { \"type\": \"add\", \"text\": \"\", \"acc\": \"2.1.3\", \"val\": 10 },\n        { \"type\": \"tot\", \"text\": \"\", \"acc\": \"1.1.3\", \"val\": 210 }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2/9.1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2",
+						"9.1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete inv2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/inv2/9.1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"inv2",
+						"9.1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get many banstat2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/banstat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"banstat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get one banstat2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/banstat/003.55555.7777777",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"banstat",
+						"003.55555.7777777"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get many eft",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/eft",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"eft"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get one etf",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('got data', function () {",
+							"    var data = pm.response.json()['data'];",
+							"    pm.expect(data).to.eql({",
+							"        \"doc_type\": \"eft\",",
+							"        \"doc_num\": \"1.1\",",
+							"        \"doc_dc\": false,",
+							"        \"doc_type_name\": \"EFT\",",
+							"        \"dt\": \"2020-01-05\",",
+							"        \"cpart_name\": \"Jack Black\",",
+							"        \"cpart_role\": \"Payer\",",
+							"        \"descr\": \"pmt lawyer fees\",",
+							"        \"seqs\": [",
+							"            {",
+							"                \"type\": \"base\",",
+							"                \"text\": \"account payable\",",
+							"                \"acc\": \"2.1.1\",",
+							"                \"val\": 200.0",
+							"            },",
+							"            {",
+							"                \"type\": \"sub\",",
+							"                \"text\": \"(-)discount on payment\",",
+							"                \"acc\": \"4.3.3\",",
+							"                \"val\": 10.0",
+							"            },",
+							"            {",
+							"                \"type\": \"tot\",",
+							"                \"text\": \"from acc 003.55555.7777777\",",
+							"                \"acc\": \"1.1.2\",",
+							"                \"val\": 190.0",
+							"            }",
+							"        ],",
+							"        \"fields\": {",
+							"            \"payment\": {",
+							"                \"account_num\": \"222333444\",",
+							"                \"institution_num\": \"003\",",
+							"                \"transit_num\": \"23456\",",
+							"                \"type\": \"eft\"",
+							"            },",
+							"            \"person\": {",
+							"                \"address\": \"555, Burrard St, suite 1001\",",
+							"                \"city\": \"Vancouver\",",
+							"                \"country\": \"CAN\",",
+							"                \"name\": \"Jack Black\",",
+							"                \"pcode\": \"V7X1M8\",",
+							"                \"province\": \"BC\"",
+							"            }",
+							"        }",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/eft/1.1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"eft",
+						"1.1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get new etf",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('got data', function () {",
+							"    var data = pm.response.json()['data'];",
+							"    pm.expect(data).to.eql({",
+							"        \"doc_type\": \"eft\",",
+							"        \"doc_num\": \"\",",
+							"        \"doc_dc\": false,",
+							"        \"doc_type_name\": \"EFT\",",
+							"        \"dt\": \"\",",
+							"        \"cpart_name\": \"\",",
+							"        \"cpart_role\": \"Payer\",",
+							"        \"descr\": \"\",",
+							"        \"seqs\": [",
+							"            {",
+							"                \"type\": \"base\",",
+							"                \"text\": \"\",",
+							"                \"acc\": \"\",",
+							"                \"val\": 0.0",
+							"            },",
+							"            {",
+							"                \"type\": \"tot\",",
+							"                \"text\": \"\",",
+							"                \"acc\": \"\",",
+							"                \"val\": 0.0",
+							"            }",
+							"        ],",
+							"        \"fields\": {",
+							"            \"payment\": {",
+							"                \"account_num\": \"\",",
+							"                \"institution_num\": \"\",",
+							"                \"transit_num\": \"\",",
+							"                \"type\": \"\"",
+							"            },",
+							"            \"person\": {",
+							"                \"address\": \"\",",
+							"                \"city\": \"\",",
+							"                \"country\": \"\",",
+							"                \"name\": \"\",",
+							"                \"pcode\": \"\",",
+							"                \"province\": \"\"",
+							"            }",
+							"        }",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/eft/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"eft",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create eft",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"doc_type\": \"eft\",\n  \"doc_num\": \"1.99\",\n  \"doc_dc\": false,\n  \"dt\": \"2020-01-22\",\n  \"cpart_name\": \"ccc\",\n  \"descr\": \"ddd\",\n  \"tra_num\": \"new\",\n  \"seqs\": [\n    { \"type\": \"base\", \"text\": \"\", \"acc\": \"2.1.1\", \"val\": \"100\" },\n    { \"type\": \"tot\", \"text\": \"\", \"acc\": \"1.1.2\", \"val\": 100 }\n  ],\n  \"fields\": {\n        \"payment\": {\n        \"account_num\": \"54321\",\n        \"institution_num\": \"003\",\n        \"transit_num\": \"\",\n        \"type\": \"EFT\",\n        \"routing_num\": \"66666\"\n      },\n      \"person\": {\n        \"address\": \"01, Main st\",\n        \"city\": \"Vancouver\",\n        \"country\": \"CAN\",\n        \"name\": \"Plinio Prado\",\n        \"pcode\": \"V6E 1R1\",\n        \"province\": \"BC\",\n        \"role\": \"client\"\n      }\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/eft",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"eft"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update eft",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"doc_type\": \"eft\",\n  \"doc_num\": \"1.99\",\n  \"doc_dc\": false,\n  \"dt\": \"2020-01-24\",\n  \"cpart_name\": \"ccc\",\n  \"descr\": \"ddd\",\n  \"seqs\": [\n    { \"type\": \"base\", \"text\": \"account payable\", \"acc\": \"2.1.1\", \"val\": \"111\" },\n    {\n      \"type\": \"tot\",\n      \"text\": \"from acc 003.55555.7777777\",\n      \"acc\": \"1.1.2\",\n      \"val\": 111\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/eft/1.99",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"eft",
+						"1.99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete eft",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/doc/eft/1.99",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"doc",
+						"eft",
+						"1.99"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
