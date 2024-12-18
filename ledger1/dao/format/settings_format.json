@@ -4,6 +4,7 @@
     {
       "header": "Key",
       "name": "key",
+      "primary": true,
       "type": "string"
     },
     {

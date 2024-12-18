@@ -34,7 +34,7 @@
     },
     {
       "label": "Entities",
-      "md": 4,
+      "md": 5,
       "name": "entities",
       "type": "text"
     },
@@ -42,6 +42,12 @@
       "label": "Active",
       "md": 1,
       "name": "active",
+      "type": "text"
+    },
+    {
+      "label": "Password",
+      "md": 4,
+      "name": "password",
       "type": "text"
     }
   ]

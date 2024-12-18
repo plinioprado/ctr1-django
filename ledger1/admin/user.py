@@ -18,6 +18,7 @@ class User:
     # params
     table_name: str = "user"
 
+
     def set_from_db(self, data):
         self.id = int(data["id"]) if data["id"] is not None else None
         self.name = str(data["name"])
@@ -65,11 +66,13 @@ class User:
             "id": str(self.id),
             "name": self.name,
             "email": self.email,
+            "password": "*" * 12,
             "role": self.role,
             "entities": self.entities,
             "entity": self.entity,
             "active": self.active,
         }
+
 
     def get_to_response_list(self):
         """ return to front-end all fields except password ans api_key """
@@ -81,6 +84,7 @@ class User:
             "entity": self.entity,
             "active": self.active,
         }
+
 
     @classmethod
     def get_db_format(cls):
@@ -95,4 +99,3 @@ class User:
             "entity": "str",
             "active": "bool",
         }
-

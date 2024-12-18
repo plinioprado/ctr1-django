@@ -55,9 +55,10 @@ def get_one(key: str):
         cur.execute(query_text, query_params)
         row: dict = dict(cur.fetchone())
 
-        print(row)
-
-        return row
+        return {
+                "key": row["setting_key"],
+                "value": row["setting_value"]
+        }
 
     except sqlite3.DatabaseError as err:
         raise ValueError(f"getting setting {str(err)}") from err

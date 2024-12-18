@@ -13,8 +13,9 @@ def get_many(obj: object):
     return data
 
 
-def get_one(user_id: str, obj: object):
-    db_data: dict = dao_aux.get_one(obj.table_name, user_id)
+def get_one(record_id: str, obj: object):
+
+    db_data: dict = dao_aux.get_one(obj.table_name, record_id)
 
     obj.set_from_db(db_data)
     data = obj.get_to_response()
