@@ -86,6 +86,19 @@ class User:
         }
 
 
+    def get_to_response_new(self):
+        return {
+            "id": "new",
+            "name": "",
+            "email": "",
+            "password": "",
+            "role": "user",
+            "entities": "example",
+            "entity": "example",
+            "active": True,
+        }
+
+
     @classmethod
     def get_db_format(cls):
         return {

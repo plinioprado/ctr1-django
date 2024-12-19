@@ -15,10 +15,14 @@ def get_many(obj: object):
 
 def get_one(record_id: str, obj: object):
 
-    db_data: dict = dao_aux.get_one(obj.table_name, record_id)
+    if record_id == "new":
+        data = obj.get_to_response_new()
 
-    obj.set_from_db(db_data)
-    data = obj.get_to_response()
+    else:
+        db_data: dict = dao_aux.get_one(obj.table_name, record_id)
+
+        obj.set_from_db(db_data)
+        data = obj.get_to_response()
 
     return data
 
