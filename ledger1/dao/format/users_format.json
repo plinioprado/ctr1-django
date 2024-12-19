@@ -27,5 +27,13 @@
       "name": "active",
       "type": "boolean"
     }
+  ],
+  "filters": [
+    {
+      "label": "Name",
+      "name": "name",
+      "type": "text",
+      "md": 3
+    }
   ]
 }

@@ -55,17 +55,26 @@ def get(param: str, filters: dict = None, record_id: str = None):
         if record_id is None:
             data: list[dict] = auxs.get_many(obj)
             data_format: dict = fileio.read_json(f"{file_format_path}/users_format.json")
+            data_filters = auxs.get_filters(data_format, filters)
+
+            response = {
+                "data": data,
+                "filters": data_filters,
+                "format": data_format,
+                "message": "ok",
+                "status_code": 200
+            }
 
         else:
             data: dict = auxs.get_one(record_id, obj)
             data_format = fileio.read_json(f"{file_format_path}/user_format.json")
 
-        response = {
-            "data": data,
-            "format": data_format,
-            "message": "ok",
-            "status_code": 200
-        }
+            response = {
+                "data": data,
+                "format": data_format,
+                "message": "ok",
+                "status_code": 200
+            }
 
     elif param == "setting":
 
@@ -74,17 +83,24 @@ def get(param: str, filters: dict = None, record_id: str = None):
             data: list[dict] | dict = settings.get_many(filters)
             data_format = fileio.read_json(f"{file_format_path}/settings_format.json")
 
+            response = {
+                "data": data,
+                "filters": filters,
+                "format": data_format,
+                "message": "ok",
+                "status_code": 200
+            }
+
         else:
             data = settings.get_one(record_id)
             data_format = fileio.read_json(f"{file_format_path}/setting_format.json")
 
-        response = {
-            "data": data,
-            "filters": filters,
-            "format": data_format,
-            "message": "ok",
-            "status_code": 200
-        }
+            response = {
+                "data": data,
+                "format": data_format,
+                "message": "ok",
+                "status_code": 200
+            }
 
 
     elif param == "reset":

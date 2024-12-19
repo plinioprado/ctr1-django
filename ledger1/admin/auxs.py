@@ -62,3 +62,18 @@ def get_by_field(field_name: str, field_value: str | int):
     data: dict = dao_aux.get_by_field("user", field_name,  field_value)
 
     return data
+
+
+def get_filters(data_format: dict, filters: dict):
+
+    if "filters" not in data_format.keys():
+        return {}
+
+    data: list[dict] = []
+    for data_filter in data_format["filters"]:
+        value = filters["name"] if (filters is not None and "name" in filters.keys()) else None
+        data.append({
+            data_filter["name"]: value
+        })
+
+    return data
