@@ -2,8 +2,8 @@ from ledger1.dao.sqlite import dao_aux
 from ledger1.admin.user import User
 
 
-def get_many(obj: object):
-    db_data: list[dict] = dao_aux.get_many(obj.table_name)
+def get_many(obj: object, filters: dict = None):
+    db_data: list[dict] = dao_aux.get_many(table_name=obj.table_name, filters=filters)
 
     data = []
     for row in db_data:

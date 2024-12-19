@@ -45,15 +45,18 @@ def login(data: dict):
         }
 
 
-def get(param: str, filters: dict = None, record_id: str = None):
+def get(param: str, query: dict = None, record_id: str = None):
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
+
+    # because the query values in Django came as an array
+    filters = {name: query[name][0] for name in query} if query else None
 
     if param == "user":
         obj = User()
 
         if record_id is None:
-            data: list[dict] = auxs.get_many(obj)
+            data: list[dict] = auxs.get_many(obj, filters)
             data_format: dict = fileio.read_json(f"{file_format_path}/users_format.json")
             data_filters = auxs.get_filters(data_format, filters)
 
