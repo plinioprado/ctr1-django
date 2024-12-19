@@ -14,7 +14,6 @@ def get_many(obj: object, filters: dict = None):
 
 
 def get_one(record_id: str, obj: object):
-
     if record_id == "new":
         data = obj.get_to_response_new()
 
@@ -35,30 +34,29 @@ def post(data: dict, obj: object):
         data=obj.get_to_db(),
         db_format=db_data)
 
-    return record_id
+    return str(record_id)
 
 
 def put(data: dict, obj: object):
     obj.set_from_request(data)
     db_data = User.get_db_format()
-    user_id = dao_aux.put(
+    result_id = dao_aux.put(
         table_name=obj.table_name,
         data=obj.get_to_db(),
         db_format=db_data)
 
-    return user_id
+    return str(result_id)
 
 
 def delete(param: str, record_id: str):
-    user_id = dao_aux.delete(
+    result_id = dao_aux.delete(
         table_name=param,
         record_id=record_id)
 
-    return user_id
+    return str(result_id)
 
 
 def get_by_field(field_name: str, field_value: str | int):
-
     data: dict = dao_aux.get_by_field("user", field_name,  field_value)
 
     return data

@@ -5,7 +5,7 @@ from datetime import datetime
 class User:
 
     # fields
-    id: int = None
+    id: str = None
     name: str = ""
     email: str = ""
     password: str = ""
@@ -20,7 +20,7 @@ class User:
 
 
     def set_from_db(self, data):
-        self.id = int(data["id"]) if data["id"] is not None else None
+        self.id = str(data["id"]) if data["id"] is not None else None
         self.name = str(data["name"])
         self.email = str(data["email"])
         self.password = str(data["password"])
@@ -32,7 +32,7 @@ class User:
 
 
     def set_from_request(self, data):
-        self.id = int(data["id"]) if ("id" in data.keys() and data["id"] is not None) else None
+        self.id = str(data["id"]) if ("id" in data.keys() and data["id"] != "new") else None
         self.name = str(data["name"])
         self.email = str(data["email"])
         self.password = str(data["password"])
@@ -63,7 +63,7 @@ class User:
         """ return to front-end all fields except password ans api_key """
 
         return {
-            "id": str(self.id),
+            "id": self.id,
             "name": self.name,
             "email": self.email,
             "password": "*" * 12,

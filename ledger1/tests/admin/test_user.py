@@ -73,12 +73,48 @@ def test_user_get_new():
 
 
 def test_create_user():
-    """ post user """
+
+    ret = admin.post(
+        param="user",
+        data={
+            "name": "Alex Doe",
+            "email": "alex.doe@example.com",
+            "password": "12345",
+            "role": "user",
+            "entities": "example",
+            "entity": "example",
+            "active": False
+        })
+
+    assert ret["status_code"] == 200
+    assert ret["message"] == "user 3 created"
+    assert ret["data"]["id"] == "3"
 
 
 def test_update_user():
-    pass
+
+    ret = admin.put(
+        param="user",
+        data={
+            "id": 3,
+            "name": "Alex Doex",
+            "email": "alex.doe@example.com",
+            "password": "12345",
+            "role": "user",
+            "entities": "example",
+            "entity": "example",
+            "active": True
+        })
+
+    assert ret["status_code"] == 200
+    assert ret["message"] == "user 3 updated"
+    assert ret["data"]["id"] == "3"
 
 
 def test_delete_user():
-    pass
+
+    ret: dict =admin.delete(param="user", record_id="3")
+
+    assert ret["status_code"] == 200
+    assert ret["message"] == "user 3 deleted"
+    assert ret["data"]["id"] == "3"

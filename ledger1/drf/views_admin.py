@@ -14,8 +14,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from ledger1.admin import admin
 
-@api_view(["GET", "POST","PUT","DELETE"])
+@api_view(["GET", "POST", "PUT", "DELETE"])
 def view(request: Request, param: str = "", record_id: str = None):
+
     try:
         if request.method == "GET":
 

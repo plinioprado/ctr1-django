@@ -45,6 +45,5 @@ def view(request: Request, acc: str = None):
 
     except Exception as err: # pylint: disable=broad-exception-caught
         res: Response = Response({ "message": f"Error: {str(err)}" })
-        print(str(err))
         res.status_code = 500
         return res
