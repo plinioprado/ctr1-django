@@ -1,6 +1,5 @@
 from ledger1.admin import admin
 
-admin.reset()
 
 def test_setting_get_many():
     ret: dict = admin.get(param="setting", query=None)
@@ -84,7 +83,7 @@ def test_seting_update():
     assert ret["data"] == { "key": "test_key" }
 
 
-def test_delete_setting():
+def test_setting_delete():
 
     ret: dict =admin.delete(param="setting", record_id="test_id")
 

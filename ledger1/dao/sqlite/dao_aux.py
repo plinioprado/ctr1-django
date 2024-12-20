@@ -101,7 +101,6 @@ def post(obj: object) -> int:
         con.close()
 
 
-
 def put(obj: object) -> int:
 
     con, cur = dbutil.get_connection()

@@ -111,7 +111,7 @@ def test_update_user():
     assert ret["data"]["id"] == "3"
 
 
-def test_delete_user():
+def test_user_delete():
 
     ret: dict =admin.delete(param="user", record_id="3")
 
