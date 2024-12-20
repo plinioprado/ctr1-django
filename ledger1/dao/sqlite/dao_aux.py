@@ -8,19 +8,19 @@ import sqlite3
 from ledger1.utils import dbutil
 
 
-def get_many(table_name: str, filters: dict):
+def get_many(obj: object, filters: dict):
 
     con, cur = dbutil.get_connection()
 
     try:
 
-        # will work for one filter using LIKE
-        filter_keys: list = list(filters) if filters else []
-        filter_values: list = [f"{filters[key]}%" for key in filters] if filters else []
 
-        query_filters = f" WHERE {filter_keys[0]} LIKE ?" if filters else ""
-        query_text: str = f"SELECT * FROM {table_name}{query_filters};"
-        query_params = tuple(filter_values)
+        # will work for one filter using LIKE
+        filter_value: list = list(filters.values())[0] if filters else []
+
+        query_filters = f" WHERE {obj.filter_field} LIKE ?" if filters else ""
+        query_text: str = f"SELECT * FROM {obj.table_name}{query_filters};"
+        query_params = (f"{filter_value}%",) if filters else ()
 
         cur.execute(query_text, query_params)
         rows = [dict(row) for row in cur.fetchall()]
@@ -28,17 +28,17 @@ def get_many(table_name: str, filters: dict):
         return rows
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting {table_name}: {str(err)}") from err
+        raise ValueError(f"getting {obj.table_name}: {str(err)}") from err
     finally:
         con.close()
 
 
-def get_one(table_name: str, record_id: str):
+def get_one(obj: object, record_id: str):
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text = f"SELECT * FROM {table_name} WHERE id = ?"
+        query_text = f"SELECT * FROM {obj.table_name} WHERE {obj.primary_key} = ?"
         query_params = (record_id,)
         cur.execute(query_text, query_params)
         row = dict(cur.fetchone())
@@ -46,7 +46,7 @@ def get_one(table_name: str, record_id: str):
         return row
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting {table_name}: {str(err)}") from err
+        raise ValueError(f"getting {obj.table_name}: {str(err)}") from err
     finally:
         con.close()
 

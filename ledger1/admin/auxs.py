@@ -1,9 +1,11 @@
+""" This module """
+
 from ledger1.dao.sqlite import dao_aux
 from ledger1.admin.user import User
 
 
 def get_many(obj: object, filters: dict = None):
-    db_data: list[dict] = dao_aux.get_many(table_name=obj.table_name, filters=filters)
+    db_data: list[dict] = dao_aux.get_many(obj=obj, filters=filters)
 
     data = []
     for row in db_data:
@@ -18,7 +20,7 @@ def get_one(record_id: str, obj: object):
         data = obj.get_to_response_new()
 
     else:
-        db_data: dict = dao_aux.get_one(obj.table_name, record_id)
+        db_data: dict = dao_aux.get_one(obj, record_id)
 
         obj.set_from_db(db_data)
         data = obj.get_to_response()

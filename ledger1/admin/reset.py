@@ -1,6 +1,3 @@
-
-from ledger1.admin import settings as settings_service
-
 from ledger1.dao.sqlite import dao
 from ledger1.dao.sqlite import dao_account1
 from ledger1.dao.sqlite import dao_document_type

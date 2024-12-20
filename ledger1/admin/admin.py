@@ -7,9 +7,9 @@ and return the requests
 
 from ledger1.admin import reset as reset_service
 from ledger1.admin import session
-from ledger1.admin import settings
 from ledger1.admin import auxs
 from ledger1.admin.user import User
+from ledger1.admin.setting import Setting
 from ledger1.utils import fileio
 
 
@@ -52,8 +52,13 @@ def get(param: str, query: dict = None, record_id: str = None):
     # because the query values in Django came as an array
     filters = {name: query[name][0] for name in query} if query else None
 
-    if param == "user":
-        obj = User()
+    if param in ["user", "setting"]:
+        if param == "user":
+            obj = User()
+        elif param == "setting":
+            obj = Setting()
+        else:
+            raise ValueError(f"invalid param {param}")
 
         if record_id is None:
             data: list[dict] = auxs.get_many(obj, filters)
@@ -71,32 +76,6 @@ def get(param: str, query: dict = None, record_id: str = None):
         else:
             data: dict = auxs.get_one(record_id, obj)
             data_format = fileio.read_json(f"{file_format_path}/user_format.json")
-
-            response = {
-                "data": data,
-                "format": data_format,
-                "message": "ok",
-                "status_code": 200
-            }
-
-    elif param == "setting":
-
-        if record_id is None:
-
-            data: list[dict] | dict = settings.get_many(filters)
-            data_format = fileio.read_json(f"{file_format_path}/settings_format.json")
-
-            response = {
-                "data": data,
-                "filters": filters,
-                "format": data_format,
-                "message": "ok",
-                "status_code": 200
-            }
-
-        else:
-            data = settings.get_one(record_id)
-            data_format = fileio.read_json(f"{file_format_path}/setting_format.json")
 
             response = {
                 "data": data,

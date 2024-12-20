@@ -1,21 +1,11 @@
-from ledger1.dao.sqlite import dao_setting
-
-def get_many(filters: dict) -> list[dict]:
-
-    data = dao_setting.get_many(filters)
-
-    return data
+from ledger1.admin import auxs
+from ledger1.admin.setting import Setting
 
 
-def get_one(record_id: str) -> dict:
-
-    if record_id == "new":
-        data = {
-            "key": "",
-            "value": ""
-        }
-
-    else:
-        data = dao_setting.get_one(record_id)
+def get_db_settings(key: str):
+    data = auxs.get_many(
+        obj=Setting(),
+        filters={"key": key}
+    )
 
     return data

@@ -5,19 +5,36 @@ from datetime import datetime
 class User:
 
     # fields
-    id: str = None
-    name: str = ""
-    email: str = ""
-    password: str = ""
-    api_key: str = ""
-    role: str = "user"
-    entities: str = "example"
-    entity: str = "example"
-    active: bool = True
+    id: str
+    name: str
+    email: str
+    password: str
+    api_key: str
+    role: str
+    entities: str
+    entity: str
+    active: bool
 
-    # params
-    table_name: str = "user"
+    # db
+    table_name: str
+    primary_key: str
+    filter_field: dict
 
+
+    def __init__(self):
+        self.id = None
+        self.name = ""
+        self.email = ""
+        self.password = ""
+        self.api_key = ""
+        self.role = "user"
+        self.entities = "example"
+        self.entity = "example"
+        self.active = True
+
+        self.table_name = "user"
+        self.primary_key = "id"
+        self.filter_field = "name"
 
     def set_from_db(self, data):
         self.id = str(data["id"]) if data["id"] is not None else None
