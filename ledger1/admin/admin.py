@@ -13,9 +13,8 @@ from ledger1.admin.setting import Setting
 from ledger1.utils import fileio
 
 
-def login(data: dict):
+def login(data: dict) -> dict:
     try:
-
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
             raise ValueError("400")
 
@@ -45,7 +44,7 @@ def login(data: dict):
         }
 
 
-def get(param: str, query: dict = None, record_id: str = None):
+def get(param: str, query: dict = None, record_id: str = None) -> dict:
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
 
@@ -53,12 +52,7 @@ def get(param: str, query: dict = None, record_id: str = None):
     filters = {name: query[name][0] for name in query} if query else None
 
     if param in ["user", "setting"]:
-        if param == "user":
-            obj = User()
-        elif param == "setting":
-            obj = Setting()
-        else:
-            raise ValueError(f"invalid param {param}")
+        obj: object = _get_object(param)
 
         if record_id is None:
             data: list[dict] = auxs.get_many(obj, filters)
@@ -86,7 +80,7 @@ def get(param: str, query: dict = None, record_id: str = None):
 
 
     elif param == "reset":
-        reset_service.reset()
+        reset()
 
         response = {
         "status_code": 200,
@@ -98,9 +92,9 @@ def get(param: str, query: dict = None, record_id: str = None):
     return response
 
 
-def post(param: str, data: dict):
-    if param == "user":
-        obj: User = User()
+def post(param: str, data: dict) -> dict:
+    if param in ["user", "setting"]:
+        obj: object = _get_object(param)
         record_id = auxs.post(data, obj)
 
     else:
@@ -110,12 +104,12 @@ def post(param: str, data: dict):
         "status_code": 200,
         "message": f"{param} {record_id} created",
         "data": {
-            "id": record_id
+            obj.primary_key_form: record_id
         }
     }
 
 
-def put(param: str, data: dict):
+def put(param: str, data: dict) -> dict:
 
     if param == "user":
         obj: User = User()
@@ -133,7 +127,7 @@ def put(param: str, data: dict):
     }
 
 
-def delete(param: str, record_id: str = None):
+def delete(param: str, record_id: str = None) -> None:
     record_id = auxs.delete(param, record_id)
     return {
         "status_code": 200,
@@ -142,3 +136,18 @@ def delete(param: str, record_id: str = None):
             "id": record_id
         }
     }
+
+
+def reset():
+    reset_service.reset()
+
+
+def _get_object(param: str) -> object:
+    if param == "user":
+        obj = User()
+    elif param == "setting":
+        obj = Setting()
+    else:
+        raise ValueError(f"invalid param {param}")
+
+    return obj

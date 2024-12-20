@@ -9,13 +9,11 @@ from ledger1.utils import dbutil
 
 
 def get_many(obj: object, filters: dict):
+    """ accepts one filter using LIKE """
 
     con, cur = dbutil.get_connection()
 
     try:
-
-
-        # will work for one filter using LIKE
         filter_value: list = list(filters.values())[0] if filters else []
 
         query_filters = f" WHERE {obj.filter_field} LIKE ?" if filters else ""
@@ -68,32 +66,35 @@ def get_by_field(table_name: str, field_name: str, field_value: str | int) -> di
         con.close()
 
 
-def post(table_name: str, data: dict, db_format: dict) -> int:
+def post(obj: object) -> int:
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text1 = f"INSERT INTO {table_name} ("
+        data = obj.get_to_db()
+        db_format = obj.get_db_format()
+
+        query_text1 = f"INSERT INTO {obj.table_name} ("
         query_text2 = ""
         for k, name in enumerate(data.keys()):
             if k != 0:
                 query_text2 += " ,"
             query_text2 += name
-        query_text3 = f") VALUES (?{", ?" * (len(data.keys()) - 1)});"
+        query_text3 = f") VALUES (?{", ?" * (len(db_format) - 1)});"
         query_text = query_text1 + query_text2 + query_text3
 
         query_params = tuple(
-            [format_value(name, data[name], db_format) for name in data.keys()])
+            [format_value(name, data[name], db_format) for name in db_format.keys()])
 
         cur.execute(query_text, query_params)
         con.commit()
 
-        last_num = cur.lastrowid
+        last_id = cur.lastrowid
 
-        return last_num
+        return last_id
 
     except sqlite3.DatabaseError as err:
-        raise IOError(f"creating document {data["doc_type"]} {data["doc_num"]}: {str(err)}") from err
+        raise IOError(f"creating {obj.table_name}: {str(err)}") from err
     finally:
         con.close()
 
@@ -185,12 +186,16 @@ def restore(table_name: str, file_name: str, db_format: dict)-> None:
 
 def format_value(name: str, value: str, db_format: dict):
 
-    field_format: str = db_format[name]
-    if value is None:
-        return None
-    elif field_format == "bool":
-        return 1 if value == "true" else 0
-    elif field_format == "int":
-        return int(value)
-    else:
-        return value
+    try:
+        field_format: str = db_format[name]
+        if value is None:
+            return None
+        elif field_format == "bool":
+            return 1 if value == "true" else 0
+        elif field_format == "int":
+            return int(value)
+        else:
+            return value
+
+    except ValueError as err:
+        raise ValueError(f"converting field {name}") from err

@@ -30,11 +30,7 @@ def get_one(record_id: str, obj: object):
 
 def post(data: dict, obj: object):
     obj.set_from_request(data)
-    db_data = User.get_db_format()
-    record_id = dao_aux.post(
-        table_name=obj.table_name,
-        data=obj.get_to_db(),
-        db_format=db_data)
+    record_id = dao_aux.post(obj)
 
     return str(record_id)
 

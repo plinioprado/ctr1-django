@@ -16,9 +16,10 @@ class User:
     active: bool
 
     # db
-    table_name: str
-    primary_key: str
-    filter_field: dict
+    table_name: str = "user"
+    primary_key: str = "id"
+    filter_field: str = "name"
+    primary_key_form: str = "id"
 
 
     def __init__(self):
@@ -32,9 +33,6 @@ class User:
         self.entity = "example"
         self.active = True
 
-        self.table_name = "user"
-        self.primary_key = "id"
-        self.filter_field = "name"
 
     def set_from_db(self, data):
         self.id = str(data["id"]) if data["id"] is not None else None
