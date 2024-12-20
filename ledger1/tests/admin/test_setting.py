@@ -67,5 +67,27 @@ def test_seting_create():
         })
 
     assert ret["status_code"] == 200
-    assert ret["message"] == "setting 7 created"
-    assert ret["data"] == { "key": "7" }
+    assert ret["message"] == "setting test_key created"
+    assert ret["data"] == { "key": "test_key" }
+
+
+def test_seting_update():
+    ret = admin.put(
+        param="setting",
+        data = {
+            "key": "test_key",
+            "value": "test_value2"
+        })
+
+    assert ret["status_code"] == 200
+    assert ret["message"] == "setting test_key updated"
+    assert ret["data"] == { "key": "test_key" }
+
+
+def test_delete_setting():
+
+    ret: dict =admin.delete(param="setting", record_id="test_id")
+
+    assert ret["status_code"] == 200
+    assert ret["message"] == "setting test_id deleted"
+    assert ret["data"]["key"] == "test_id"

@@ -1,7 +1,6 @@
 """ This module """
 
 from ledger1.dao.sqlite import dao_aux
-from ledger1.admin.user import User
 
 
 def get_many(obj: object, filters: dict = None):
@@ -37,19 +36,13 @@ def post(data: dict, obj: object):
 
 def put(data: dict, obj: object):
     obj.set_from_request(data)
-    db_data = User.get_db_format()
-    result_id = dao_aux.put(
-        table_name=obj.table_name,
-        data=obj.get_to_db(),
-        db_format=db_data)
+    record_id = dao_aux.put(obj)
 
-    return str(result_id)
+    return str(record_id)
 
 
-def delete(param: str, record_id: str):
-    result_id = dao_aux.delete(
-        table_name=param,
-        record_id=record_id)
+def delete(record_id: str, obj: object):
+    result_id = dao_aux.delete(record_id, obj)
 
     return str(result_id)
 

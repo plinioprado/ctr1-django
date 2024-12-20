@@ -89,7 +89,9 @@ def post(obj: object) -> int:
         cur.execute(query_text, query_params)
         con.commit()
 
-        last_id = cur.lastrowid
+        last_id = data[obj.primary_key]
+        if last_id is None:
+            last_id = cur.lastrowid
 
         return last_id
 
@@ -100,42 +102,45 @@ def post(obj: object) -> int:
 
 
 
-def put(table_name: str, data: dict, db_format: dict) -> int:
+def put(obj: object) -> int:
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text1 = f"UPDATE {table_name} SET "
+        data = obj.get_to_db()
+        db_format = obj.get_db_format()
+        names: list = [name for name in db_format if name != obj.primary_key]
+        values: list = [format_value(name, data[name], db_format)  for name in db_format if name != obj.primary_key] + [data[obj.primary_key]]
+
+        query_text1 = f"UPDATE {obj.table_name} SET "
         query_text2 = ""
-        for k, name in enumerate(data.keys()):
+        for k, name in enumerate(names):
             if name == "id":
                 continue
-            if k > 1:
+            if k > 0:
                 query_text2 += ", "
             query_text2 += f"{name} = ?"
-        query_text3 = " WHERE id = ?;"
+        query_text3 = f" WHERE {obj.primary_key} = ?;"
         query_text = query_text1 + query_text2 + query_text3
-
-        values: list = list(data.values())[1:] + [data["id"]]
         query_params = tuple(values)
 
         cur.execute(query_text, query_params)
         con.commit()
 
-        return data["id"]
+        return data[obj.primary_key]
 
     except sqlite3.DatabaseError as err:
-        raise IOError(f"updating {table_name} {data["id"]}") from err
+        raise IOError(f"updating {obj.table_name} {data[obj.primary_key]}") from err
     finally:
         con.close()
 
 
-def delete(table_name: str, record_id: str):
+def delete(record_id: str, obj: object):
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text = f"DELETE FROM {table_name} WHERE id = ?;"
+        query_text = f"DELETE FROM {obj.table_name} WHERE {obj.primary_key} = ?;"
         query_params = (record_id,)
 
         cur.execute(query_text, query_params)
@@ -144,7 +149,7 @@ def delete(table_name: str, record_id: str):
         return record_id
 
     except sqlite3.DatabaseError as err:
-        raise IOError(f"deleting {table_name} {record_id}") from err
+        raise IOError(f"deleting {obj.table_name} {record_id}") from err
     finally:
         con.close()
 

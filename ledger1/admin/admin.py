@@ -111,8 +111,8 @@ def post(param: str, data: dict) -> dict:
 
 def put(param: str, data: dict) -> dict:
 
-    if param == "user":
-        obj: User = User()
+    if param in ["user", "setting"]:
+        obj: object = _get_object(param)
         record_id = auxs.put(data, obj)
 
     else:
@@ -122,18 +122,25 @@ def put(param: str, data: dict) -> dict:
         "status_code": 200,
         "message": f"{param} {record_id} updated",
         "data": {
-            "id": record_id
+            obj.primary_key_form: record_id
         }
     }
 
 
 def delete(param: str, record_id: str = None) -> None:
-    record_id = auxs.delete(param, record_id)
+
+    if param in ["user", "setting"]:
+        obj: object = _get_object(param)
+        record_id = auxs.delete(record_id, obj)
+
+    else:
+        raise ValueError(f"invalid param {param}")
+
     return {
         "status_code": 200,
         "message": f"{param} {record_id} deleted",
         "data": {
-            "id": record_id
+            obj.primary_key_form: record_id
         }
     }
 
