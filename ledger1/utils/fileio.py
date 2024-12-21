@@ -4,7 +4,7 @@ import json
 import csv
 
 
-def read_text(filename: str) -> dict:
+def read_text(filename: str) -> str:
     """ read a file and return a dict """
 
     try:
@@ -57,3 +57,9 @@ def read_csv(filename: str) -> list[dict]:
 
     except OSError as err:
         raise OSError(f"Error reading csv file {filename}:", err) from err
+
+
+def get_file_settings() -> dict:
+    settings = read_json("./ledger1/settings.json")
+
+    return settings

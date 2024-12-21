@@ -12,6 +12,7 @@
     "file_db": "./ledger1/dao/sqlite/tws.sqlite3"
   },
   "file": {
+    "format": "./ledger1/dao/format",
     "sql": {
       "reset": "./ledger1/dao/sqlite/reset.sql"
     },

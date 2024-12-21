@@ -135,8 +135,7 @@ def get_options() -> list[dict]:
         con.close()
 
 
-def reset() -> None:
-    """ Reset account1 table """
+def restore() -> None:
 
     try:
         con, cur = get_connection()
@@ -167,7 +166,7 @@ def reset() -> None:
                 con.commit()
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"reseting account {str(err)}") from err
+        raise ValueError(f"restoring account {str(err)}") from err
     except Exception as err:
         raise err
     finally:

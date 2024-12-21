@@ -1,7 +1,7 @@
-setting_key,setting_value
-field_date_min,2020-01-01
-field_date_max,2020-12-31
-institution_name_001,BMO
-institution_name_002,Scotiabank
-institution_name_003,RBC
-institution_name_004,TD
+setting_key,setting_value,denied
+field_date_min,2020-01-01,cd
+field_date_max,2020-12-31,cd
+institution_name_001,BMO,
+institution_name_002,Scotiabank,
+institution_name_003,RBC,
+institution_name_004,TD,

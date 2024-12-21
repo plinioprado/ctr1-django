@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS setting;
 CREATE TABLE IF NOT EXISTS setting (
     setting_key TEXT NOT NULL,
     setting_value TEXT NOT NULL,
+    denied TEXT DEFAULT "",
     PRIMARY KEY (setting_key)
 );
 

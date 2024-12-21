@@ -5,33 +5,39 @@ crud generic sqlite tables returning Python lists or dictionaries
 
 import csv
 import sqlite3
+from ledger1.admin.aux import Aux
 from ledger1.utils import dbutil
 
 
-def get_many(table_name: str):
+def get_many(obj: Aux, filters: dict):
+    """ accepts one filter using LIKE """
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text = f"SELECT * FROM {table_name};"
+        filter_value: list = list(filters.values())[0] if filters else []
 
-        cur.execute(query_text)
+        query_filters = f" WHERE {obj.filter_field} LIKE ?" if filters else ""
+        query_text: str = f"SELECT * FROM {obj.table_name}{query_filters};"
+        query_params = (f"{filter_value}%",) if filters else ()
+
+        cur.execute(query_text, query_params)
         rows = [dict(row) for row in cur.fetchall()]
 
         return rows
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting {table_name}: {str(err)}") from err
+        raise ValueError(f"getting {obj.table_name}: {str(err)}") from err
     finally:
         con.close()
 
 
-def get_one(table_name: str, record_id: str):
+def get_one(obj: Aux, record_id: str):
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text = f"SELECT * FROM {table_name} WHERE id = ?"
+        query_text = f"SELECT * FROM {obj.table_name} WHERE {obj.primary_key} = ?"
         query_params = (record_id,)
         cur.execute(query_text, query_params)
         row = dict(cur.fetchone())
@@ -39,7 +45,7 @@ def get_one(table_name: str, record_id: str):
         return row
 
     except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting {table_name}: {str(err)}") from err
+        raise ValueError(f"getting {obj.table_name}: {str(err)}") from err
     finally:
         con.close()
 
@@ -61,73 +67,80 @@ def get_by_field(table_name: str, field_name: str, field_value: str | int) -> di
         con.close()
 
 
-def post(table_name: str, data: dict, db_format: dict) -> int:
+def post(obj: Aux) -> int:
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text1 = f"INSERT INTO {table_name} ("
+        data = obj.get_to_db()
+        db_format = obj.get_db_format()
+
+        query_text1 = f"INSERT INTO {obj.table_name} ("
         query_text2 = ""
         for k, name in enumerate(data.keys()):
             if k != 0:
                 query_text2 += " ,"
             query_text2 += name
-        query_text3 = f") VALUES (?{", ?" * (len(data.keys()) - 1)});"
+        query_text3 = f") VALUES (?{", ?" * (len(db_format) - 1)});"
         query_text = query_text1 + query_text2 + query_text3
 
         query_params = tuple(
-            [format_value(name, data[name], db_format) for name in data.keys()])
+            [format_value(name, data[name], db_format) for name in db_format.keys()])
 
         cur.execute(query_text, query_params)
         con.commit()
 
-        last_num = cur.lastrowid
+        last_id = data[obj.primary_key]
+        if last_id is None:
+            last_id = cur.lastrowid
 
-        return last_num
+        return last_id
 
     except sqlite3.DatabaseError as err:
-        raise IOError(f"creating document {data["doc_type"]} {data["doc_num"]}: {str(err)}") from err
+        raise IOError(f"creating {obj.table_name}: {str(err)}") from err
     finally:
         con.close()
 
 
-
-def put(table_name: str, data: dict, db_format: dict) -> int:
+def put(obj: Aux) -> int:
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text1 = f"UPDATE {table_name} SET "
+        data = obj.get_to_db()
+        db_format = obj.get_db_format()
+        names: list = [name for name in db_format if name != obj.primary_key]
+        values: list = [format_value(name, data[name], db_format)  for name in db_format if name != obj.primary_key] + [data[obj.primary_key]]
+
+        query_text1 = f"UPDATE {obj.table_name} SET "
         query_text2 = ""
-        for k, name in enumerate(data.keys()):
+        for k, name in enumerate(names):
             if name == "id":
                 continue
-            if k > 1:
+            if k > 0:
                 query_text2 += ", "
             query_text2 += f"{name} = ?"
-        query_text3 = " WHERE id = ?;"
+        query_text3 = f" WHERE {obj.primary_key} = ?;"
         query_text = query_text1 + query_text2 + query_text3
-
-        values: list = list(data.values())[1:] + [data["id"]]
         query_params = tuple(values)
 
         cur.execute(query_text, query_params)
         con.commit()
 
-        return data["id"]
+        return data[obj.primary_key]
 
     except sqlite3.DatabaseError as err:
-        raise IOError(f"updating {table_name} {data["id"]}") from err
+        raise IOError(f"updating {obj.table_name} {data[obj.primary_key]}") from err
     finally:
         con.close()
 
 
-def delete(table_name: str, record_id: str):
+def delete(record_id: str, obj: Aux):
 
     con, cur = dbutil.get_connection()
 
     try:
-        query_text = f"DELETE FROM {table_name} WHERE id = ?;"
+        query_text = f"DELETE FROM {obj.table_name} WHERE {obj.primary_key} = ?;"
         query_params = (record_id,)
 
         cur.execute(query_text, query_params)
@@ -136,7 +149,7 @@ def delete(table_name: str, record_id: str):
         return record_id
 
     except sqlite3.DatabaseError as err:
-        raise IOError(f"deleting {table_name} {record_id}") from err
+        raise IOError(f"deleting {obj.table_name} {record_id}") from err
     finally:
         con.close()
 
@@ -178,12 +191,16 @@ def restore(table_name: str, file_name: str, db_format: dict)-> None:
 
 def format_value(name: str, value: str, db_format: dict):
 
-    field_format: str = db_format[name]
-    if value is None:
-        return None
-    elif field_format == "bool":
-        return 1 if value == "true" else 0
-    elif field_format == "int":
-        return int(value)
-    else:
-        return value
+    try:
+        field_format: str = db_format[name]
+        if value is None:
+            return None
+        elif field_format == "bool":
+            return 1 if value == "true" else 0
+        elif field_format == "int":
+            return int(value)
+        else:
+            return value
+
+    except ValueError as err:
+        raise ValueError(f"converting field {name}") from err

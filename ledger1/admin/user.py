@@ -1,27 +1,48 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+from ledger1.admin.aux import Aux
+
 @dataclass
-class User:
+class User(Aux):
 
     # fields
-    id: int = None
-    name: str = ""
-    email: str = ""
-    password: str = ""
-    api_key: str = ""
-    role: str = "user"
-    entities: str = "example"
-    entity: str = "example"
-    active: bool = True
+    id: str | None
+    name: str
+    email: str
+    password: str
+    api_key: str
+    role: str
+    entities: str
+    entity: str
+    active: bool
 
-    # params
-    table_name: str = "user"
+    # db
+    table_name: str
+    primary_key: str
+    filter_field: str
+    primary_key_form: str
 
-    def set_from_db(self, data):
-        print(11)
-        print(12, data)
-        self.id = int(data["id"]) if data["id"] is not None else None
+
+    def __init__(self) -> None:
+        self.id = None
+        self.name = ""
+        self.email = ""
+        self.password = ""
+        self.api_key = ""
+        self.role = "user"
+        self.entities = "example"
+        self.entity = "example"
+        self.active = True
+
+        self.table_name = "user"
+        self.primary_key = "id"
+        self.filter_field = "name"
+        self.primary_key_form = "id"
+
+
+    def set_from_db(self, data) -> None:
+        self.id = str(data["id"]) if data["id"] is not None else None
         self.name = str(data["name"])
         self.email = str(data["email"])
         self.password = str(data["password"])
@@ -32,8 +53,8 @@ class User:
         self.active = bool(data["active"])
 
 
-    def set_from_request(self, data):
-        self.id = int(data["id"]) if ("id" in data.keys() and data["id"] is not None) else None
+    def set_from_request(self, data) -> None:
+        self.id = str(data["id"]) if ("id" in data.keys() and data["id"] != "new") else None
         self.name = str(data["name"])
         self.email = str(data["email"])
         self.password = str(data["password"])
@@ -44,7 +65,7 @@ class User:
         self.active = bool(data["active"])
 
 
-    def get_to_db(self):
+    def get_to_db(self) -> dict:
         """ return to front-end all fields except password ans api_key """
 
         return {
@@ -60,20 +81,22 @@ class User:
         }
 
 
-    def get_to_response(self):
+    def get_to_response(self) -> dict:
         """ return to front-end all fields except password ans api_key """
 
         return {
-            "id": str(self.id),
+            "id": self.id,
             "name": self.name,
             "email": self.email,
+            "password": "*" * 12,
             "role": self.role,
             "entities": self.entities,
             "entity": self.entity,
             "active": self.active,
         }
 
-    def get_to_response_list(self):
+
+    def get_to_response_list(self) -> dict:
         """ return to front-end all fields except password ans api_key """
 
         return {
@@ -84,8 +107,22 @@ class User:
             "active": self.active,
         }
 
+
+    def get_to_response_new(self):
+        return {
+            "id": "new",
+            "name": "",
+            "email": "",
+            "password": "",
+            "role": "user",
+            "entities": "example",
+            "entity": "example",
+            "active": True,
+        }
+
+
     @classmethod
-    def get_db_format(cls):
+    def get_db_format(cls) -> dict:
         return {
             "id": "int",
             "name": "str",
@@ -97,4 +134,3 @@ class User:
             "entity": "str",
             "active": "bool",
         }
-
