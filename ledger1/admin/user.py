@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+from ledger1.admin.aux import Aux
+
 @dataclass
-class User:
+class User(Aux):
 
     # fields
-    id: str
+    id: str | None
     name: str
     email: str
     password: str
@@ -16,13 +18,13 @@ class User:
     active: bool
 
     # db
-    table_name: str = "user"
-    primary_key: str = "id"
-    filter_field: str = "name"
-    primary_key_form: str = "id"
+    table_name: str
+    primary_key: str
+    filter_field: str
+    primary_key_form: str
 
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.id = None
         self.name = ""
         self.email = ""
@@ -33,8 +35,13 @@ class User:
         self.entity = "example"
         self.active = True
 
+        self.table_name = "user"
+        self.primary_key = "id"
+        self.filter_field = "name"
+        self.primary_key_form = "id"
 
-    def set_from_db(self, data):
+
+    def set_from_db(self, data) -> None:
         self.id = str(data["id"]) if data["id"] is not None else None
         self.name = str(data["name"])
         self.email = str(data["email"])
@@ -46,7 +53,7 @@ class User:
         self.active = bool(data["active"])
 
 
-    def set_from_request(self, data):
+    def set_from_request(self, data) -> None:
         self.id = str(data["id"]) if ("id" in data.keys() and data["id"] != "new") else None
         self.name = str(data["name"])
         self.email = str(data["email"])
@@ -58,7 +65,7 @@ class User:
         self.active = bool(data["active"])
 
 
-    def get_to_db(self):
+    def get_to_db(self) -> dict:
         """ return to front-end all fields except password ans api_key """
 
         return {
@@ -74,7 +81,7 @@ class User:
         }
 
 
-    def get_to_response(self):
+    def get_to_response(self) -> dict:
         """ return to front-end all fields except password ans api_key """
 
         return {
@@ -89,7 +96,7 @@ class User:
         }
 
 
-    def get_to_response_list(self):
+    def get_to_response_list(self) -> dict:
         """ return to front-end all fields except password ans api_key """
 
         return {
@@ -115,7 +122,7 @@ class User:
 
 
     @classmethod
-    def get_db_format(cls):
+    def get_db_format(cls) -> dict:
         return {
             "id": "int",
             "name": "str",

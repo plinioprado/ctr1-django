@@ -5,10 +5,11 @@ crud generic sqlite tables returning Python lists or dictionaries
 
 import csv
 import sqlite3
+from ledger1.admin.aux import Aux
 from ledger1.utils import dbutil
 
 
-def get_many(obj: object, filters: dict):
+def get_many(obj: Aux, filters: dict):
     """ accepts one filter using LIKE """
 
     con, cur = dbutil.get_connection()
@@ -31,7 +32,7 @@ def get_many(obj: object, filters: dict):
         con.close()
 
 
-def get_one(obj: object, record_id: str):
+def get_one(obj: Aux, record_id: str):
 
     con, cur = dbutil.get_connection()
 
@@ -66,7 +67,7 @@ def get_by_field(table_name: str, field_name: str, field_value: str | int) -> di
         con.close()
 
 
-def post(obj: object) -> int:
+def post(obj: Aux) -> int:
 
     con, cur = dbutil.get_connection()
 
@@ -101,7 +102,7 @@ def post(obj: object) -> int:
         con.close()
 
 
-def put(obj: object) -> int:
+def put(obj: Aux) -> int:
 
     con, cur = dbutil.get_connection()
 
@@ -134,7 +135,7 @@ def put(obj: object) -> int:
         con.close()
 
 
-def delete(record_id: str, obj: object):
+def delete(record_id: str, obj: Aux):
 
     con, cur = dbutil.get_connection()
 

@@ -8,6 +8,7 @@ and return the requests
 from ledger1.admin import reset as reset_service
 from ledger1.admin import session
 from ledger1.admin import auxs
+from ledger1.admin.aux import Aux
 from ledger1.utils import fileio
 
 
@@ -47,15 +48,15 @@ def get(param: str, query: dict | None = None, record_id: str | None = None) -> 
     file_format_path = settings_data["file"]["format"]
 
     # because the query values in Django came as an array
-    filters = {name: query[name][0] for name in query} if query else None
+    filters: dict = {name: query[name][0] for name in query} if query else {}
 
     if param in ["user", "setting"]:
-        obj: object = auxs.get_object(param)
+        obj: Aux = auxs.get_object(param)
 
         if record_id is None:
-            data: list[dict] = auxs.get_many(obj, filters)
+            data: list[dict] | dict = auxs.get_many(obj, filters)
             data_format: dict = fileio.read_json(f"{file_format_path}/users_format.json")
-            data_filters = auxs.get_filters(data_format, filters)
+            data_filters: list[dict] | None = auxs.get_filters(data_format, filters)
 
             response = {
                 "data": data,
@@ -92,7 +93,7 @@ def get(param: str, query: dict | None = None, record_id: str | None = None) -> 
 
 def post(param: str, data: dict) -> dict:
     if param in ["user", "setting"]:
-        obj: object = auxs.get_object(param)
+        obj: Aux = auxs.get_object(param)
         record_id = auxs.post(data, obj)
 
     else:
@@ -110,7 +111,7 @@ def post(param: str, data: dict) -> dict:
 def put(param: str, data: dict) -> dict:
 
     if param in ["user", "setting"]:
-        obj: object = auxs.get_object(param)
+        obj: Aux = auxs.get_object(param)
         record_id = auxs.put(data, obj)
 
     else:
@@ -125,10 +126,10 @@ def put(param: str, data: dict) -> dict:
     }
 
 
-def delete(param: str, record_id: str | None = None) -> dict:
+def delete(param: str, record_id: str) -> dict:
 
     if param in ["user", "setting"]:
-        obj: object = auxs.get_object(param)
+        obj: Aux = auxs.get_object(param)
         record_id = auxs.delete(record_id, obj)
 
     else:
@@ -147,7 +148,7 @@ def reset() -> None:
     reset_service.reset()
 
 
-def get_db_settings(key: str | None) -> dict:
+def get_db_settings(key: str) -> dict:
     settings_list: list[dict] = auxs.get_db_settings(key)
 
     settings_dict: dict = {setting["key"]: setting["value"] for setting in settings_list}

@@ -3,9 +3,10 @@
 from ledger1.dao.sqlite import dao_aux
 from ledger1.admin.user import User
 from ledger1.admin.setting import Setting
+from ledger1.admin.aux import Aux
 
 
-def get_many(obj: object, filters: dict = None) -> list[dict]:
+def get_many(obj: Aux, filters: dict) -> list[dict]:
     db_data: list[dict] = dao_aux.get_many(obj=obj, filters=filters)
 
     data: list[dict] = []
@@ -16,7 +17,7 @@ def get_many(obj: object, filters: dict = None) -> list[dict]:
     return data
 
 
-def get_one(record_id: str, obj: object) -> dict:
+def get_one(record_id: str, obj: Aux) -> dict:
     if record_id == "new":
         data = obj.get_to_response_new()
 
@@ -29,21 +30,21 @@ def get_one(record_id: str, obj: object) -> dict:
     return data
 
 
-def post(data: dict, obj: object) -> str:
+def post(data: dict, obj: Aux) -> str:
     obj.set_from_request(data)
     record_id = dao_aux.post(obj)
 
     return str(record_id)
 
 
-def put(data: dict, obj: object) -> str:
+def put(data: dict, obj: Aux) -> str:
     obj.set_from_request(data)
     record_id = dao_aux.put(obj)
 
     return str(record_id)
 
 
-def delete(record_id: str, obj: object) -> str:
+def delete(record_id: str, obj: Aux) -> str:
     result_id = dao_aux.delete(record_id, obj)
 
     return str(result_id)
@@ -55,10 +56,10 @@ def get_by_field(field_name: str, field_value: str | int) -> dict:
     return data
 
 
-def get_filters(data_format: dict, filters: dict) -> dict:
+def get_filters(data_format: dict, filters: dict | None) -> list[dict]:
 
     if "filters" not in data_format.keys():
-        return {}
+        return []
 
     data: list[dict] = []
     for data_filter in data_format["filters"]:
@@ -70,9 +71,9 @@ def get_filters(data_format: dict, filters: dict) -> dict:
     return data
 
 
-def get_object(param: str) -> object:
+def get_object(param: str) -> Aux:
     if param == "user":
-        obj: object = User()
+        obj: Aux = User()
     elif param == "setting":
         obj = Setting()
     else:
