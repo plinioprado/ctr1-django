@@ -55,7 +55,7 @@ def get(param: str, query: dict | None = None, record_id: str | None = None) -> 
 
         if record_id is None:
             data: list[dict] | dict = auxs.get_many(obj, filters)
-            data_format: dict = fileio.read_json(f"{file_format_path}/users_format.json")
+            data_format: dict = fileio.read_json(f"{file_format_path}/{param}s_format.json")
             data_filters: list[dict] | None = auxs.get_filters(data_format, filters)
 
             response = {
@@ -68,7 +68,7 @@ def get(param: str, query: dict | None = None, record_id: str | None = None) -> 
 
         else:
             data = auxs.get_one(record_id, obj)
-            data_format = fileio.read_json(f"{file_format_path}/user_format.json")
+            data_format = fileio.read_json(f"{file_format_path}/{param}_format.json")
 
             response = {
                 "data": data,

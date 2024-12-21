@@ -2,7 +2,7 @@
 
 # pylint: disable=missing-function-docstring
 
-from ledger1.reports.reports_service import service
+from ledger1.reports.reports_service import service as reports
 from ledger1.admin import admin
 
 def test_chart_accounts():
@@ -10,7 +10,7 @@ def test_chart_accounts():
 
     admin.get("reset")
 
-    result = service("chart_accounts")
+    result = reports("chart_accounts")
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"
@@ -24,7 +24,7 @@ def test_chart_accounts():
 def test_journal():
     """ test chart of accunts """
 
-    result = service("journal")
+    result = reports("journal")
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"
@@ -39,7 +39,7 @@ def test_journal():
 def test_general_ledger():
     """ test general ledger """
 
-    result = service("general_ledger")
+    result = reports("general_ledger")
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"
@@ -58,7 +58,7 @@ def test_general_ledger():
 def test_trial_balance():
     """ test trial balance """
 
-    result = service("trial_balance")
+    result = reports("trial_balance")
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"

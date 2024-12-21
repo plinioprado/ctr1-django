@@ -6,8 +6,7 @@ This poject explores coding and tools using:
 
 * Web local service receving and responding rest requests using Django REST Framework (DRF) in the project root
 * Applications coded in plain Python, using function based views. These apps are self containing modules that return data as Python dicts that is then inserted into the DRF responses. So can be incorporated into other REST services beyond DRF.
-* Ai ledger system in ./ledger1
-* An Invoice1 app in ./invoice1, using function based views and plain Python 3 service in ./invoice1/invoice_service.py. This service is a class containing methods that receive variables with the content of the requests and returns dicts with the contents of the responses. So it can be incorporated into other REST services beyond DRF.
+* A ledger system in ./ledger1
 * An User app using DRF working with class-based views and Django coding in ./drf/user, accessed via endpoints and also the Django admin.
 
 ## Run
@@ -68,7 +67,7 @@ In Authorization, select Aasic Auth, fill Username and Password
 
 ## Endpoints
 
-ledger1
+ledger1 main endpoints
 
 * Accounts
 
@@ -130,6 +129,19 @@ Integration test including the web service:
 1. Import to Postman the collection stored in invoice1/test/postman/ctr-invoice1-python.postman_collection
 2. Run the application
 3. Run the collection in Postman
+
+## Standards
+
+References:
+
+* PEP 8 - https://peps.python.org/pep-0008
+* pylint - https://pypi.org/project/pylint
+* Google Python Style Guide - https://google.github.io/styleguide/pyguide.html
+
+Checked with:
+
+* mypy (static Typing for Python)
+* pylint (style checking)
 
 ## Dev notes
 

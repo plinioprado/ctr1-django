@@ -6,7 +6,7 @@
       "md": 6,
       "name": "key",
       "type": "text",
-      "read_only": true
+      "read_only": false
     },
     {
       "label": "Value",
