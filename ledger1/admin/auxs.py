@@ -1,12 +1,14 @@
 """ This module """
 
 from ledger1.dao.sqlite import dao_aux
+from ledger1.admin.user import User
+from ledger1.admin.setting import Setting
 
 
-def get_many(obj: object, filters: dict = None):
+def get_many(obj: object, filters: dict = None) -> list[dict]:
     db_data: list[dict] = dao_aux.get_many(obj=obj, filters=filters)
 
-    data = []
+    data: list[dict] = []
     for row in db_data:
         obj.set_from_db(row)
         data.append(obj.get_to_response_list())
@@ -14,7 +16,7 @@ def get_many(obj: object, filters: dict = None):
     return data
 
 
-def get_one(record_id: str, obj: object):
+def get_one(record_id: str, obj: object) -> dict:
     if record_id == "new":
         data = obj.get_to_response_new()
 
@@ -27,33 +29,33 @@ def get_one(record_id: str, obj: object):
     return data
 
 
-def post(data: dict, obj: object):
+def post(data: dict, obj: object) -> str:
     obj.set_from_request(data)
     record_id = dao_aux.post(obj)
 
     return str(record_id)
 
 
-def put(data: dict, obj: object):
+def put(data: dict, obj: object) -> str:
     obj.set_from_request(data)
     record_id = dao_aux.put(obj)
 
     return str(record_id)
 
 
-def delete(record_id: str, obj: object):
+def delete(record_id: str, obj: object) -> str:
     result_id = dao_aux.delete(record_id, obj)
 
     return str(result_id)
 
 
-def get_by_field(field_name: str, field_value: str | int):
+def get_by_field(field_name: str, field_value: str | int) -> dict:
     data: dict = dao_aux.get_by_field("user", field_name,  field_value)
 
     return data
 
 
-def get_filters(data_format: dict, filters: dict):
+def get_filters(data_format: dict, filters: dict) -> dict:
 
     if "filters" not in data_format.keys():
         return {}
@@ -64,5 +66,25 @@ def get_filters(data_format: dict, filters: dict):
         data.append({
             data_filter["name"]: value
         })
+
+    return data
+
+
+def get_object(param: str) -> object:
+    if param == "user":
+        obj: object = User()
+    elif param == "setting":
+        obj = Setting()
+    else:
+        raise ValueError(f"invalid param {param}")
+
+    return obj
+
+
+def get_db_settings(key: str) -> list[dict]:
+    data: list[dict] = get_many(
+        obj=Setting(),
+        filters={"key": key}
+    )
 
     return data

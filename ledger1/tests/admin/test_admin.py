@@ -18,3 +18,12 @@ def test_login():
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
     assert ret["data"]["user"]["api_key"] == "1q2w3e4r5t6y7u8i9o0p"
+
+
+def test_get_db_settings():
+    ret: dict = admin.get_db_settings("field_date")
+
+    assert ret == {
+        "field_date_max": "2020-12-31",
+        "field_date_min": "2020-01-01"
+    }

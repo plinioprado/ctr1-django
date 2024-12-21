@@ -4,7 +4,7 @@ import json
 import csv
 
 
-def read_text(filename: str) -> dict:
+def read_text(filename: str) -> str:
     """ read a file and return a dict """
 
     try:

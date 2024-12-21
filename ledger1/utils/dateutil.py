@@ -1,6 +1,6 @@
 import datetime
 
-def date_iso_to_timestamp(date_iso: str) -> int:
+def date_iso_to_timestamp(date_iso: str) -> float:
     return datetime.datetime.fromisoformat(date_iso).timestamp()
 
 
