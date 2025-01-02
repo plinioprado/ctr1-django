@@ -1,0 +1,16 @@
+{
+  "cols": [
+    {
+      "header": "Number",
+      "type": "string"
+    },
+    {
+      "header": "Name",
+      "type": "string"
+    },
+    {
+      "header": "D/C",
+      "type": "string"
+    }
+  ]
+}

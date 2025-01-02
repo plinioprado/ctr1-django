@@ -8,7 +8,7 @@ from ledger1.reports.journal import get as journal_get
 from ledger1.reports.general_ledger import get as general_ledger_get
 from ledger1.reports.trial_balance import get as trial_balance_get
 from ledger1.reports.documents import get as documents_get
-
+from ledger1.utils import fileio
 
 def service(
         name: str,
@@ -109,11 +109,17 @@ def service(
     if data:
         export_csv(data)
 
-    return {
+    res = {
         "code": 200,
         "message": "ok",
         "data": data
     }
+
+    data_format: dict = get_format(name)
+    if data_format is not None:
+        res["format"] = data_format
+
+    return res
 
 
 def export_csv(data: dict) -> None:
@@ -135,3 +141,15 @@ def export_csv(data: dict) -> None:
         rows.append(row)
 
     write_csv("./ledger1/file/report.csv", rows)
+
+
+def get_format(name: str) -> dict:
+    settings_data = fileio.get_file_settings()
+    file_format_path = settings_data["file"]["format"]
+
+    if name in ["chart_accounts","journal","general_ledger","trial_balance","documents"]:
+        data_format: dict = fileio.read_json(f"{file_format_path}/rep_{name}_format.json")
+    else:
+        data_format = None
+
+    return data_format
