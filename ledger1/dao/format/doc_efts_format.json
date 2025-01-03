@@ -1,0 +1,33 @@
+{
+  "header": {
+    "h2": "EFT"
+  },
+  "cols": [
+    {
+      "header": "Number",
+      "name": "doc_num",
+      "type": "text",
+      "primary": true
+    },
+    {
+      "header": "Date",
+      "name": "dt",
+      "type": "date"
+    },
+    {
+      "header": "Type",
+      "name": "doc_type",
+      "type": "text"
+    },
+    {
+      "header": "Description",
+      "name": "descr",
+      "type": "text"
+    },
+    {
+      "header": "Amount",
+      "name": "val",
+      "type": "amount"
+    }
+  ]
+}

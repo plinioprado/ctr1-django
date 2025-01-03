@@ -8,6 +8,7 @@ from ledger1.admin import admin
 from ledger1.reports import general_ledger
 from ledger1.dao.sqlite import dao_document
 from ledger1.utils import dateutil
+from ledger1.utils import fileio
 
 def get(num: str = None) -> dict:
     if num is None:
@@ -23,17 +24,20 @@ def get_many() -> dict:
 
     data = dao_document.get_many("banstat2")
 
+    settings_data = fileio.get_file_settings()
+    file_format_path = settings_data["file"]["format"]
+    data_format: dict = fileio.read_json(f"{file_format_path}/doc_banstats_format.json")
+
     return {
         "code": 200,
         "data": data,
+        "format": data_format,
         "message": "ok"
     }
 
 
 def get_one(num: str, date: str = None, date_to: str = None):
-
     settings_date: dict = admin.get_db_settings("field_date_")
-
     dt = dateutil.get_date_from(date, settings_date)
     dt_to = dateutil.get_date_to(date_to, settings_date)
 
@@ -58,11 +62,12 @@ def get_one(num: str, date: str = None, date_to: str = None):
     stat.set_seqs(doc_seqs)
 
     settings_db: list[dict] = admin.get_db_settings("institution_name_")
+
     institutions = []
-    for setting in settings_db:
+    for key in settings_db.keys():
         institutions.append({
-            "value": setting["key"].replace("institution_name_", ""),
-            "text": setting["value"],
+            "value": key.replace("institution_name_", ""),
+            "text": settings_db[key],
         })
     options = {
         "institutions": institutions
