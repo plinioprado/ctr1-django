@@ -17,7 +17,7 @@ def test_login():
 
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
-    assert ret["data"]["user"]["api_key"] == "1q2w3e4r5t6y7u8i9o0p"
+    assert ret["data"]["user"]["api_key"] == "1a2s3d1q2w3e4r5t6y7u8i9o0p"
 
 
 def test_get_db_settings():

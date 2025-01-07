@@ -1,4 +1,20 @@
 {
+  "entities": [
+    {
+      "id": "example",
+      "name": "Example Ltd",
+      "type": "sqlite",
+      "path": "./ledger1/dao/sqlite/tws.sqlite3",
+      "key": "1a2s3d"
+    },
+    {
+      "id": "test",
+      "name": "Lest Ltd.",
+      "type": "sqlite",
+      "path": "./ledger1/dao/sqlite/tws-test.sqlite3",
+      "key": "2s3d4f"
+    }
+  ],
   "entity": {
     "name": "Example Ltd."
   },

@@ -10,6 +10,7 @@ from ledger1.admin import session
 from ledger1.admin import auxs
 from ledger1.admin.aux import Aux
 from ledger1.utils import fileio
+from ledger1.admin import entity
 
 
 def login(data: dict) -> dict:
@@ -17,6 +18,7 @@ def login(data: dict) -> dict:
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
             raise ValueError("400")
 
+        entity_key: str = entity.get_entity_key(data["entity"])
         user: dict = auxs.get_by_field(field_name="email", field_value=data["user_email"])
 
         if (not user or
@@ -25,7 +27,7 @@ def login(data: dict) -> dict:
 
             raise ValueError("401")
 
-        api_key: str = user["api_key"]
+        api_key: str = f"{entity_key}{user["api_key"]}"
         data = session.get_session(user, data["entity"], api_key)
 
         response = {
