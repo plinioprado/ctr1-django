@@ -18,6 +18,8 @@ from ledger1.reports.reports_service import service
 # @permission_classes([IsAuthenticated])
 def view(request: Request, name: str):
 
+    print(request.headers["Authorization"])
+
     try:
         if request.method == "GET":
 

@@ -1,0 +1,32 @@
+{
+  "cols": [
+    {
+      "header": "Number",
+      "type": "string"
+    },
+    {
+      "header": "Date",
+      "type": "string"
+    },
+    {
+      "header": "Description",
+      "type": "string"
+    },
+    {
+      "header": "Transaction",
+      "type": "text"
+    },
+    {
+      "header": "Account",
+      "type": "text"
+    },
+    {
+      "header": "Debit",
+      "type": "amount"
+    },
+    {
+      "header": "Credit",
+      "type": "amount"
+    }
+  ]
+}

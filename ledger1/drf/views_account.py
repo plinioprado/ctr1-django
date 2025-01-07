@@ -18,6 +18,8 @@ import ledger1.account.account_service as service
 # @permission_classes([IsAuthenticated])
 def view(request: Request, acc: str | None = None):
 
+    print(request.headers["Authorization"])
+
     try:
         if request.method == "GET":
 

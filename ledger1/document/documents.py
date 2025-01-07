@@ -4,18 +4,18 @@ from ledger1.document.document import Document
 from ledger1.document import document_options
 from ledger1.transaction import transaction_service as transactions
 from ledger1.document.document_types import DocumentTypes
-
+from ledger1.utils import fileio
 
 # get
 
-
 def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
-
     if doc_num is None:
         data: list[dict] = get_many(doc_dc, doc_type)
+        data_format: dict = get_format(doc_type)
 
         response = {
             "data": data,
+            "format": data_format,
             "message": "wip",
             "status": 200,
             "options": {
@@ -162,3 +162,15 @@ def get_document(doc_dc: bool, doc_type: str) -> Document:
     return Document(
         doc_dc=doc_dc,
         document_type=document_type)
+
+
+def get_format(doc_type:str) -> dict:
+    settings_data = fileio.get_file_settings()
+    file_format_path = settings_data["file"]["format"]
+
+    if doc_type in ["eft","inv2"]:
+        data_format: dict = fileio.read_json(f"{file_format_path}/doc_{doc_type}s_format.json")
+    else:
+        raise ValueError(f"invalid document type {doc_type}")
+
+    return data_format

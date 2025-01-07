@@ -1,0 +1,18 @@
+{
+  "header": {
+    "h2": "Bank Statements"
+  },
+  "cols": [
+    {
+      "header": "Num",
+      "name": "doc_num",
+      "type": "text",
+      "primary": true
+    },
+    {
+      "header": "Name",
+      "name": "name",
+      "type": "text"
+    }
+  ]
+}
