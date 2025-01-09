@@ -3,6 +3,7 @@
 import ledger1.dao.sqlite.dao_report as dao
 
 def get(
+        db_id: str,
         entity_name,
         date_from,
         date_to,
@@ -22,7 +23,7 @@ def get(
             table: 2d list with the report content
     """
 
-    dao_rows = dao.get_trial_balance(date_from, date_to, acc_from, acc_to)
+    dao_rows = dao.get_trial_balance(db_id, date_from, date_to, acc_from, acc_to)
 
     rows =[["acc_num", "acc_name", "val_open", "val_db", "val_cr", "val_bal"]]
     for dao_row in dao_rows:

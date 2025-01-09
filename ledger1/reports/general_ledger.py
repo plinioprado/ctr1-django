@@ -3,6 +3,7 @@
 import ledger1.dao.sqlite.dao_report as dao
 
 def get(
+    db_id: str,
     entity_name: str,
     date_from: str,
     date_to: str,
@@ -22,7 +23,7 @@ def get(
             table: 2d list with the report content
     """
 
-    dao_rows = dao.get_general_ledger(date_from, date_to, acc_from, acc_to)
+    dao_rows = dao.get_general_ledger(db_id, date_from, date_to, acc_from, acc_to)
 
     rows: list[list] =[
             ["dt", "num", "descr", "seq", "doc_type", "doc_num", "val_db",

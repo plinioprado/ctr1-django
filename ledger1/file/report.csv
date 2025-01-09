@@ -1,4 +1,4 @@
-Test Ltd.
+Example Ltd.
 chart of accounts
 
 acc,1.0.0,acc_to,9.9.9
@@ -53,3 +53,4 @@ num,name,Dc
 4.3.2,interest on payment,C
 4.3.3,discount on payment,C
 4.3.9,other finance expenses,C
+9.9.9,xxx,D

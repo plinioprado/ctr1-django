@@ -76,18 +76,21 @@ def service(
     # Get report
     if name == "chart_accounts":
         data: dict = chart_accounts_get(
+            db_id,
             entity_name,
             acc_from=af,
             acc_to=at
         )
     elif name == "journal":
         data = journal_get(
+            db_id,
             entity_name,
             date_from=df,
             date_to=dt
         )
     elif name == "general_ledger":
         data = general_ledger_get(
+            db_id,
             entity_name,
             date_from=df,
             date_to=dt,
@@ -96,6 +99,7 @@ def service(
         )
     elif name == "trial_balance":
         data = trial_balance_get(
+            db_id,
             entity_name,
             date_from=df,
             date_to=dt,
@@ -104,6 +108,7 @@ def service(
         )
     elif name == "documents":
         data = documents_get(
+            db_id,
             entity_name,
             date_from=df,
             date_to=dt,

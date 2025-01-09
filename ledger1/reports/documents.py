@@ -4,6 +4,7 @@ from ledger1.document.document_types import DocumentTypes
 from ledger1.dao.sqlite.dao_report import get_documents
 
 def get(
+    db_id: str,
     entity_name: str,
     date_from: str,
     date_to: str,
@@ -14,6 +15,7 @@ def get(
     options_doc_type = document_types.get_dict_options()
 
     rows: list[dict] = get_documents(
+            db_id,
             date_from,
             date_to,
             doc_type

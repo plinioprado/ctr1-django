@@ -1,11 +1,12 @@
 """ Data access objects for chart of accounts report to sqlite """
 
 import datetime
-from ledger1.dao.sqlite.dao import get_connection
+from ledger1.utils import dbutil
 from ledger1.account.account1 import Account1
 
 
 def get(
+        db_id: str,
         acc_from: str,
         acc_to: str
     ) -> list[Account1]:
@@ -20,8 +21,9 @@ def get(
         List of all accounts as a list of Accounts
     """
 
+    con, _ = dbutil.get_connection(db_id)
+
     report_rows = []
-    con, _ = get_connection()
     for row in con.execute("""
         SELECT num, name, dc FROM account1
         WHERE (num BETWEEN ? AND ?)
@@ -34,6 +36,7 @@ def get(
 
 
 def get_general_ledger(
+    db_id: str,
     date_from: str,
     date_to: str,
     acc_from: str,
@@ -43,9 +46,9 @@ def get_general_ledger(
     data for general ledger
     """
 
-    report_rows = []
-    con, _ = get_connection()
+    con, _ = dbutil.get_connection(db_id)
 
+    report_rows = []
     for row in con.execute(
         """
             SELECT
@@ -110,6 +113,7 @@ def get_general_ledger(
 
 
 def get_journal(
+        db_id: str,
         date_from: str,
         date_to: str
     ) -> list[dict]:
@@ -124,7 +128,7 @@ def get_journal(
     """
 
     report_rows = []
-    con, _ = get_connection()
+    con, _ = dbutil.get_connection(db_id)
 
     for row in con.execute(
         """
@@ -167,6 +171,7 @@ def get_journal(
 
 
 def get_trial_balance(
+    db_id: str,
     date_from: str,
     date_to: str,
     acc_from: str,
@@ -176,7 +181,7 @@ def get_trial_balance(
     data for general ledger
     """
 
-    con, _ = get_connection() # pylint: disable=unused-variable
+    con, _ = dbutil.get_connection(db_id) # pylint: disable=unused-variable
 
     # get rows from db
     dao_rows = []
@@ -292,6 +297,7 @@ def get_trial_balance(
 
 
 def get_documents(
+    db_id: str,
     date_from: str,
     date_to: str,
     doc_type: str
@@ -300,7 +306,7 @@ def get_documents(
     data documents report
     """
 
-    con, cur = get_connection() # pylint: disable=unused-variable
+    con, cur = dbutil.get_connection(db_id) # pylint: disable=unused-variable
 
     query_text = """
     SELECT
