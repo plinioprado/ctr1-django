@@ -6,8 +6,8 @@ from ledger1.admin.setting import Setting
 from ledger1.admin.aux import Aux
 
 
-def get_many(obj: Aux, filters: dict) -> list[dict]:
-    db_data: list[dict] = dao_aux.get_many(obj=obj, filters=filters)
+def get_many(obj: Aux, filters: dict, db_id: str) -> list[dict]:
+    db_data: list[dict] = dao_aux.get_many(obj=obj, filters=filters, db_id=db_id)
 
     data: list[dict] = []
     for row in db_data:
@@ -17,12 +17,12 @@ def get_many(obj: Aux, filters: dict) -> list[dict]:
     return data
 
 
-def get_one(record_id: str, obj: Aux) -> dict:
+def get_one(record_id: str, obj: Aux,  entity_id: str = "") -> dict:
     if record_id == "new":
         data = obj.get_to_response_new()
 
     else:
-        db_data: dict = dao_aux.get_one(obj, record_id)
+        db_data: dict = dao_aux.get_one(obj, record_id, entity_id)
 
         obj.set_from_db(db_data)
         data = obj.get_to_response()
@@ -82,10 +82,11 @@ def get_object(param: str) -> Aux:
     return obj
 
 
-def get_db_settings(key: str) -> list[dict]:
+def get_db_settings(key: str, db_id: str) -> list[dict]:
     data: list[dict] = get_many(
         obj=Setting(),
-        filters={"key": key}
+        filters={"key": key},
+        db_id=db_id
     )
 
     return data

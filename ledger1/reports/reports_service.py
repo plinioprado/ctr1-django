@@ -1,17 +1,20 @@
 """ main service for reports """
 
-from ledger1.utils.settings import get as settings_get
-from ledger1.utils.fileio import write_csv
+from ledger1.utils.settings import get as settings_file_get
 from ledger1.utils.field import date_iso_is_valid, date_iso_to_timestamp, acc_num_is_valid
+from ledger1.utils import fileio
+from ledger1.admin import admin
+from ledger1.admin import entities
 from ledger1.reports.chart_accounts import get as chart_accounts_get
 from ledger1.reports.journal import get as journal_get
 from ledger1.reports.general_ledger import get as general_ledger_get
 from ledger1.reports.trial_balance import get as trial_balance_get
 from ledger1.reports.documents import get as documents_get
-from ledger1.utils import fileio
+
 
 def service(
         name: str,
+        auth_header: str,
         acc: str = None,
         acc_to: str = None,
         date: str = None,
@@ -20,11 +23,14 @@ def service(
     ) -> dict:
     """ directs the request to its report service """
 
-    # Get and validate parameters
-    settings = settings_get()
+    # get entity name
+    db_id: str = entities.get_entity_by_header_key(auth_header)["id"]
+    entity_name: str = admin.get_db_settings(key="entity_name", db_id=db_id)["entity_name"]
 
-    entity_name = settings["entity"]["name"]
+    # for now, what is here should get from file settings
+    settings = settings_file_get()
 
+    # get date final
     if name == "chart_accounts":
         df = None
     if date is None:
@@ -140,7 +146,7 @@ def export_csv(data: dict) -> None:
     for row in data["table"]:
         rows.append(row)
 
-    write_csv("./ledger1/file/report.csv", rows)
+    fileio.write_csv("./ledger1/file/report.csv", rows)
 
 
 def get_format(name: str) -> dict:

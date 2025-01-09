@@ -9,10 +9,10 @@ from ledger1.admin.aux import Aux
 from ledger1.utils import dbutil
 
 
-def get_many(obj: Aux, filters: dict):
+def get_many(obj: Aux, filters: dict, db_id: str) -> list[dict]:
     """ accepts one filter using LIKE """
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         filter_value: list = list(filters.values())[0] if filters else []
@@ -32,9 +32,9 @@ def get_many(obj: Aux, filters: dict):
         con.close()
 
 
-def get_one(obj: Aux, record_id: str):
+def get_one(obj: Aux, record_id: str, db_id: str = ""):
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = f"SELECT * FROM {obj.table_name} WHERE {obj.primary_key} = ?"

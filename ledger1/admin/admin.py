@@ -10,7 +10,7 @@ from ledger1.admin import session
 from ledger1.admin import auxs
 from ledger1.admin.aux import Aux
 from ledger1.utils import fileio
-from ledger1.admin import entity
+from ledger1.admin import entities
 
 
 def login(data: dict) -> dict:
@@ -18,17 +18,22 @@ def login(data: dict) -> dict:
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
             raise ValueError("400")
 
-        entity_key: str = entity.get_entity_key(data["entity"])
+        # data from file settings
+        entity_id = data["entity"]
+        entity_key: str = entities.get_entity("id", entity_id)["key"]
+
+        # data from user
         user: dict = auxs.get_by_field(field_name="email", field_value=data["user_email"])
 
-        if (not user or
-            data["user_pass"] != user["password"] or
-            data["entity"] not in user["entities"]):
-
+        if (not user or data["user_pass"] != user["password"]):
             raise ValueError("401")
 
-        api_key: str = f"{entity_key}{user["api_key"]}"
-        data = session.get_session(user, data["entity"], api_key)
+        # data from db settings
+        obj: Aux = auxs.get_object("setting")
+        entity_name: dict = auxs.get_one("entity_name", obj, entity_id)["value"]
+
+        api_key: str = f"{entity_key}-{user["api_key"]}"
+        data = session.get_session(entity_name, user, api_key)
 
         response = {
             "data": data,
@@ -150,8 +155,8 @@ def reset() -> None:
     reset_service.reset()
 
 
-def get_db_settings(key: str) -> dict:
-    settings_list: list[dict] = auxs.get_db_settings(key)
+def get_db_settings(key: str, db_id: str = "") -> dict:
+    settings_list: list[dict] = auxs.get_db_settings(key, db_id)
 
     settings_dict: dict = {setting["key"]: setting["value"] for setting in settings_list}
 

@@ -18,6 +18,8 @@ from ledger1.admin import admin
 def view(request: Request, param: str = "", record_id: str = None):
 
     try:
+        auth_header: str = request.headers["Authorization"]
+
         if request.method == "GET":
 
             ret: dict = admin.get(

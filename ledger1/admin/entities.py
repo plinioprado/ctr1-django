@@ -17,31 +17,20 @@ Initially, all entities will be in a sqlite db therefore the connectin data will
 from ledger1.utils import fileio
 
 
-def get_entity_key(entity_id: str) -> str:
-    """
-    called from the login and will return the api_key to be added to the session in the response
-    """
+def get_entity_by_header_key(header_key: str) -> dict:
 
-    data: dict = _get_entity_data_by_id(entity_id)
+    entity_key: str = header_key.replace("Bearer ", "").split("-")[0]
 
-    return data["key"]
+    entity: dict = get_entity("key", entity_key)
 
-
-def get_connection_data(api_key: str) -> dict:
-    """
-    called in each request to provide the connection data to the correspondent db
-    Initially, just the path to a sqlite db
-    """
-
-    return {
-        "path": "xxx"
-    }
+    return entity
 
 
-def _get_entity_data_by_id(entity_id) -> dict:
+def get_entity(field: str, value: str) -> dict:
 
     settings_data = fileio.get_file_settings()
     entities = settings_data["entities"]
-    entity: dict = [en for en in entities if en["id"] ==  entity_id][0]
+    entity: dict = [en for en in entities if en[field] ==  value][0]
 
     return entity
+

@@ -15,9 +15,6 @@
       "key": "2s3d4f"
     }
   ],
-  "entity": {
-    "name": "Example Ltd."
-  },
   "filters": {
     "date_min": "2020-01-01",
     "date_max": "2020-01-31",

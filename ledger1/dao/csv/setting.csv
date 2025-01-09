@@ -1,4 +1,5 @@
 setting_key,setting_value,denied
+entity_name,Example Ltd.,cd
 field_date_min,2020-01-01,cd
 field_date_max,2020-12-31,cd
 institution_name_001,BMO,

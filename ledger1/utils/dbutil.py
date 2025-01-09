@@ -3,7 +3,7 @@ import sqlite3
 from ledger1.utils import fileio
 
 
-def get_connection() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
+def get_connection(db_id: str = "") -> tuple[sqlite3.Connection, sqlite3.Cursor]:
     """
     Connect to the db and
 
@@ -12,7 +12,9 @@ def get_connection() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
     """
 
     settings = fileio.read_json("./ledger1/settings.json")
-    dbfilename = settings["sqlite3"]["file_db"]
+    db_id: str = "example" if db_id == "" else db_id
+
+    dbfilename = [s for s in settings["entities"] if s["id"] == db_id][0]["path"]
 
     con = sqlite3.connect(dbfilename, timeout=10)
     con.row_factory = sqlite3.Row
