@@ -17,13 +17,12 @@ Initially, all entities will be in a sqlite db therefore the connectin data will
 from ledger1.utils import fileio
 
 
-def get_entity_by_header_key(header_key: str) -> dict:
+def get_db_id_by_api_key(api_key: str) -> dict:
 
-    entity_key: str = header_key.replace("Bearer ", "").split("-")[0]
+    entity_key: str = api_key.replace("Bearer ", "").split("-")[0]
+    api_key: dict = get_entity("key", entity_key)["id"]
 
-    entity: dict = get_entity("key", entity_key)
-
-    return entity
+    return api_key
 
 
 def get_entity(field: str, value: str) -> dict:

@@ -14,7 +14,7 @@ from ledger1.reports.documents import get as documents_get
 
 def service(
         name: str,
-        auth_header: str,
+        api_key: str,
         acc: str = None,
         acc_to: str = None,
         date: str = None,
@@ -24,7 +24,7 @@ def service(
     """ directs the request to its report service """
 
     # get entity name
-    db_id: str = entities.get_entity_by_header_key(auth_header)["id"]
+    db_id: str = entities.get_db_id_by_api_key(api_key)
     entity_name: str = admin.get_db_settings(key="entity_name", db_id=db_id)["entity_name"]
 
     # for now, what is here should get from file settings

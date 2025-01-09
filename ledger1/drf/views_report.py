@@ -19,12 +19,13 @@ from ledger1.reports.reports_service import service
 def view(request: Request, name: str):
 
     try:
-        auth_header: str = request.headers["Authorization"]
+        api_key: str = request.headers["Authorization"]
+
         if request.method == "GET":
 
             ret: dict = service(
                 name,
-                auth_header=auth_header,
+                api_key=api_key,
                 acc=request.query_params.get("acc"),
                 acc_to=request.query_params.get("acc_to"),
                 date=request.query_params.get("date"),

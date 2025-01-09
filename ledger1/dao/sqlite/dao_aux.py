@@ -32,7 +32,7 @@ def get_many(obj: Aux, filters: dict, db_id: str) -> list[dict]:
         con.close()
 
 
-def get_one(obj: Aux, record_id: str, db_id: str = ""):
+def get_one(obj: Aux, record_id: str, db_id: str):
 
     con, cur = dbutil.get_connection(db_id)
 
@@ -50,8 +50,9 @@ def get_one(obj: Aux, record_id: str, db_id: str = ""):
         con.close()
 
 
-def get_by_field(table_name: str, field_name: str, field_value: str | int) -> dict:
-    con, cur = dbutil.get_connection()
+def get_by_field(table_name: str, field_name: str, field_value: str | int, db_id: str) -> dict:
+
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = f"SELECT * FROM {table_name} WHERE {field_name} = ?"
@@ -67,9 +68,9 @@ def get_by_field(table_name: str, field_name: str, field_value: str | int) -> di
         con.close()
 
 
-def post(obj: Aux) -> int:
+def post(obj: Aux, db_id: str) -> int:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         data = obj.get_to_db()
@@ -102,9 +103,9 @@ def post(obj: Aux) -> int:
         con.close()
 
 
-def put(obj: Aux) -> int:
+def put(obj: Aux, db_id: str) -> int:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         data = obj.get_to_db()
@@ -135,9 +136,9 @@ def put(obj: Aux) -> int:
         con.close()
 
 
-def delete(record_id: str, obj: Aux):
+def delete(record_id: str, obj: Aux, db_id: str) -> str:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = f"DELETE FROM {obj.table_name} WHERE {obj.primary_key} = ?;"

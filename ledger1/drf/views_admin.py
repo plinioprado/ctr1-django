@@ -18,21 +18,22 @@ from ledger1.admin import admin
 def view(request: Request, param: str = "", record_id: str = None):
 
     try:
-        auth_header: str = request.headers["Authorization"]
+        api_key: str = request.headers["Authorization"]
 
         if request.method == "GET":
 
             ret: dict = admin.get(
                 param=param,
+                api_key=api_key,
                 query= dict(request.query_params),
                 record_id=record_id)
 
         elif request.method == "POST":
-            ret: dict = admin.post(param, data=request.data)
+            ret: dict = admin.post(param, data=request.data, api_key=api_key)
         elif request.method == "PUT":
-            ret: dict = admin.put(param, data=request.data)
+            ret: dict = admin.put(param, data=request.data, api_key=api_key)
         elif request.method == "DELETE":
-            ret: dict = admin.delete(param, record_id)
+            ret: dict = admin.delete(param, record_id, api_key=api_key)
         else:
             raise ValueError("invalid method")
 

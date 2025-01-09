@@ -17,12 +17,12 @@ def get_many(obj: Aux, filters: dict, db_id: str) -> list[dict]:
     return data
 
 
-def get_one(record_id: str, obj: Aux,  entity_id: str = "") -> dict:
+def get_one(record_id: str, obj: Aux,  db_id) -> dict:
     if record_id == "new":
         data = obj.get_to_response_new()
 
     else:
-        db_data: dict = dao_aux.get_one(obj, record_id, entity_id)
+        db_data: dict = dao_aux.get_one(obj, record_id, db_id)
 
         obj.set_from_db(db_data)
         data = obj.get_to_response()
@@ -30,28 +30,28 @@ def get_one(record_id: str, obj: Aux,  entity_id: str = "") -> dict:
     return data
 
 
-def post(data: dict, obj: Aux) -> str:
+def post(data: dict, obj: Aux, db_id: str) -> str:
     obj.set_from_request(data)
-    record_id = dao_aux.post(obj)
+    record_id = dao_aux.post(obj, db_id)
 
     return str(record_id)
 
 
-def put(data: dict, obj: Aux) -> str:
+def put(data: dict, obj: Aux, db_id: str) -> str:
     obj.set_from_request(data)
-    record_id = dao_aux.put(obj)
+    record_id = dao_aux.put(obj, db_id)
 
     return str(record_id)
 
 
-def delete(record_id: str, obj: Aux) -> str:
-    result_id = dao_aux.delete(record_id, obj)
+def delete(record_id: str, obj: Aux, db_id: str) -> str:
+    result_id = dao_aux.delete(record_id, obj, db_id)
 
     return str(result_id)
 
 
-def get_by_field(field_name: str, field_value: str | int) -> dict:
-    data: dict = dao_aux.get_by_field("user", field_name,  field_value)
+def get_by_field(field_name: str, field_value: str | int, db_id: str) -> dict:
+    data: dict = dao_aux.get_by_field("user", field_name, field_value, db_id)
 
     return data
 
