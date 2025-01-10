@@ -1,1007 +1,1099 @@
 {
-  "info": {
-    "_postman_id": "2a824075-04b0-463c-b083-cefd41a30b76",
-    "name": "tws1-admin",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "14675761",
-    "_collection_link": "https://warped-trinity-715604.postman.co/workspace/ctr~2fc9ccce-c4d8-4167-aa27-12260dc6cb3c/collection/14675761-2a824075-04b0-463c-b083-cefd41a30b76?action=share&source=collection_link&creator=14675761"
-  },
-  "item": [
-    {
-      "name": "login",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('message is ok', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data).to.eql({",
-              "        \"user\": {",
-              "            \"api_key\": \"1q2w3e4r5t6y7u8i9o0p\",",
-              "            \"name\": \"John Doe\",",
-              "            \"entity\": \"example\"",
-              "        }",
-              "    });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"user_email\": \"john.doe@example.com\",\n    \"user_pass\": \"12345\",\n    \"entity\": \"example\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/ledger/login",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "login"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "reset",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('reset ledger db', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData).to.eql({",
-              "        \"message\": \"reset ok\",",
-              "    });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/reset",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "reset"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get many users",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data[0]).to.eql({",
-              "            \"id\": \"1\",",
-              "            \"name\": \"John Doe\",",
-              "            \"role\": \"admin\",",
-              "            \"entity\": \"example\",",
-              "            \"active\": true",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/user",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "user"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get filtered users",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data[0]).to.eql({",
-              "            \"id\": \"1\",",
-              "            \"name\": \"John Doe\",",
-              "            \"role\": \"admin\",",
-              "            \"entity\": \"example\",",
-              "            \"active\": true",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/user?name=john",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "user"],
-          "query": [
-            {
-              "key": "name",
-              "value": "john"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get one user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data).to.eql({",
-              "        \"id\": \"1\",",
-              "        \"name\": \"John Doe\",",
-              "        \"email\": \"john.doe@example.com\",",
-              "        \"password\": \"************\",",
-              "        \"role\": \"admin\",",
-              "        \"entities\": \"example\",",
-              "        \"entity\": \"example\",",
-              "        \"active\": true",
-              "    });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        },
-        {
-          "listen": "prerequest",
-          "script": {
-            "exec": [""],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/user/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "user", "1"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get new user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data).to.eql({",
-              "        \"id\": \"new\",",
-              "        \"name\": \"\",",
-              "        \"email\": \"\",",
-              "        \"password\": \"\",",
-              "        \"role\": \"user\",",
-              "        \"entities\": \"example\",",
-              "        \"entity\": \"example\",",
-              "        \"active\": true",
-              "    });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        },
-        {
-          "listen": "prerequest",
-          "script": {
-            "exec": [""],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/user/new",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "user", "new"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "create user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"user 3 created\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data.id).to.eql(\"3\");",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        },
-        {
-          "listen": "prerequest",
-          "script": {
-            "exec": [""],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "h": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"name\": \"Alex Doe\",\n    \"email\": \"alex.doe@example.com\",\n    \"password\": \"12345\",\n    \"role\": \"user\",\n    \"entities\": \"example\",\n    \"entity\": \"example\",\n    \"active\": false\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/user",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "user"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "update user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"user 3 updated\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data.id).to.eql(\"3\");",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        },
-        {
-          "listen": "prerequest",
-          "script": {
-            "exec": [""],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"id\": 3,\n    \"name\": \"Alex Doex\",\n    \"email\": \"alex.doe@example.com\",\n    \"password\": \"12345\",\n    \"role\": \"user\",\n    \"entities\": \"example\",\n    \"entity\": \"example\",\n    \"active\": true\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/user",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "user"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "delete user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"user 3 deleted\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data.id).to.eql(\"3\");",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        },
-        {
-          "listen": "prerequest",
-          "script": {
-            "exec": [""],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "DELETE",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/user/3",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "user", "3"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get many settings",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data[0]).to.eql({",
-              "            \"key\": \"field_date_min\",",
-              "            \"value\": \"2020-01-01\"",
-              "        },",
-              "        {",
-              "            \"key\": \"field_date_max\",",
-              "            \"value\": \"2020-12-31\"",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/setting",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "setting"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get filtered settings",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data).to.eql([",
-              "        {",
-              "            \"key\": \"field_date_min\",",
-              "            \"value\": \"2020-01-01\"",
-              "        },",
-              "        {",
-              "            \"key\": \"field_date_max\",",
-              "            \"value\": \"2020-12-31\"",
-              "        },",
-              "        ]);",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/setting?key=field_date",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "setting"],
-          "query": [
-            {
-              "key": "key",
-              "value": "field_date"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get one setting",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data).to.eql({",
-              "            \"key\": \"field_date_min\",",
-              "            \"value\": \"2020-01-01\"",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/setting/field_date_min",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "setting", "field_date_min"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get new setting",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data).to.eql({",
-              "            \"key\": \"field_date_min\",",
-              "            \"value\": \"2020-01-01\"",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/setting/field_date_min",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "setting", "field_date_min"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "create setting",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data[0]).to.eql({",
-              "            \"key\": \"field_date_min\",",
-              "            \"value\": \"2020-01-01\"",
-              "        },",
-              "        {",
-              "            \"key\": \"field_date_max\",",
-              "            \"value\": \"2020-12-31\"",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"key\": \"test_key\",\n    \"value\": \"test_value\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/setting",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "setting"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "update setting",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data[0]).to.eql({",
-              "            \"key\": \"field_date_min\",",
-              "            \"value\": \"2020-01-01\"",
-              "        },",
-              "        {",
-              "            \"key\": \"field_date_max\",",
-              "            \"value\": \"2020-12-31\"",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"key\": \"test_key\",\n    \"value\": \"test_value2\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/setting",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "setting"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "delete setting",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});",
-              "pm.test('get message', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.message).to.eql(\"ok\");",
-              "});",
-              "pm.test('get data', function () {",
-              "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData.data).to.eql({",
-              "            \"key\": \"field_date_min\",",
-              "            \"value\": \"2020-01-01\"",
-              "        });",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {}
-          }
-        }
-      ],
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "12345",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/ledger/admin/setting/test_id",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["ledger", "admin", "setting", "test_id"]
-        }
-      },
-      "response": []
-    }
-  ]
+	"info": {
+		"_postman_id": "2a824075-04b0-463c-b083-cefd41a30b76",
+		"name": "tws1-admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14675761",
+		"_collection_link": "https://warped-trinity-715604.postman.co/workspace/ctr~2fc9ccce-c4d8-4167-aa27-12260dc6cb3c/collection/14675761-2a824075-04b0-463c-b083-cefd41a30b76?action=share&source=collection_link&creator=14675761"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('message is ok', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"        \"user\": {",
+							"            \"api_key\": \"2s3d4f-1q2w3e4r5t6y7u8i9o0p\",",
+							"            \"name\": \"John Doe\"",
+							"        },",
+							"        \"entity\": {",
+							"            \"name\": \"Test Ltd.\"",
+							"        }",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_email\": \"john.doe@example.com\",\n    \"user_pass\": \"12345\",\n    \"entity\": \"test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('reset ledger db', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql({",
+							"        \"message\": \"reset ok\",",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/reset",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get many users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data[0]).to.eql({",
+							"            \"id\": \"1\",",
+							"            \"name\": \"John Doe\",",
+							"            \"role\": \"admin\",",
+							"            \"active\": true",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get filtered users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data[0]).to.eql({",
+							"            \"id\": \"1\",",
+							"            \"name\": \"John Doe\",",
+							"            \"role\": \"admin\",",
+							"            \"active\": true",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/user?name=john",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"user"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "john"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get one user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"        \"id\": \"1\",",
+							"        \"name\": \"John Doe\",",
+							"        \"email\": \"john.doe@example.com\",",
+							"        \"password\": \"************\",",
+							"        \"role\": \"admin\",",
+							"        \"active\": true",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/user/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"        \"id\": \"new\",",
+							"        \"name\": \"\",",
+							"        \"email\": \"\",",
+							"        \"password\": \"\",",
+							"        \"role\": \"user\",",
+							"        \"active\": true",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/user/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"user",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"user 3 created\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.id).to.eql(\"3\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Alex Doe\",\n    \"email\": \"alex.doe@example.com\",\n    \"password\": \"12345\",\n    \"role\": \"user\",\n    \"entities\": \"example\",\n    \"entity\": \"example\",\n    \"active\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"user 3 updated\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.id).to.eql(\"3\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 3,\n    \"name\": \"Alex Doex\",\n    \"email\": \"alex.doe@example.com\",\n    \"password\": \"12345\",\n    \"role\": \"user\",\n    \"entities\": \"example\",\n    \"entity\": \"example\",\n    \"active\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"user 3 deleted\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.id).to.eql(\"3\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/user/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"user",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get many settings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data[0]).to.eql({",
+							"            \"key\": \"entity_name\",",
+							"            \"value\": \"Test Ltd.\"",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/setting",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"setting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get filtered settings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql([",
+							"        {",
+							"            \"key\": \"field_date_min\",",
+							"            \"value\": \"2020-01-01\"",
+							"        },",
+							"        {",
+							"            \"key\": \"field_date_max\",",
+							"            \"value\": \"2020-12-31\"",
+							"        },",
+							"        ]);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/setting?key=field_date",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"setting"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "field_date"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get one setting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"            \"key\": \"field_date_min\",",
+							"            \"value\": \"2020-01-01\"",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/setting/field_date_min",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"setting",
+						"field_date_min"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get new setting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"            \"key\": \"\",",
+							"            \"value\": \"\"",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/setting/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"setting",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create setting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"setting test_key created\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"            \"key\": \"test_key\"",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"key\": \"test_key\",\n    \"value\": \"test_value\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/setting",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"setting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update setting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"setting test_key updated\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"            \"key\": \"test_key\"",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"key\": \"test_key\",\n    \"value\": \"test_value2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/setting",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"setting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete setting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test('get message', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"setting test_id deleted\");",
+							"});",
+							"pm.test('get data', function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.eql({",
+							"            \"key\": \"test_id\"",
+							"        });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/ledger/admin/setting/test_id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ledger",
+						"admin",
+						"setting",
+						"test_id"
+					]
+				}
+			},
+			"response": []
+		}
+	]
 }

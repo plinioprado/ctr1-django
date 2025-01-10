@@ -29,7 +29,7 @@ def get_entity(field: str, value: str) -> dict:
 
     settings_data = fileio.get_file_settings()
     entities = settings_data["entities"]
-    entity: dict = [en for en in entities if en[field] ==  value][0]
+    entity: dict = [en for en in entities if en[field] == value][0]
 
     return entity
 

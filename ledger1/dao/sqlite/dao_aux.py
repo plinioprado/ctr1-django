@@ -50,7 +50,7 @@ def get_one(obj: Aux, record_id: str, db_id: str):
         con.close()
 
 
-def get_by_field(table_name: str, field_name: str, field_value: str | int, db_id: str) -> dict:
+def get_by_field(db_id: str, table_name: str, field_name: str, field_value: str | int) -> dict:
 
     con, cur = dbutil.get_connection(db_id)
 

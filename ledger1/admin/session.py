@@ -1,6 +1,6 @@
 
 
-def get_session(entity_name: str, user: dict, api_key: str):
+def get_session(api_key: str, entity_name: str, user: dict):
 
     session = {
         "user": {

@@ -38,16 +38,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -94,16 +94,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -120,7 +120,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/ledger/accounts/",
+					"raw": "http://localhost:8000/ledger/accounts",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -128,8 +128,7 @@
 					"port": "8000",
 					"path": [
 						"ledger",
-						"accounts",
-						""
+						"accounts"
 					]
 				}
 			},
@@ -159,16 +158,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -185,7 +184,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/ledger/accounts/",
+					"raw": "http://localhost:8000/ledger/accounts",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -193,8 +192,7 @@
 					"port": "8000",
 					"path": [
 						"ledger",
-						"accounts",
-						""
+						"accounts"
 					]
 				}
 			},
@@ -224,16 +222,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -294,16 +292,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -311,7 +309,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/ledger/transactions/",
+					"raw": "http://localhost:8000/ledger/transactions",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -319,8 +317,7 @@
 					"port": "8000",
 					"path": [
 						"ledger",
-						"transactions",
-						""
+						"transactions"
 					]
 				}
 			},
@@ -384,16 +381,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -474,16 +471,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -528,16 +525,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -554,7 +551,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/ledger/transactions/",
+					"raw": "http://localhost:8000/ledger/transactions",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -562,8 +559,7 @@
 					"port": "8000",
 					"path": [
 						"ledger",
-						"transactions",
-						""
+						"transactions"
 					]
 				}
 			},
@@ -593,16 +589,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -619,7 +615,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/ledger/transactions/",
+					"raw": "http://localhost:8000/ledger/transactions",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -627,8 +623,7 @@
 					"port": "8000",
 					"path": [
 						"ledger",
-						"transactions",
-						""
+						"transactions"
 					]
 				}
 			},
@@ -658,16 +653,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]

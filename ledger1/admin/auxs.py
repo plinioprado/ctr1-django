@@ -17,7 +17,7 @@ def get_many(obj: Aux, filters: dict, db_id: str) -> list[dict]:
     return data
 
 
-def get_one(record_id: str, obj: Aux,  db_id) -> dict:
+def get_one(record_id: str, obj: Aux, db_id: str) -> dict:
     if record_id == "new":
         data = obj.get_to_response_new()
 
@@ -50,8 +50,8 @@ def delete(record_id: str, obj: Aux, db_id: str) -> str:
     return str(result_id)
 
 
-def get_by_field(field_name: str, field_value: str | int, db_id: str) -> dict:
-    data: dict = dao_aux.get_by_field("user", field_name, field_value, db_id)
+def get_by_field(db_id: str, field_name: str, field_value: str | int) -> dict:
+    data: dict = dao_aux.get_by_field(db_id, "user", field_name, field_value)
 
     return data
 

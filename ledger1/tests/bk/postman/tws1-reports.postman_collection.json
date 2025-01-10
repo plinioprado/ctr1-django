@@ -24,7 +24,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"chart of accounts\"",
 							"        });",
 							"});"
@@ -36,16 +36,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -85,7 +85,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"chart of accounts\"",
 							"        });",
 							"});"
@@ -97,16 +97,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -156,7 +156,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"journal\"",
 							"        });",
 							"});"
@@ -168,16 +168,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -217,7 +217,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"journal\"",
 							"        });",
 							"});"
@@ -229,16 +229,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -288,7 +288,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"general ledger\"",
 							"        });",
 							"});"
@@ -300,16 +300,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -349,7 +349,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"general ledger\"",
 							"        });",
 							"});"
@@ -361,16 +361,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -428,7 +428,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"trial balance\"",
 							"        });",
 							"});"
@@ -440,16 +440,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -489,7 +489,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"trial balance\"",
 							"        });",
 							"});"
@@ -501,16 +501,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -560,7 +560,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"documents\"",
 							"        });",
 							"});"
@@ -572,16 +572,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -621,7 +621,7 @@
 							"pm.test('get headers', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data.header).to.eql({",
-							"            \"entity_name\": \"Example Ltd.\",",
+							"            \"entity_name\": \"Test Ltd.\",",
 							"            \"title\": \"documents\"",
 							"        });",
 							"});"
@@ -633,16 +633,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -701,16 +701,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]

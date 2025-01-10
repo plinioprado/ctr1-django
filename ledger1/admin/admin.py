@@ -24,9 +24,10 @@ def login(data: dict) -> dict:
 
         # data from user
         user: dict = auxs.get_by_field(
+            db_id=param_db_entity["id"],
             field_name="email",
-            field_value=data["user_email"],
-            db_id=param_db_entity["id"])
+            field_value=data["user_email"]
+        )
 
         if (not user or data["user_pass"] != user["password"]):
             raise ValueError("401")
@@ -36,7 +37,7 @@ def login(data: dict) -> dict:
         entity_name: dict = auxs.get_one("entity_name", obj, entity_id)["value"]
 
         api_key: str = f"{param_db_entity["key"]}-{user["api_key"]}"
-        data = session.get_session(entity_name, user, api_key)
+        data = session.get_session(api_key, entity_name, user)
 
         response = {
             "data": data,
