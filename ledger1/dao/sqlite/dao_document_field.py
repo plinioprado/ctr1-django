@@ -3,9 +3,13 @@ import csv
 from ledger1.utils import dbutil
 
 
-def get_one(doc_type: str, doc_num: str) -> dict:
+def get_one(
+        db_id: str,
+        doc_type: str,
+        doc_num: str
+    ) -> dict:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = """
@@ -35,8 +39,9 @@ def get_one(doc_type: str, doc_num: str) -> dict:
         con.close()
 
 
-def restore(filename: str):
-    con, cur = dbutil.get_connection()
+def restore( db_id: str, filename: str) -> None:
+
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         with open(filename, "r", encoding="UTF-8") as csvfile:

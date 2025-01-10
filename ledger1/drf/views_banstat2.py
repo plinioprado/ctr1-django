@@ -17,8 +17,10 @@ from ledger1.document import banstats2
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def view(request: Request, acc: str = None):
     try:
+        api_key: str = request.headers["Authorization"]
+
         if request.method == "GET":
-            ret: dict = banstats2.get(acc)
+            ret: dict = banstats2.get(api_key, acc)
 
         # elif request.method == "DELETE":
         #     ret = invoices2.delete(num)

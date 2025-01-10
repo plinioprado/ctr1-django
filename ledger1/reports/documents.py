@@ -11,7 +11,7 @@ def get(
     doc_type: str = ""
 ) -> dict:
 
-    document_types = DocumentTypes()
+    document_types = DocumentTypes(db_id)
     options_doc_type = document_types.get_dict_options()
 
     rows: list[dict] = get_documents(

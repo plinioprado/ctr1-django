@@ -1,10 +1,12 @@
 import csv
 import sqlite3
-from ledger1.dao.sqlite.dao import get_connection
+from ledger1.utils import dbutil
 from ledger1.document.document_type import DocumentType
 
-def get():
+def get(db_id: str) -> list[DocumentType]:
     try:
+        con, cur = dbutil.get_connection(db_id)
+
         query_text: str = """
             SELECT
                 id,
@@ -18,7 +20,6 @@ def get():
             FROM document_type;
             """
 
-        con, cur = get_connection()
         res = cur.execute(query_text)
         types = []
         for row in res.fetchall():
@@ -40,11 +41,11 @@ def get():
         con.close()
 
 
-def reset() -> None:
+def reset(db_id: str) -> None:
     """ Reset account1 table """
 
     try:
-        con, cur = get_connection()
+        con, cur = dbutil.get_connection(db_id)
 
         with open("./ledger1/dao/csv/document_type.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)

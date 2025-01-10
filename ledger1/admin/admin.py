@@ -54,19 +54,19 @@ def login(data: dict) -> dict:
 
 
 def get(
-        param: str,
         api_key: str,
+        param: str,
         query: dict | None = None,
         record_id: str | None = None
     ) -> dict:
+
+    db_id: str = entities.get_db_id_by_api_key(api_key)
 
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
 
     # because the query values in Django came as an array
     filters: dict = {name: query[name][0] for name in query} if query else {}
-
-    db_id: str = entities.get_db_id_by_api_key(api_key)
 
     if param in ["user", "setting"]:
         obj: Aux = auxs.get_object(param)
@@ -97,7 +97,7 @@ def get(
 
 
     elif param == "reset":
-        reset()
+        reset(db_id)
 
         response = {
         "status_code": 200,
@@ -167,8 +167,9 @@ def delete(param: str, record_id: str, api_key: str) -> dict:
     }
 
 
-def reset() -> None:
-    reset_service.reset()
+def reset(db_id) -> None:
+
+    reset_service.reset(db_id)
 
 
 def get_db_settings(key: str, db_id: str = "") -> dict:

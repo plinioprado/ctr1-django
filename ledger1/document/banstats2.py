@@ -1,7 +1,7 @@
-""" Functions to handle requests to bank statement doucments
+# """ Functions to handle requests to bank statement doucments
 
-get_many() is only implemented for checking acc, therefore doc_dc == True
- """
+# get_many() is only implemented for checking acc, therefore doc_dc == True
+#  """
 
 from ledger1.document.banstat2 import Banstat2
 from ledger1.admin import admin
@@ -9,20 +9,24 @@ from ledger1.reports import general_ledger
 from ledger1.dao.sqlite import dao_document
 from ledger1.utils import dateutil
 from ledger1.utils import fileio
+from ledger1.admin import entities
 
-def get(num: str = None) -> dict:
+def get(api_key: str, num: str = None) -> dict:
+
     if num is None:
-        response = get_many()
+        response = get_many(api_key)
     else:
-        response = get_one(num)
+        response = get_one(api_key, num)
 
     return response
 
 
-def get_many() -> dict:
+def get_many(api_key: str) -> dict:
     ## obs: acc_num up to 11 dig
 
-    data = dao_document.get_many("banstat2")
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
+    data = dao_document.get_many(db_id, "banstat2")
 
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
@@ -36,15 +40,19 @@ def get_many() -> dict:
     }
 
 
-def get_one(num: str, date: str = None, date_to: str = None):
+def get_one(api_key: str, num: str, date: str = None, date_to: str = None):
+
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
     settings_date: dict = admin.get_db_settings("field_date_")
     dt = dateutil.get_date_from(date, settings_date)
     dt_to = dateutil.get_date_to(date_to, settings_date)
 
-    row = dao_document.get_one("banstat2", num)
+    row = dao_document.get_one(db_id, "banstat2", num)
     stat: Banstat2 = Banstat2()
     stat.set_from_db(row)
     tra_seqs: list[dict] = general_ledger.get(
+        db_id,
         "",
         dt,
         dt_to,

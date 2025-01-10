@@ -10,9 +10,9 @@ from ledger1.utils import dbutil
 from ledger1.utils import dateutil
 
 
-def get_many(doc_type: str = None) -> list[dict]:
+def get_many(db_id: str, doc_type: str = None) -> list[dict]:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
 
@@ -39,9 +39,9 @@ def get_many(doc_type: str = None) -> list[dict]:
         con.close()
 
 
-def get_many_tra(doc_dc: bool, doc_type: str):
+def get_many_tra(db_id: str, doc_dc: bool, doc_type: str):
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -82,9 +82,9 @@ def get_many_tra(doc_dc: bool, doc_type: str):
         con.close()
 
 
-def get_one(doc_type: str, doc_num: str) -> dict:
+def get_one(db_id: str, doc_type: str, doc_num: str) -> dict:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = """
@@ -110,9 +110,9 @@ def get_one(doc_type: str, doc_num: str) -> dict:
         con.close()
 
 
-def post(data: dict):
+def post(db_id: str, data: dict):
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -159,9 +159,9 @@ def post(data: dict):
         con.close()
 
 
-def put(data: dict):
+def put(db_id: str, data: dict):
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -204,9 +204,9 @@ def put(data: dict):
         con.close()
 
 
-def delete(doc_type: str, doc_num: str):
+def delete(db_id: str, doc_type: str, doc_num: str):
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = """
@@ -232,10 +232,10 @@ def delete(doc_type: str, doc_num: str):
         con.close()
 
 
-def restore(file_name) -> None:
+def restore(db_id: str, file_name) -> None:
     """ Restore from CSV """
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         with open(file_name, "r", encoding="UTF-8") as csvfile:

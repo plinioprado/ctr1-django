@@ -155,10 +155,15 @@ def delete(record_id: str, obj: Aux, db_id: str) -> str:
         con.close()
 
 
-def restore(table_name: str, file_name: str, db_format: dict)-> None:
+def restore(
+        db_id: str,
+        table_name: str,
+        file_name: str,
+        db_format: dict
+    )-> None:
     """ Restore from CSV """
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
 

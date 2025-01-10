@@ -4,9 +4,9 @@ from ledger1.dao.sqlite import dao_document_type
 class DocumentTypes:
     types: list[DocumentType] = []
 
-
-    def __init__(self):
-        self.types = dao_document_type.get()
+    # TODO: In th future, requests to dao should be in the service
+    def __init__(self, db_id: str):
+        self.types = dao_document_type.get(db_id)
 
 
     def asdict(self) -> list[dict]:

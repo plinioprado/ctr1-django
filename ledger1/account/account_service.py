@@ -9,7 +9,7 @@
 
 from ledger1.admin import entities
 from ledger1.account.account1 import Account1
-import ledger1.dao.sqlite.dao_account1 as dao
+from ledger1.dao.sqlite import dao_account1
 
 def get(
         api_key: str,
@@ -35,7 +35,7 @@ def get(
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    data = dao.get(db_id, af, at)
+    data = dao_account1.get(db_id, af, at)
 
     return {
         "code": 200,
@@ -59,7 +59,7 @@ def post(api_key: str, data: dict) -> dict:
         name=data["name"],
         dc=data["dc"])
 
-    acc_num: str = dao.post(db_id, acc)
+    acc_num: str = dao_account1.post(db_id, acc)
 
     return {
         "code": 200,
@@ -82,7 +82,7 @@ def put(api_key: str, data: dict) -> dict:
         name=data["name"],
         dc=data["dc"])
 
-    acc_num: str = dao.put(db_id, acc)
+    acc_num: str = dao_account1.put(db_id, acc)
 
     return {
         "code": 200,
@@ -105,7 +105,7 @@ def delete(api_key: str, acc_num: str) -> dict:
 
     an = f"{acc_num[0:1]}.{acc_num[1:2]}.{acc_num[2:3]}"
 
-    num: str = dao.delete(db_id, an)
+    num: str = dao_account1.delete(db_id, an)
 
     return {
         "code": 200,
@@ -113,7 +113,10 @@ def delete(api_key: str, acc_num: str) -> dict:
     }
 
 
-def get_options() -> list[dict]:
-    result = dao.get_options()
+def get_options(api_key) -> list[dict]:
+
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
+    result = dao_account1.get_options(db_id)
 
     return result

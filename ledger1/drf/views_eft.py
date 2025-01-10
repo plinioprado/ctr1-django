@@ -6,21 +6,24 @@ from ledger1.document import documents
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def view(request: Request, num: str = None):
     try:
+        api_key: str = request.headers["Authorization"]
+
         if request.method == "GET":
 
             ret: dict = documents.get(
+                api_key,
                 doc_dc=request.query_params.get("dc") == 'true',
                 doc_type="eft",
                 doc_num=num)
 
-        elif request.method == "DELETE":
-            ret = documents.delete(doc_type="eft", doc_num=num)
-
         elif request.method == "POST":
-            ret = documents.post(data=request.data)
+            ret = documents.post(api_key, data=request.data)
 
         elif request.method == "PUT":
-            ret = documents.put(data=request.data)
+            ret = documents.put(api_key, data=request.data)
+
+        elif request.method == "DELETE":
+            ret = documents.delete(api_key, doc_type="eft", doc_num=num)
 
         else:
             raise ValueError("invalid method")

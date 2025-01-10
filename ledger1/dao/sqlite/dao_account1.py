@@ -109,13 +109,13 @@ def delete(db_id: str, num: str) -> str:
         con.close()
 
 
-def get_options() -> list[dict]:
+def get_options(db_id: str) -> list[dict]:
     """ Get a list of option for a form select
 
      """
+    con, cur = dbutil.get_connection(db_id)
 
     accs = []
-    con, cur = dbutil.get_connection()
 
     try:
         query_text: str = """
@@ -135,10 +135,10 @@ def get_options() -> list[dict]:
         con.close()
 
 
-def restore() -> None:
+def restore(db_id: str) -> None:
 
     try:
-        con, cur = dbutil.get_connection()
+        con, cur = dbutil.get_connection(db_id)
 
         with open("./ledger1/dao/csv/account.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)

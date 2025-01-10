@@ -287,10 +287,10 @@ def delete(db_id: str, num: int) -> int:
         con.close()
 
 
-def reset() -> None:
+def reset(db_id: str) -> None:
     """ reset transaction table """
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         with open(

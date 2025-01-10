@@ -23,8 +23,8 @@ def view(request: Request, param: str = "", record_id: str = None):
         if request.method == "GET":
 
             ret: dict = admin.get(
-                param=param,
                 api_key=api_key,
+                param=param,
                 query= dict(request.query_params),
                 record_id=record_id)
 
