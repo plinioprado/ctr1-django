@@ -9,10 +9,10 @@ from ledger1.admin.aux import Aux
 from ledger1.utils import dbutil
 
 
-def get_many(obj: Aux, filters: dict):
+def get_many(obj: Aux, filters: dict, db_id: str) -> list[dict]:
     """ accepts one filter using LIKE """
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         filter_value: list = list(filters.values())[0] if filters else []
@@ -32,9 +32,9 @@ def get_many(obj: Aux, filters: dict):
         con.close()
 
 
-def get_one(obj: Aux, record_id: str):
+def get_one(obj: Aux, record_id: str, db_id: str):
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = f"SELECT * FROM {obj.table_name} WHERE {obj.primary_key} = ?"
@@ -50,8 +50,9 @@ def get_one(obj: Aux, record_id: str):
         con.close()
 
 
-def get_by_field(table_name: str, field_name: str, field_value: str | int) -> dict:
-    con, cur = dbutil.get_connection()
+def get_by_field(db_id: str, table_name: str, field_name: str, field_value: str | int) -> dict:
+
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = f"SELECT * FROM {table_name} WHERE {field_name} = ?"
@@ -67,9 +68,9 @@ def get_by_field(table_name: str, field_name: str, field_value: str | int) -> di
         con.close()
 
 
-def post(obj: Aux) -> int:
+def post(obj: Aux, db_id: str) -> int:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         data = obj.get_to_db()
@@ -102,9 +103,9 @@ def post(obj: Aux) -> int:
         con.close()
 
 
-def put(obj: Aux) -> int:
+def put(obj: Aux, db_id: str) -> int:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         data = obj.get_to_db()
@@ -135,9 +136,9 @@ def put(obj: Aux) -> int:
         con.close()
 
 
-def delete(record_id: str, obj: Aux):
+def delete(record_id: str, obj: Aux, db_id: str) -> str:
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = f"DELETE FROM {obj.table_name} WHERE {obj.primary_key} = ?;"
@@ -154,10 +155,15 @@ def delete(record_id: str, obj: Aux):
         con.close()
 
 
-def restore(table_name: str, file_name: str, db_format: dict)-> None:
+def restore(
+        db_id: str,
+        table_name: str,
+        file_name: str,
+        db_format: dict
+    )-> None:
     """ Restore from CSV """
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
 

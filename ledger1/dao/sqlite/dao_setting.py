@@ -2,10 +2,10 @@ import sqlite3
 import csv
 from ledger1.utils import dbutil
 
-def restore(file_name) -> None:
+def restore(db_id, file_name) -> None:
     """ Restore from CSV """
 
-    con, cur = dbutil.get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         with open(file_name, "r", encoding="UTF-8") as csvfile:

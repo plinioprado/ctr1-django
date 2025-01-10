@@ -25,9 +25,11 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data).to.eql({",
 							"        \"user\": {",
-							"            \"api_key\": \"1q2w3e4r5t6y7u8i9o0p\",",
-							"            \"name\": \"John Doe\",",
-							"            \"entity\": \"example\"",
+							"            \"api_key\": \"2s3d4f-1q2w3e4r5t6y7u8i9o0p\",",
+							"            \"name\": \"John Doe\"",
+							"        },",
+							"        \"entity\": {",
+							"            \"name\": \"Test Ltd.\"",
 							"        }",
 							"    });",
 							"});"
@@ -42,7 +44,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"user_email\": \"john.doe@example.com\",\n    \"user_pass\": \"12345\",\n    \"entity\": \"example\"\n}",
+					"raw": "{\n    \"user_email\": \"john.doe@example.com\",\n    \"user_pass\": \"12345\",\n    \"entity\": \"test\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -88,16 +90,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -140,7 +142,6 @@
 							"            \"id\": \"1\",",
 							"            \"name\": \"John Doe\",",
 							"            \"role\": \"admin\",",
-							"            \"entity\": \"example\",",
 							"            \"active\": true",
 							"        });",
 							"});"
@@ -152,16 +153,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -204,7 +205,6 @@
 							"            \"id\": \"1\",",
 							"            \"name\": \"John Doe\",",
 							"            \"role\": \"admin\",",
-							"            \"entity\": \"example\",",
 							"            \"active\": true",
 							"        });",
 							"});"
@@ -216,16 +216,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -276,8 +276,6 @@
 							"        \"email\": \"john.doe@example.com\",",
 							"        \"password\": \"************\",",
 							"        \"role\": \"admin\",",
-							"        \"entities\": \"example\",",
-							"        \"entity\": \"example\",",
 							"        \"active\": true",
 							"    });",
 							"});"
@@ -299,16 +297,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -354,8 +352,6 @@
 							"        \"email\": \"\",",
 							"        \"password\": \"\",",
 							"        \"role\": \"user\",",
-							"        \"entities\": \"example\",",
-							"        \"entity\": \"example\",",
 							"        \"active\": true",
 							"    });",
 							"});"
@@ -377,16 +373,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -446,16 +442,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -523,16 +519,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -600,16 +596,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -659,12 +655,8 @@
 							"pm.test('get data', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data[0]).to.eql({",
-							"            \"key\": \"field_date_min\",",
-							"            \"value\": \"2020-01-01\"",
-							"        },",
-							"        {",
-							"            \"key\": \"field_date_max\",",
-							"            \"value\": \"2020-12-31\"",
+							"            \"key\": \"entity_name\",",
+							"            \"value\": \"Test Ltd.\"",
 							"        });",
 							"});"
 						],
@@ -675,16 +667,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -742,16 +734,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -809,16 +801,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -859,8 +851,8 @@
 							"pm.test('get data', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data).to.eql({",
-							"            \"key\": \"field_date_min\",",
-							"            \"value\": \"2020-01-01\"",
+							"            \"key\": \"\",",
+							"            \"value\": \"\"",
 							"        });",
 							"});"
 						],
@@ -871,16 +863,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -888,7 +880,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8000/ledger/admin/setting/field_date_min",
+					"raw": "http://localhost:8000/ledger/admin/setting/new",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -898,7 +890,7 @@
 						"ledger",
 						"admin",
 						"setting",
-						"field_date_min"
+						"new"
 					]
 				}
 			},
@@ -916,17 +908,12 @@
 							"});",
 							"pm.test('get message', function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"    pm.expect(jsonData.message).to.eql(\"setting test_key created\");",
 							"});",
 							"pm.test('get data', function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.data[0]).to.eql({",
-							"            \"key\": \"field_date_min\",",
-							"            \"value\": \"2020-01-01\"",
-							"        },",
-							"        {",
-							"            \"key\": \"field_date_max\",",
-							"            \"value\": \"2020-12-31\"",
+							"    pm.expect(jsonData.data).to.eql({",
+							"            \"key\": \"test_key\"",
 							"        });",
 							"});"
 						],
@@ -937,16 +924,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -990,17 +977,12 @@
 							"});",
 							"pm.test('get message', function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"    pm.expect(jsonData.message).to.eql(\"setting test_key updated\");",
 							"});",
 							"pm.test('get data', function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.data[0]).to.eql({",
-							"            \"key\": \"field_date_min\",",
-							"            \"value\": \"2020-01-01\"",
-							"        },",
-							"        {",
-							"            \"key\": \"field_date_max\",",
-							"            \"value\": \"2020-12-31\"",
+							"    pm.expect(jsonData.data).to.eql({",
+							"            \"key\": \"test_key\"",
 							"        });",
 							"});"
 						],
@@ -1011,16 +993,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]
@@ -1064,13 +1046,12 @@
 							"});",
 							"pm.test('get message', function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.message).to.eql(\"ok\");",
+							"    pm.expect(jsonData.message).to.eql(\"setting test_id deleted\");",
 							"});",
 							"pm.test('get data', function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.data).to.eql({",
-							"            \"key\": \"field_date_min\",",
-							"            \"value\": \"2020-01-01\"",
+							"            \"key\": \"test_id\"",
 							"        });",
 							"});"
 						],
@@ -1081,16 +1062,16 @@
 			],
 			"request": {
 				"auth": {
-					"type": "basic",
-					"basic": [
+					"type": "apikey",
+					"apikey": [
 						{
-							"key": "password",
-							"value": "12345",
+							"key": "value",
+							"value": "Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p",
 							"type": "string"
 						},
 						{
-							"key": "username",
-							"value": "admin",
+							"key": "key",
+							"value": "Authorization",
 							"type": "string"
 						}
 					]

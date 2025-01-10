@@ -5,12 +5,23 @@ from ledger1.document import document_options
 from ledger1.transaction import transaction_service as transactions
 from ledger1.document.document_types import DocumentTypes
 from ledger1.utils import fileio
+from ledger1.admin import entities
 
 # get
 
-def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
+def get(
+        api_key: str,
+        doc_dc: bool,
+        doc_type: str = None,
+        doc_num: str = None
+    ) -> dict:
+
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
     if doc_num is None:
-        data: list[dict] = get_many(doc_dc, doc_type)
+
+        data: list[dict] = get_many(db_id, doc_dc, doc_type)
+
         data_format: dict = get_format(doc_type)
 
         response = {
@@ -19,7 +30,7 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
             "message": "wip",
             "status": 200,
             "options": {
-                "doc_dc": document_options.get_op_doc_dc(doc_type),
+                "doc_dc": document_options.get_op_doc_dc(db_id, doc_type),
             },
             "filters": {
                 "doc_dc": doc_dc
@@ -29,12 +40,12 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
     elif doc_num == "new":
 
         # set primary attributes
-        doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
+        doc: Document = get_document_obj(db_id, doc_dc=doc_dc, doc_type=doc_type)
         #data = doc.get_new()
         op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=doc_dc)
 
         # set terciary attributes
-        fields: dict = dao_document_field.get_one(doc_type, doc_num)
+        fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
         doc.add_fields_data(fields)
 
         data = doc.get_to_response()
@@ -44,26 +55,26 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
             "message": "wip",
             "options": {
                 "op_seq_acc": op_seq_acc,
-                "doc_dc": document_options.get_op_doc_dc(doc_type),
+                "doc_dc": document_options.get_op_doc_dc(db_id, doc_type),
             },
             "status": 200,
         }
 
     else:
-        tra: dict = transactions.get_by_doc(doc_type, doc_num)
+        tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
         tra_doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
         op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
 
         # set primary attributes
-        doc: Document = get_document(doc_dc=tra_doc_dc, doc_type=doc_type)
+        doc: Document = get_document_obj(db_id, doc_dc=tra_doc_dc, doc_type=doc_type)
         doc.set_from_transaction(tra, op_seq_acc)
 
         # set secondary attributes
-        res: dict = dao_document.get_one(doc_type, doc_num)
+        res: dict = dao_document.get_one(db_id, doc_type, doc_num)
         doc.add_document_data(res)
 
         # set terciary attributes
-        fields: dict = dao_document_field.get_one(doc_type, doc_num)
+        fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
         doc.add_fields_data(fields)
 
         data = doc.get_to_response()
@@ -73,7 +84,7 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
             "message": "wip",
             "options": {
                 "op_seq_acc": op_seq_acc,
-                "doc_dc": document_options.get_op_doc_dc(doc_type),
+                "doc_dc": document_options.get_op_doc_dc(db_id, doc_type),
             },
             "status": 200,
         }
@@ -81,37 +92,46 @@ def get(doc_dc: bool, doc_type: str = None, doc_num: str = None) -> dict:
     return response
 
 
-def get_one(doc_type: str, doc_num: str, op_seq_acc: list[dict]):
-    tra: dict = transactions.get_by_doc(doc_type, doc_num)
+def get_one(
+        db_id: str,
+        doc_type: str,
+        doc_num: str,
+        op_seq_acc: list[dict]
+    ) -> dict:
+
+    tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
     doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
 
-    doc: Document = get_document(doc_dc=doc_dc, doc_type=doc_type)
+    doc: Document = get_document_obj(db_id, doc_dc=doc_dc, doc_type=doc_type)
     doc.set_from_transaction(tra, op_seq_acc)
 
-    res: dict = dao_document.get_one(doc_type, doc_num)
+    res: dict = dao_document.get_one(db_id, doc_type, doc_num)
     doc.add_document_data(res)
     data = doc.get_to_response()
 
     return data
 
 
-def get_many(doc_dc: bool, doc_type: str):
-    data = dao_document.get_many_tra(doc_dc=doc_dc, doc_type=doc_type)
+def get_many(db_id: str, doc_dc: bool, doc_type: str):
+
+    data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
 
     return data
 
 
 # post
 
-def post(data) -> dict:
+def post(api_key: str, data) -> dict:
+
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
+    # no db_id because is in a csv file
     op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
 
-    doc: Document = get_document(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+    doc: Document = get_document_obj(db_id, doc_dc=data["doc_dc"], doc_type=data["doc_type"])
     doc.set_from_request(data, op_seq_acc)
-
-    transactions.post(doc.get_to_transaction())
-    dao_document.post(doc.get_to_document())
-
+    transactions.post(api_key, doc.get_to_transaction())
+    dao_document.post(db_id, doc.get_to_document())
     return {
         "status": 200,
         "message": f"document {data["doc_type"]} {data["doc_num"]} created"
@@ -121,14 +141,17 @@ def post(data) -> dict:
 # put
 
 
-def put(data: dict) -> dict:
+def put(api_key: str, data: dict) -> dict:
+
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
     op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
-    doc = get_document(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+    doc = get_document_obj(db_id, doc_dc=data["doc_dc"], doc_type=data["doc_type"])
     doc.set_from_request(data, op_seq_acc)
-    tra = transactions.get_by_doc(data["doc_type"], data["doc_num"])
+    tra = transactions.get_by_doc(db_id, data["doc_type"], data["doc_num"])
     doc.tra_num = tra["num"]
-    transactions.put(doc.get_to_transaction())
-    dao_document.put(doc.get_to_document())
+    transactions.put(api_key, doc.get_to_transaction())
+    dao_document.put(db_id, doc.get_to_document())
 
     return {
         "status": 200,
@@ -139,11 +162,13 @@ def put(data: dict) -> dict:
 # delete
 
 
-def delete(doc_type: str, doc_num: str) -> dict:
+def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
-    tra = transactions.get_by_doc(doc_type, doc_num)
-    transactions.delete(tra["num"])
-    deleted_type, deleted_num = dao_document.delete(doc_type, doc_num)
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
+    tra = transactions.get_by_doc(db_id, doc_type, doc_num)
+    transactions.delete(api_key, tra["num"])
+    deleted_type, deleted_num = dao_document.delete(db_id, doc_type, doc_num)
 
     return {
         "status": 200,
@@ -154,9 +179,9 @@ def delete(doc_type: str, doc_num: str) -> dict:
 ## helpers
 
 
-def get_document(doc_dc: bool, doc_type: str) -> Document:
+def get_document_obj(db_id: str, doc_dc: bool, doc_type: str) -> Document:
 
-    document_types: DocumentTypes = DocumentTypes()
+    document_types: DocumentTypes = DocumentTypes(db_id)
     document_type: dict = document_types.get(doc_type)
 
     return Document(

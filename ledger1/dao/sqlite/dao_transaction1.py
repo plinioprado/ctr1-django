@@ -3,15 +3,15 @@
 import csv
 import datetime
 import sqlite3
-from ledger1.dao.sqlite.dao import get_connection
+from ledger1.utils import dbutil
 from ledger1.utils.field import date_iso_to_timestamp, date_timestamp_to_iso
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
 
 
-def get_many(date_from: str, date_to: str) -> Transaction1 | None:
+def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
     """ return one transaction """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
 
@@ -76,10 +76,10 @@ def get_many(date_from: str, date_to: str) -> Transaction1 | None:
         con.close()
 
 
-def get_one(num: int) -> Transaction1 | None:
+def get_one(db_id: str, num: int) -> Transaction1 | None:
     """ return one transaction """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -134,8 +134,8 @@ def get_one(num: int) -> Transaction1 | None:
         con.close()
 
 
-def get_num_by_doc(doc_type: str, doc_num: str) -> int:
-    con, cur = get_connection()
+def get_num_by_doc(db_id: str, doc_type: str, doc_num: str) -> int:
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -156,7 +156,7 @@ def get_num_by_doc(doc_type: str, doc_num: str) -> int:
         con.close()
 
 
-def post(tra: Transaction1) -> int | None:
+def post(db_id: str, tra: Transaction1) -> int | None:
     """ insert one transaction
 
     Args:
@@ -166,7 +166,7 @@ def post(tra: Transaction1) -> int | None:
         int: num of the inserted transaction
     """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -208,7 +208,7 @@ def post(tra: Transaction1) -> int | None:
         con.close()
 
 
-def put(tra: Transaction1):
+def put(db_id: str, tra: Transaction1):
     """ update one transaction
 
     Args:
@@ -218,7 +218,7 @@ def put(tra: Transaction1):
         int: num of the updated transaction
     """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
 
@@ -262,7 +262,7 @@ def put(tra: Transaction1):
         con.close()
 
 
-def delete(num: int) -> int:
+def delete(db_id: str, num: int) -> int:
     """ Insert one transaction
 
     Args:
@@ -272,7 +272,7 @@ def delete(num: int) -> int:
         int: num of the deleted transaction
     """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         cur.execute(f"DELETE FROM transaction1 WHERE num = {num};")
@@ -287,10 +287,10 @@ def delete(num: int) -> int:
         con.close()
 
 
-def reset() -> None:
+def reset(db_id: str) -> None:
     """ reset transaction table """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         with open(

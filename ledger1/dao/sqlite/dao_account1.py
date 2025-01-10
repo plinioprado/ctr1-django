@@ -7,14 +7,14 @@ and execure them in the SQLite database
 import csv
 import sqlite3
 from ledger1.account.account1 import Account1
-from ledger1.dao.sqlite.dao import get_connection
+from ledger1.utils import dbutil
 
 
-def get(acc_from: str, acc_to: str) -> list[dict]:
+def get(db_id: str, acc_from: str, acc_to: str) -> list[dict]:
     """ Get (read) accounts """
 
     accs = []
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -43,10 +43,10 @@ def get(acc_from: str, acc_to: str) -> list[dict]:
         con.close()
 
 
-def post(acc: Account1) -> str:
+def post(db_id: str, acc: Account1) -> str:
     """ Post (create) account """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text: str = """
@@ -66,10 +66,10 @@ def post(acc: Account1) -> str:
         con.close()
 
 
-def put(acc: Account1) -> str:
+def put(db_id: str, acc: Account1) -> str:
     """ Put (update) account """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = """
@@ -90,10 +90,10 @@ def put(acc: Account1) -> str:
         con.close()
 
 
-def delete(num: str) -> str:
+def delete(db_id: str, num: str) -> str:
     """ Delete account """
 
-    con, cur = get_connection()
+    con, cur = dbutil.get_connection(db_id)
 
     try:
         query_text = "DELETE FROM account1 WHERE num = ?;"
@@ -109,13 +109,13 @@ def delete(num: str) -> str:
         con.close()
 
 
-def get_options() -> list[dict]:
+def get_options(db_id: str) -> list[dict]:
     """ Get a list of option for a form select
 
      """
+    con, cur = dbutil.get_connection(db_id)
 
     accs = []
-    con, cur = get_connection()
 
     try:
         query_text: str = """
@@ -135,10 +135,10 @@ def get_options() -> list[dict]:
         con.close()
 
 
-def restore() -> None:
+def restore(db_id: str) -> None:
 
     try:
-        con, cur = get_connection()
+        con, cur = dbutil.get_connection(db_id)
 
         with open("./ledger1/dao/csv/account.csv", "r", encoding="UTF-8") as csvfile:
             reader = csv.DictReader(csvfile)

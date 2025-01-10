@@ -1,8 +1,9 @@
 """ Finance reports - Journal """
 
-import ledger1.dao.sqlite.dao_report as dao
+from ledger1.dao.sqlite import dao_report
 
 def get(
+        db_id: str,
         entity_name: str,
         date_from: str,
         date_to: str
@@ -20,7 +21,7 @@ def get(
             table: 2d list with the report content
     """
 
-    dao_rows = dao.get_journal(date_from, date_to)
+    dao_rows = dao_report.get_journal(db_id, date_from, date_to)
 
     rows = [["dt", "num", "descr", "seq",
         "acc_num", "acc_name", "doc_type", "doc_num", "val", "dc"]

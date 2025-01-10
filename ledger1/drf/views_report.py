@@ -18,13 +18,14 @@ from ledger1.reports.reports_service import service
 # @permission_classes([IsAuthenticated])
 def view(request: Request, name: str):
 
-    print(request.headers["Authorization"])
-
     try:
+        api_key: str = request.headers["Authorization"]
+
         if request.method == "GET":
 
             ret: dict = service(
                 name,
+                api_key=api_key,
                 acc=request.query_params.get("acc"),
                 acc_to=request.query_params.get("acc_to"),
                 date=request.query_params.get("date"),

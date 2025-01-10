@@ -13,8 +13,6 @@ class User(Aux):
     password: str
     api_key: str
     role: str
-    entities: str
-    entity: str
     active: bool
 
     # db
@@ -31,8 +29,6 @@ class User(Aux):
         self.password = ""
         self.api_key = ""
         self.role = "user"
-        self.entities = "example"
-        self.entity = "example"
         self.active = True
 
         self.table_name = "user"
@@ -48,8 +44,6 @@ class User(Aux):
         self.password = str(data["password"])
         self.api_key = str(data["api_key"])
         self.role = str(data["role"])
-        self.entities = str(data["entities"])
-        self.entity = str(data["entity"])
         self.active = bool(data["active"])
 
 
@@ -60,8 +54,6 @@ class User(Aux):
         self.password = str(data["password"])
         self.api_key = datetime.now().strftime('%Y%m%d%1q2w3e4r5t6y7u8i9o0p')
         self.role = str(data["role"])
-        self.entities = str(data["entities"])
-        self.entity = str(data["entity"])
         self.active = bool(data["active"])
 
 
@@ -75,8 +67,6 @@ class User(Aux):
             "password": self.password,
             "api_key": self.api_key,
             "role": self.role,
-            "entities": self.entities,
-            "entity": self.entity,
             "active": self.active,
         }
 
@@ -90,8 +80,6 @@ class User(Aux):
             "email": self.email,
             "password": "*" * 12,
             "role": self.role,
-            "entities": self.entities,
-            "entity": self.entity,
             "active": self.active,
         }
 
@@ -103,7 +91,6 @@ class User(Aux):
             "id": str(self.id),
             "name": self.name,
             "role": self.role,
-            "entity": self.entity,
             "active": self.active,
         }
 
@@ -115,8 +102,6 @@ class User(Aux):
             "email": "",
             "password": "",
             "role": "user",
-            "entities": "example",
-            "entity": "example",
             "active": True,
         }
 
@@ -130,7 +115,5 @@ class User(Aux):
             "password": "str",
             "api_key": "str",
             "role": "str",
-            "entities": "str",
-            "entity": "str",
             "active": "bool",
         }

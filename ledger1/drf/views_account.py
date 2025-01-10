@@ -18,24 +18,24 @@ import ledger1.account.account_service as service
 # @permission_classes([IsAuthenticated])
 def view(request: Request, acc: str | None = None):
 
-    print(request.headers["Authorization"])
-
     try:
+        api_key: str = request.headers["Authorization"]
+
         if request.method == "GET":
 
-            ret: dict = service.get(acc)
+            ret: dict = service.get(api_key, acc)
 
         elif request.method == "POST":
 
-            ret = service.post(request.data)
+            ret = service.post(api_key, request.data)
 
         elif request.method == "PUT":
 
-            ret = service.put(data=request.data)
+            ret = service.put(api_key, data=request.data)
 
         elif request.method == "DELETE":
 
-            ret = service.delete(acc_num=acc)
+            ret = service.delete(api_key, acc_num=acc)
 
         else:
             raise ValueError("invalid method")

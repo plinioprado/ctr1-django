@@ -5,6 +5,7 @@ from ledger1.account.account1 import Account1
 
 
 def get(
+        api_key: str,
         entity_name: str,
         acc_from: str,
         acc_to: str
@@ -23,7 +24,7 @@ def get(
     """
 
     rows: list[list] = []
-    accounts: list[Account1] = get_accounts(acc_from, acc_to)
+    accounts: list[Account1] = get_accounts(api_key, acc_from, acc_to)
     rows.append(["num", "name", "Dc"])
     for account in accounts:
         rows.append([

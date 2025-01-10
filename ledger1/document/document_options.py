@@ -11,9 +11,9 @@ def get_op_seq_acc(doc_dc: bool, doc_type: str) -> list[dict]:
     return options
 
 
-def get_op_doc_dc(doc_type: str):
+def get_op_doc_dc(db_id: str, doc_type: str):
 
-    document_type = DocumentTypes().get(doc_type=doc_type)
+    document_type = DocumentTypes(db_id).get(doc_type=doc_type)
     options: list[dict] = [
         { "value": False, "text": document_type["dc_false_name"]},
         { "value": True, "text": document_type["dc_true_name"]}

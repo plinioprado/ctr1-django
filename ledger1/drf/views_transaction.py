@@ -19,21 +19,23 @@ import ledger1.transaction.transaction_service as service
 def view(request: Request, num: int | None = None):
 
     try:
+        api_key: str = request.headers["Authorization"]
 
         if request.method == "GET":
             ret = service.get(
+                api_key,
                 num,
                 date=request.query_params.get("date"),
                 date_to=request.query_params.get("date_to"))
 
         elif request.method == "POST":
-            ret: dict = service.post(request.data)
+            ret: dict = service.post(api_key, request.data)
 
         elif request.method == "PUT":
-            ret: dict = service.put(request.data)
+            ret: dict = service.put(api_key, request.data)
 
         elif request.method == "DELETE":
-            ret: dict = service.delete(num)
+            ret: dict = service.delete(api_key, num)
 
         else:
             raise ValueError("invalid method")

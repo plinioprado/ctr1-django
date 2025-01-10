@@ -1,12 +1,14 @@
 
 
-def get_session(user: dict, entity: str, api_key: str):
+def get_session(api_key: str, entity_name: str, user: dict):
 
     session = {
         "user": {
             "api_key": api_key,
             "name": user["name"],
-            "entity": entity,
+        },
+        "entity": {
+            "name": entity_name,
         }
     }
 
