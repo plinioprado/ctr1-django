@@ -1,0 +1,23 @@
+{
+  "header": {
+    "h2": "Checking accounts"
+  },
+  "cols": [
+    {
+      "header": "Number",
+      "name": "doc_num",
+      "type": "text",
+      "primary": true
+    },
+    {
+      "header": "Description",
+      "name": "descr",
+      "type": "text"
+    },
+    {
+      "header": "Account",
+      "name": "acc_num",
+      "type": "text"
+    }
+  ]
+}

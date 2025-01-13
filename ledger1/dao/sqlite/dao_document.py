@@ -9,6 +9,7 @@ import csv
 from ledger1.utils import dbutil
 from ledger1.utils import dateutil
 
+# get
 
 def get_many(db_id: str, doc_type: str = None) -> list[dict]:
 
@@ -82,6 +83,31 @@ def get_many_tra(db_id: str, doc_dc: bool, doc_type: str):
         con.close()
 
 
+def get_many_accs(db_id: str, doc_type: str) -> list[dict]:
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text = """
+        SELECT
+            a.doc_num,
+            a.name AS descr,
+            a.num AS acc_num
+        FROM account1 a
+        WHERE a.doc_type = ?
+        """
+        query_params = (doc_type,)
+        cur.execute(query_text, query_params)
+        rows = [dict(row) for row in cur.fetchall()]
+
+        return rows
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting accounts type {doc_type}: {str(err)}") from err
+    finally:
+        con.close()
+
+
 def get_one(db_id: str, doc_type: str, doc_num: str) -> dict:
 
     con, cur = dbutil.get_connection(db_id)
@@ -109,6 +135,8 @@ def get_one(db_id: str, doc_type: str, doc_num: str) -> dict:
     finally:
         con.close()
 
+
+# post
 
 def post(db_id: str, data: dict):
 
@@ -159,6 +187,8 @@ def post(db_id: str, data: dict):
         con.close()
 
 
+ # put
+
 def put(db_id: str, data: dict):
 
     con, cur = dbutil.get_connection(db_id)
@@ -203,6 +233,8 @@ def put(db_id: str, data: dict):
     finally:
         con.close()
 
+
+# delete
 
 def delete(db_id: str, doc_type: str, doc_num: str):
 

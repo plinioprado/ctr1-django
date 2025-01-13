@@ -16,13 +16,28 @@ def get(
         doc_num: str = None
     ) -> dict:
 
+    print(1)
     db_id: str = entities.get_db_id_by_api_key(api_key)
+
+    doc_types: list[dict] = DocumentTypes(db_id).asdict()
+    doc_type_dict = [tp for tp in doc_types if tp["id"] == doc_type][0]
+    doc_type_is_tra = doc_type_dict["traacc"]
 
     if doc_num is None:
 
-        data: list[dict] = get_many(db_id, doc_dc, doc_type)
+        if doc_type_is_tra is False and doc_type != "bstat2":
+            print(3)
+            data: list[dict] = dao_document.get_many_accs(db_id, doc_type)
+            print(8)
+            data_options = {}
 
+        else:
+            data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
+            data_options = document_options.get_op_doc_dc(db_id, doc_type),
+
+        print(7)
         data_format: dict = get_format(doc_type)
+        print(8)
 
         response = {
             "data": data,
@@ -30,7 +45,7 @@ def get(
             "message": "wip",
             "status": 200,
             "options": {
-                "doc_dc": document_options.get_op_doc_dc(db_id, doc_type),
+                "doc_dc": data_options,
             },
             "filters": {
                 "doc_dc": doc_dc
@@ -61,33 +76,45 @@ def get(
         }
 
     else:
-        tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
-        tra_doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
-        op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
 
-        # set primary attributes
-        doc: Document = get_document_obj(db_id, doc_dc=tra_doc_dc, doc_type=doc_type)
-        doc.set_from_transaction(tra, op_seq_acc)
+        if doc_type_is_tra is False and doc_type != "bstat2":
+            data: list[dict] = {}
 
-        # set secondary attributes
-        res: dict = dao_document.get_one(db_id, doc_type, doc_num)
-        doc.add_document_data(res)
+            response = {
+                "data": data,
+                "message": "ok",
+                "status": 200,
+            }
 
-        # set terciary attributes
-        fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
-        doc.add_fields_data(fields)
+        else:
 
-        data = doc.get_to_response()
+            tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
+            tra_doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
+            op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
 
-        response = {
-            "data": data,
-            "message": "wip",
-            "options": {
-                "op_seq_acc": op_seq_acc,
-                "doc_dc": document_options.get_op_doc_dc(db_id, doc_type),
-            },
-            "status": 200,
-        }
+            # set primary attributes
+            doc: Document = get_document_obj(db_id, doc_dc=tra_doc_dc, doc_type=doc_type)
+            doc.set_from_transaction(tra, op_seq_acc)
+
+            # set secondary attributes
+            res: dict = dao_document.get_one(db_id, doc_type, doc_num)
+            doc.add_document_data(res)
+
+            # set terciary attributes
+            fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
+            doc.add_fields_data(fields)
+
+            data = doc.get_to_response()
+
+            response = {
+                "data": data,
+                "message": "wip",
+                "options": {
+                    "op_seq_acc": op_seq_acc,
+                    "doc_dc": document_options.get_op_doc_dc(db_id, doc_type),
+                },
+                "status": 200,
+            }
 
     return response
 
@@ -110,14 +137,6 @@ def get_one(
     data = doc.get_to_response()
 
     return data
-
-
-def get_many(db_id: str, doc_dc: bool, doc_type: str):
-
-    data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
-
-    return data
-
 
 # post
 
@@ -190,10 +209,11 @@ def get_document_obj(db_id: str, doc_dc: bool, doc_type: str) -> Document:
 
 
 def get_format(doc_type:str) -> dict:
+    print(11, doc_type)
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
 
-    if doc_type in ["eft","inv2"]:
+    if doc_type in ["eft","inv2","chequing","gic"]:
         data_format: dict = fileio.read_json(f"{file_format_path}/doc_{doc_type}s_format.json")
     else:
         raise ValueError(f"invalid document type {doc_type}")
