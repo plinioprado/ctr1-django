@@ -1,7 +1,9 @@
 from ledger1.dao.sqlite import dao_document
 from ledger1.dao.sqlite import dao_document_field
+from ledger1.dao.sqlite import dao_account1
 from ledger1.document.document import Document
 from ledger1.document import document_options
+
 from ledger1.transaction import transaction_service as transactions
 from ledger1.document.document_types import DocumentTypes
 from ledger1.utils import fileio
@@ -73,7 +75,8 @@ def get(
     else:
 
         if doc_type_is_tra is False and doc_type != "bstat2":
-            data: list[dict] = {}
+            data: dict = dao_document.get_one_by_doc(db_id, doc_type, doc_num)
+            data["fields"] = dao_document_field.get_one(db_id, doc_type, doc_num)
 
             response = {
                 "data": data,

@@ -88,6 +88,30 @@ def get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
         con.close()
 
 
+def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text = """
+        SELECT
+            a.doc_num,
+            a.name AS descr,
+            a.num AS acc_num
+        FROM account1 a
+        WHERE a.doc_type = ? AND a.doc_num = ?
+        """
+        query_params = (doc_type, doc_num)
+        cur.execute(query_text, query_params)
+        row = dict(cur.fetchone())
+
+        return row
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting document type {doc_type}: {str(err)}") from err
+    finally:
+        con.close()
+
 def get_many_accs(db_id: str, doc_type: str) -> list[dict]:
 
     con, cur = dbutil.get_connection(db_id)

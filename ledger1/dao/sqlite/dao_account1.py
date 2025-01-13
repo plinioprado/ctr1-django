@@ -135,6 +135,27 @@ def get_options(db_id: str) -> list[dict]:
         con.close()
 
 
+def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
+    """ Get account by document """
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text: str = """
+        SELECT num, name, dc FROM account1
+        WHERE doc_type = ? and doc_num = ?;
+        """
+        query_params = (doc_type, doc_num)
+        cur.execute(query_text, query_params)
+        row = dict(cur.fetchone())
+
+        return row
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"getting account by document: {str(err)}") from err
+    finally:
+        con.close()
+
 def restore(db_id: str) -> None:
 
     try:

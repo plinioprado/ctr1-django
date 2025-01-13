@@ -19,6 +19,18 @@ eft,new,person,country,
 eft,new,person,name,
 eft,new,person,pcode,
 eft,new,person,province,
+gic,new,terms,certificate,
+gic,new,terms,redemption_date,
+gic,new,terms,effective_date,
+gic,new,terms,interest_rate,
+gic,new,terms,maturity_date,
+gic,new,terms,terma,
+gic,new,terms,redeemable,
+gic,new,terms,interest_payment_frequency,
+gic,new,terms,next_interest_payment_date,
+gic,new,terms,interest_disbursement,
+gic,new,terms,anticipated_interest,
+gic,new,terms,maturity_instructions,
 inv2,1.1,payment,account_num,111222333
 inv2,1.1,payment,institution_num,003
 inv2,1.1,payment,transit_num,12345
@@ -59,3 +71,15 @@ eft,1.1,person,country,CAN
 eft,1.1,person,name,Jack Black
 eft,1.1,person,pcode,V7X1M8
 eft,1.1,person,province,BC
+gic,003.55555.444444444,terms,certificate,00000001
+gic,003.55555.444444444,terms,redemption_date,0.04840
+gic,003.55555.444444444,terms,effective_date,2020-01-22
+gic,003.55555.444444444,terms,interest_rate,0.04
+gic,003.55555.444444444,terms,maturity_date,2021-01-022
+gic,003.55555.444444444,terms,terma,1 year
+gic,003.55555.444444444,terms,redeemable,Yes
+gic,003.55555.444444444,terms,interest_payment_frequency,Semi-annually
+gic,003.55555.444444444,terms,next_interest_payment_date,2020-07-22
+gic,003.55555.444444444,terms,interest_disbursement,Credit acc 003.12345.111222333
+gic,003.55555.444444444,terms,anticipated_interest,565.38
+gic,003.55555.444444444,terms,maturity_instructions,Credit acc 003.12345.111222333
