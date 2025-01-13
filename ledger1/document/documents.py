@@ -16,7 +16,6 @@ def get(
         doc_num: str = None
     ) -> dict:
 
-    print(1)
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
     doc_types: list[dict] = DocumentTypes(db_id).asdict()
@@ -26,18 +25,14 @@ def get(
     if doc_num is None:
 
         if doc_type_is_tra is False and doc_type != "bstat2":
-            print(3)
             data: list[dict] = dao_document.get_many_accs(db_id, doc_type)
-            print(8)
             data_options = {}
 
         else:
             data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
             data_options = document_options.get_op_doc_dc(db_id, doc_type),
 
-        print(7)
         data_format: dict = get_format(doc_type)
-        print(8)
 
         response = {
             "data": data,
@@ -92,15 +87,15 @@ def get(
             tra_doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
             op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
 
-            # set primary attributes
+            # set primary attributes (transaction)
             doc: Document = get_document_obj(db_id, doc_dc=tra_doc_dc, doc_type=doc_type)
             doc.set_from_transaction(tra, op_seq_acc)
 
-            # set secondary attributes
+            # set secondary attributes (document)
             res: dict = dao_document.get_one(db_id, doc_type, doc_num)
             doc.add_document_data(res)
 
-            # set terciary attributes
+            # set terciary attributes (fields)
             fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
             doc.add_fields_data(fields)
 
@@ -185,7 +180,8 @@ def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    tra = transactions.get_by_doc(db_id, doc_type, doc_num)
+    tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
+
     transactions.delete(api_key, tra["num"])
     deleted_type, deleted_num = dao_document.delete(db_id, doc_type, doc_num)
 
@@ -209,7 +205,6 @@ def get_document_obj(db_id: str, doc_dc: bool, doc_type: str) -> Document:
 
 
 def get_format(doc_type:str) -> dict:
-    print(11, doc_type)
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
 

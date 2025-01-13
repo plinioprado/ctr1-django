@@ -40,7 +40,7 @@ def get_many(db_id: str, doc_type: str = None) -> list[dict]:
         con.close()
 
 
-def get_many_tra(db_id: str, doc_dc: bool, doc_type: str):
+def get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
 
     con, cur = dbutil.get_connection(db_id)
 
@@ -51,13 +51,18 @@ def get_many_tra(db_id: str, doc_dc: bool, doc_type: str):
             td.doc_num,
             td.dc,
             t.dt,
-            d.cpart_name,
+            f.field_value AS cpart_name,
             t.descr,
             td.val
         FROM transaction1_detail td
             INNER JOIN transaction1 t ON t.num = td.num
             INNER JOIN document d
                 ON d.doc_type = td.doc_type AND d.doc_num = td.doc_num
+            LEFT OUTER JOIN document_field f
+                ON f.doc_type = d.doc_type
+                AND f.doc_num = d.doc_num
+                AND f.field_group = 'person'
+                AND f.field_name = 'name'
         WHERE td.doc_type = ? AND td.dc = ?
         """
 

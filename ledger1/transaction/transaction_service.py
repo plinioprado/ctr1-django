@@ -270,7 +270,7 @@ def get_new(api_key: str) -> dict:
     }
 
 
-def get_by_doc(db_id: str, doc_type: str, doc_num: str):
+def get_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
     num: int = dao_transaction1.get_num_by_doc(db_id, doc_type, doc_num)
     tra: dict = _get_one_data(db_id, num)
 

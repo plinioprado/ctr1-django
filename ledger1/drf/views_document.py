@@ -1,9 +1,11 @@
-""" reset DRF view
+""" documents view
 
-resets ledger1 db on the path documents/banstat
+handles requests to path documents
 
 Arguments:
     request (Request): DRF REST request object
+    doc_type (str): document type
+    doc_num (str optional): document number
 
 Returns:
     Response: DRF REST response reset confirmation
@@ -18,14 +20,27 @@ from ledger1.document import documents
 def view(request: Request, doc_type: str = None, doc_num: str = None) -> Response:
     try:
         api_key: str = request.headers["Authorization"]
+        doc_dc = request.query_params.get("dc") == 'true'
 
         if request.method == "GET":
             ret: dict = documents.get(
                 api_key=api_key,
-                doc_dc=True,
+                doc_dc=doc_dc,
                 doc_type=doc_type,
-                doc_num=doc_num
-            )
+                doc_num=doc_num)
+
+        elif request.method == "POST":
+            ret = documents.post(api_key, data=request.data)
+
+        elif request.method == "PUT":
+            ret = documents.put(api_key, data=request.data)
+
+        elif request.method == "DELETE":
+            ret = documents.delete(
+                api_key,
+                doc_type=doc_type,
+                doc_num=doc_num)
+
         else:
             raise ValueError("invalid method")
 
