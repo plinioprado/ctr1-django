@@ -1,0 +1,6 @@
+{
+  "h2": "Invoice",
+  "header": true,
+  "parts": true,
+  "payment": true
+}

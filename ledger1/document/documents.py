@@ -1,6 +1,5 @@
 from ledger1.dao.sqlite import dao_document
 from ledger1.dao.sqlite import dao_document_field
-from ledger1.dao.sqlite import dao_account1
 from ledger1.document.document import Document
 from ledger1.document import document_options
 
@@ -34,7 +33,7 @@ def get(
             data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
             data_options = document_options.get_op_doc_dc(db_id, doc_type),
 
-        data_format: dict = get_format(doc_type)
+        data_format: dict = get_format(doc_type, True)
 
         response = {
             "data": data,
@@ -61,10 +60,12 @@ def get(
         doc.add_fields_data(fields)
 
         data = doc.get_to_response()
+        data_format: dict = get_format(doc_type, False)
 
         response = {
             "data": data,
             "message": "wip",
+            "format": data_format,
             "options": {
                 "op_seq_acc": op_seq_acc,
                 "doc_dc": document_options.get_op_doc_dc(db_id, doc_type),
@@ -77,10 +78,14 @@ def get(
         if doc_type_is_tra is False and doc_type != "bstat2":
             data: dict = dao_document.get_one_by_doc(db_id, doc_type, doc_num)
             data["fields"] = dao_document_field.get_one(db_id, doc_type, doc_num)
+            data_format: dict = get_format(doc_type, False)
+            data_options = []
 
             response = {
                 "data": data,
+                "format": data_format,
                 "message": "ok",
+                "options": data_options,
                 "status": 200,
             }
 
@@ -103,9 +108,11 @@ def get(
             doc.add_fields_data(fields)
 
             data = doc.get_to_response()
+            data_format: dict = get_format(doc_type, False)
 
             response = {
                 "data": data,
+                "format": data_format,
                 "message": "wip",
                 "options": {
                     "op_seq_acc": op_seq_acc,
@@ -207,13 +214,16 @@ def get_document_obj(db_id: str, doc_dc: bool, doc_type: str) -> Document:
         document_type=document_type)
 
 
-def get_format(doc_type:str) -> dict:
+def get_format(doc_type:str, is_list: bool) -> dict:
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
 
-    if doc_type in ["eft","inv2","chequing","gic"]:
+    if doc_type not in ["eft","inv2","chequing","gic"]:
+        raise ValueError(f"invalid document type {doc_type}")
+
+    if is_list:
         data_format: dict = fileio.read_json(f"{file_format_path}/doc_{doc_type}s_format.json")
     else:
-        raise ValueError(f"invalid document type {doc_type}")
+        data_format = fileio.read_json(f"{file_format_path}/doc_{doc_type}_format.json")
 
     return data_format
