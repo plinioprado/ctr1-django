@@ -29,5 +29,5 @@
     }
   ],
   "parts": true,
-  "payment": true
+  "tra_seq": true
 }

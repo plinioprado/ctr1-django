@@ -71,7 +71,7 @@ eft,1.1,person,country,CAN
 eft,1.1,person,name,Jack Black
 eft,1.1,person,pcode,V7X1M8
 eft,1.1,person,province,BC
-gic,003.55555.444444444,detail,detail.certificate,00000001
+gic,003.55555.444444444,detail,certificate,00000001
 gic,003.55555.444444444,detail,redemption_rate,0.04840
 gic,003.55555.444444444,detail,effective_date,2020-01-22
 gic,003.55555.444444444,detail,interest_rate,0.04

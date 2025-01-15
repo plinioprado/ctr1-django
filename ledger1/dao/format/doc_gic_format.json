@@ -16,8 +16,8 @@
     },
     {
       "class": "col-md-3",
-      "label": "",
-      "name": "doc_dc_name",
+      "label": "Account",
+      "name": "acc_num",
       "type": "text",
       "disabled": true
     }
@@ -26,73 +26,73 @@
     {
       "class": "col-md-3",
       "label": "Certificate",
-      "name": "certificate",
+      "name": "fields.detail.certificate",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Redemption Rate",
-      "name": "redemption_rate",
+      "name": "fields.detail.redemption_rate",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Effective Date",
-      "name": "effective_date",
+      "name": "fields.detail.effective_date",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Interest Rate",
-      "name": "interest_rate",
+      "name": "fields.detail.interest_rate",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Maturity Date",
-      "name": "maturity_date",
+      "name": "fields.detail.maturity_date",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Term",
-      "name": "term",
+      "name": "fields.detail.term",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Redeemable",
-      "name": "redeemable",
+      "name": "fields.detail.redeemable",
       "type": "text"
     },
     {
       "class": "col-md-3",
-      "label": "Interest Payment Frequency",
-      "name": "interest_payment_frequency",
+      "label": "Interest Pmt Frequency",
+      "name": "fields.detail.interest_payment_frequency",
       "type": "text"
     },
     {
       "class": "col-md-3",
-      "label": "Next Interest Payment Date",
-      "name": "next_interest_payment_date",
+      "label": "Next Interest pmt Date",
+      "name": "fields.detail.next_interest_payment_date",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Interest Disbursement",
-      "name": "interest_disbursement",
+      "name": "fields.detail.interest_disbursement",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Anticipated Interest",
-      "name": "anticipated_interest",
+      "name": "fields.detail.anticipated_interest",
       "type": "text"
     },
     {
       "class": "col-md-3",
       "label": "Maturity Instructions",
-      "name": "maturity_instructions",
+      "name": "fields.detail.maturity_instructions",
       "type": "text"
     }
   ],
