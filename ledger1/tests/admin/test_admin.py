@@ -1,8 +1,11 @@
 from ledger1.admin import admin
 
+API_KEY: str ="Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p"
 
 def test_reset():
-    ret: dict = admin.get(param="reset")
+    ret: dict = admin.get(
+        api_key=API_KEY,
+        param="reset")
 
     assert ret["status_code"] == 200
     assert ret["message"] == "reset ok"
@@ -19,7 +22,7 @@ def test_login():
     assert ret["message"] == "ok"
     assert ret["data"] == {
         "user": {
-            "api_key": "2s3d4f1q2w3e4r5t6y7u8i9o0p",
+            "api_key": "2s3d4f-1q2w3e4r5t6y7u8i9o0p",
             "name": "John Doe",
         },
         "entity": {
@@ -39,7 +42,7 @@ def test_login_example():
     assert ret["message"] == "ok"
     assert ret["data"] == {
         "user": {
-            "api_key": "1a2s3d1q2w3e4r5t6y7u8i9o0p",
+            "api_key": "1a2s3d-1q2w3e4r5t6y7u8i9o0p",
             "name": "John Doe",
         },
         "entity": {

@@ -1,10 +1,16 @@
 from ledger1.document import documents
 
+API_KEY: str ="Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p"
 
 def test_get_many_inv2_sell():
-    response = documents.get(doc_dc=False, doc_type="inv2", doc_num=None)
+    response = documents.get(
+        api_key=API_KEY,
+        doc_dc=False,
+        doc_type="inv2",
+        doc_num=None)
+
     assert response["data"][0] == {
-        'cpart_name': 'Cedar Store Ltd',
+        'cpart_name': 'Cedar Store Ltd.',
         'descr': 'sale to cedar store ltd',
         'doc_dc': False,
         'doc_num': '1.1',
@@ -17,7 +23,12 @@ def test_get_many_inv2_sell():
 
 
 def test_get_many_inv2_buy():
-    response = documents.get(doc_dc=True, doc_type="inv2", doc_num=None)
+    response = documents.get(
+        api_key=API_KEY,
+        doc_dc=True,
+        doc_type="inv2",
+        doc_num=None)
+
     assert response["data"][0] == {
         'doc_type': 'inv2',
         'doc_num': '2.135',
@@ -32,7 +43,11 @@ def test_get_many_inv2_buy():
 
 
 def test_get_one_inv2_sell():
-    response = documents.get(doc_dc=False, doc_type="inv2", doc_num="1.1")
+    response = documents.get(
+        api_key=API_KEY,
+        doc_dc=False,
+        doc_type="inv2",
+        doc_num="1.1")
 
     assert response['message'] == 'wip'
     assert response['status'] == 200
@@ -85,7 +100,11 @@ def test_get_one_inv2_sell():
 
 
 def test_get_new_inv2():
-    response = documents.get(doc_dc=False, doc_type="inv2", doc_num="new")
+    response = documents.get(
+        api_key=API_KEY,
+        doc_dc=False,
+        doc_type="inv2",
+        doc_num="new")
 
     assert response['message'] == 'wip'
     assert response['status'] == 200
@@ -124,6 +143,7 @@ def test_get_new_inv2():
 def test_post_inv2_sell():
 
     response = documents.post(
+        api_key=API_KEY,
         data={
             "cpart_name": "Ccc Ltd",
             "descr": "sale to Ccc Ltd",
@@ -141,6 +161,10 @@ def test_post_inv2_sell():
     assert response['message'] == "document inv2 9.1 created"
     assert response['status'] == 200
 
-    response2 = documents.get(doc_dc=False, doc_type="inv2", doc_num="9.1")
+    response2 = documents.get(
+        api_key=API_KEY,
+        doc_dc=False,
+        doc_type="inv2",
+        doc_num="9.1")
 
     assert response2['data']["descr"] == "sale to Ccc Ltd"

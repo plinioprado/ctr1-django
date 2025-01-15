@@ -33,8 +33,6 @@ def get(
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
-
     data = dao_account1.get(db_id, af, at)
 
     return {

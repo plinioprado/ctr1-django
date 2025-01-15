@@ -1,7 +1,12 @@
 from ledger1.admin import admin
 
+API_KEY: str ="Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p"
+
 def test_user_get_many():
-    ret: dict = admin.get(param="user", query=None)
+    ret: dict = admin.get(
+        api_key=API_KEY,
+        param="user",
+        query=None)
 
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
@@ -11,13 +16,15 @@ def test_user_get_many():
         'id': '1',
         'name': 'John Doe',
         'role': 'admin',
-        'entity': 'example',
         'active': True
     }
 
 
 def test_user_get_filtered():
-    ret: dict = admin.get(param="user", query={'name': ['john']})
+    ret: dict = admin.get(
+        api_key=API_KEY,
+        param="user",
+        query={'name': ['john']})
 
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
@@ -27,13 +34,16 @@ def test_user_get_filtered():
         'id': '1',
         'name': 'John Doe',
         'role': 'admin',
-        'entity': 'example',
         'active': True,
     }]
 
 
 def test_user_get_one():
-    ret: dict = admin.get(param="user", query=None, record_id="1")
+    ret: dict = admin.get(
+        api_key=API_KEY,
+        param="user",
+        query=None,
+        record_id="1")
 
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
@@ -45,8 +55,6 @@ def test_user_get_one():
         'email': 'john.doe@example.com',
         'password': '************',
         'role': 'admin',
-        'entity': 'example',
-        'entities': 'example',
         'active': True,
     }
 
@@ -54,7 +62,11 @@ def test_user_get_one():
 def test_user_get_new():
     """ needed by create user requirement"""
 
-    ret: dict = admin.get(param="user", query=None, record_id="new")
+    ret: dict = admin.get(
+        api_key=API_KEY,
+        param="user",
+        query=None,
+        record_id="new")
 
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
@@ -66,8 +78,6 @@ def test_user_get_new():
         'email': '',
         'password': '',
         'role': 'user',
-        'entity': 'example',
-        'entities': 'example',
         'active': True,
     }
 
@@ -75,14 +85,13 @@ def test_user_get_new():
 def test_create_user():
 
     ret = admin.post(
+        api_key=API_KEY,
         param="user",
         data={
             "name": "Alex Doe",
             "email": "alex.doe@example.com",
             "password": "12345",
             "role": "user",
-            "entities": "example",
-            "entity": "example",
             "active": False
         })
 
@@ -94,6 +103,7 @@ def test_create_user():
 def test_update_user():
 
     ret = admin.put(
+        api_key=API_KEY,
         param="user",
         data={
             "id": 3,
@@ -101,8 +111,6 @@ def test_update_user():
             "email": "alex.doe@example.com",
             "password": "12345",
             "role": "user",
-            "entities": "example",
-            "entity": "example",
             "active": True
         })
 
@@ -113,7 +121,10 @@ def test_update_user():
 
 def test_user_delete():
 
-    ret: dict =admin.delete(param="user", record_id="3")
+    ret: dict =admin.delete(
+        api_key=API_KEY,
+        param="user",
+        record_id="3")
 
     assert ret["status_code"] == 200
     assert ret["message"] == "user 3 deleted"

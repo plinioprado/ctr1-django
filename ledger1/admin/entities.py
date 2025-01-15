@@ -17,10 +17,10 @@ Initially, all entities will be in a sqlite db therefore the connectin data will
 from ledger1.utils import fileio
 
 
-def get_db_id_by_api_key(api_key: str) -> dict:
+def get_db_id_by_api_key(api_key: str) -> str:
 
     entity_key: str = api_key.replace("Bearer ", "").split("-")[0]
-    api_key: dict = get_entity("key", entity_key)["id"]
+    api_key = get_entity("key", entity_key)["id"]
 
     return api_key
 
