@@ -1,6 +1,101 @@
 {
   "h2": "GIC",
-  "header": true,
+  "head": [
+    {
+      "class": "col-md-3",
+      "label": "Number",
+      "name": "doc_num",
+      "type": "text",
+      "key": true
+    },
+    {
+      "class": "col-md-6",
+      "label": "Description",
+      "name": "descr",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "",
+      "name": "doc_dc_name",
+      "type": "text",
+      "disabled": true
+    }
+  ],
+  "detail": [
+    {
+      "class": "col-md-3",
+      "label": "Certificate",
+      "name": "certificate",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Redemption Rate",
+      "name": "redemption_rate",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Effective Date",
+      "name": "effective_date",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Interest Rate",
+      "name": "interest_rate",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Maturity Date",
+      "name": "maturity_date",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Term",
+      "name": "term",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Redeemable",
+      "name": "redeemable",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Interest Payment Frequency",
+      "name": "interest_payment_frequency",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Next Interest Payment Date",
+      "name": "next_interest_payment_date",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Interest Disbursement",
+      "name": "interest_disbursement",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Anticipated Interest",
+      "name": "anticipated_interest",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Maturity Instructions",
+      "name": "maturity_instructions",
+      "type": "text"
+    }
+  ],
   "parts": true,
   "payment": true
 }

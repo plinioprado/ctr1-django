@@ -211,7 +211,7 @@ def post(db_id: str, data: dict):
         return {"doc_type": data["doc_type"],"doc_num": data["doc_num"]}
 
     except sqlite3.DatabaseError as err:
-        raise IOError(f"creating document {data["doc_type"]} {data["doc_num"]}: {str(err)}") from err
+        raise IOError(f'creating document {data["doc_type"]} {data["doc_num"]}: {str(err)}') from err
     finally:
         con.close()
 
