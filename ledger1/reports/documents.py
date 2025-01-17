@@ -8,8 +8,7 @@ def get(
     entity_name: str,
     date_from: str,
     date_to: str,
-    doc_type: str = ""
-) -> dict:
+    doc_type: str = "") -> dict:
 
     document_types = DocumentTypes(db_id)
     options_doc_type = document_types.get_dict_options()

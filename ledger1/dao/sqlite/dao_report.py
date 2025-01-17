@@ -40,8 +40,7 @@ def get_general_ledger(
     date_from: str,
     date_to: str,
     acc_from: str,
-    acc_to: str,
-) -> list[dict]:
+    acc_to: str) -> list[dict]:
     """
     data for general ledger
     """
@@ -175,8 +174,7 @@ def get_trial_balance(
     date_from: str,
     date_to: str,
     acc_from: str,
-    acc_to: str,
-) -> list[dict]:
+    acc_to: str) -> list[dict]:
     """
     data for general ledger
     """
@@ -300,8 +298,7 @@ def get_documents(
     db_id: str,
     date_from: str,
     date_to: str,
-    doc_type: str
-) -> list[dict]:
+    doc_type: str) -> list[dict]:
     """
     data documents report
     """

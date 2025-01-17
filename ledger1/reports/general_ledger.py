@@ -8,8 +8,7 @@ def get(
     date_from: str,
     date_to: str,
     acc_from: str,
-    acc_to: str
-) -> dict:
+    acc_to: str) -> dict:
     """
     Creates the report from the data from a DAO query
 
