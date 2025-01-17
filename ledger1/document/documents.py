@@ -10,7 +10,7 @@ from ledger1.admin import entities
 
 # get
 
-def get(
+def get( # pylint: disable=too-many-locals
         api_key: str,
         doc_dc: bool,
         doc_type: str = None,
@@ -31,7 +31,7 @@ def get(
 
         else:
             data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
-            data_options = document_options.get_op_doc_dc(db_id, doc_type),
+            data_options = document_options.get_op_doc_dc(db_id, doc_type)
 
         data_format: dict = get_format(doc_type, True)
 

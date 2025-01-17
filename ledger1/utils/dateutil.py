@@ -1,11 +1,29 @@
+import re
 import datetime
 
+
+def date_iso_is_valid(date_iso: str) -> bool:
+
+    try:
+        if date_iso is None:
+            raise ValueError()
+        datetime.datetime.fromisoformat(date_iso)
+
+    except ValueError:
+        return False
+
+    return True
+
+
 def date_iso_to_timestamp(date_iso: str) -> float:
-    return datetime.datetime.fromisoformat(date_iso).timestamp()
+    if date_iso is None or re.fullmatch(r'\d{4}-\d{2}-\d{2}?', date_iso) is None:
+        raise ValueError(f"Invalid date {date_iso}")
+
+    return float(datetime.datetime.fromisoformat(date_iso).timestamp())
 
 
 def date_timestamp_to_iso(date_timestamp: int) -> str:
-    return datetime.datetime.fromtimestamp(date_timestamp).isoformat()[0:10]
+    return datetime.date.fromtimestamp(date_timestamp).isoformat()
 
 
 def get_date_from(date_iso: str, settings_date: list[dict]):

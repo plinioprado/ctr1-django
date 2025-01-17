@@ -99,7 +99,7 @@ def get_general_ledger(
         report_rows.append({
             "account_num": str(row["account_num"]),
             "account_name": str(row["account_name"]),
-            "dt": datetime.datetime.fromtimestamp(row["dt"]).isoformat()[0:10],
+            "dt": datetime.date.fromtimestamp(row["dt"]).isoformat(),
             "num": int(row["num"]),
             "descr": str(row["descr"]),
             "doc_type": str(row["doc_type"]),
@@ -155,7 +155,7 @@ def get_journal(
         )
     ):
         report_rows.append({
-            "dt": datetime.datetime.fromtimestamp(row[0]).isoformat()[0:10],
+            "dt": datetime.date.fromtimestamp(row[0]).isoformat(),
             "num": int(row[1]),
             "descr": str(row[2]),
             "doc_type": str(row[3]),
@@ -337,7 +337,7 @@ def get_documents(
 
         rows.append([
             record["doc_num"],
-            datetime.datetime.fromtimestamp(record["dt"]).isoformat()[0:10],
+            datetime.date.fromtimestamp(record["dt"]).isoformat(),
             record["descr"],
             record["tra"],
             record["account"],

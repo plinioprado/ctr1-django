@@ -1,11 +1,10 @@
 """ data access object from transaction to sqlite """
 
 import csv
-import datetime
 import sqlite3
-from ledger1.utils import dbutil
-from ledger1.utils.field import date_iso_to_timestamp, date_timestamp_to_iso
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
+from ledger1.utils import dbutil
+from ledger1.utils import dateutil
 
 
 def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
@@ -31,9 +30,10 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
         WHERE t.dt BETWEEN ? AND ?
         ORDER BY td.num, td.seq DESC
         """
+
         query_data: tuple = (
-            datetime.datetime.fromisoformat(date_from).timestamp(),
-            datetime.datetime.fromisoformat(date_to).timestamp()
+            dateutil.date_iso_to_timestamp(date_from),
+            dateutil.date_iso_to_timestamp(date_to),
         )
 
         seqs = []
@@ -41,7 +41,7 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
         for row in cur.execute(query_text, query_data):
 
             num = int(row[0])
-            date: str = str(date_timestamp_to_iso(row[1]))
+            date: str = dateutil.date_timestamp_to_iso(row[1])
             descr: str = str(row[2])
             seq: int = int(row[3])
             account: str = row[4]
@@ -105,7 +105,7 @@ def get_one(db_id: str, num: int) -> Transaction1 | None:
         for row in cur.execute(query_text, query_data):
             if row[3] == 1:
                 num = int(row[0])
-                date: str = str(date_timestamp_to_iso(row[1]))
+                date: str = dateutil.date_timestamp_to_iso(row[1])
                 descr: str = str(row[2])
             seqs.append(Transaction1Seq(
                 account=row[4],
@@ -174,8 +174,9 @@ def post(db_id: str, tra: Transaction1) -> int | None:
         (dt, descr)
         VALUES (?, ?);
         """
+
         query_params = (
-            date_iso_to_timestamp(tra.date),
+            dateutil.date_iso_to_timestamp(tra.date),
             tra.descr)
         cur.execute(query_text, query_params)
 
@@ -228,8 +229,9 @@ def put(db_id: str, tra: Transaction1):
             descr = ?
         WHERE num = ?;
         """
+
         query_params = (
-            date_iso_to_timestamp(tra.date),
+            dateutil.date_iso_to_timestamp(tra.date),
             tra.descr,
             tra.num)
         cur.execute(query_text, query_params)
@@ -301,7 +303,6 @@ def reset(db_id: str) -> None:
 
             reader = csv.DictReader(csvfile)
             for row in reader:
-
                 cur.execute(
                     """
                     INSERT INTO transaction1 (num, dt, descr)
@@ -309,7 +310,7 @@ def reset(db_id: str) -> None:
                     """,
                     (
                         int(row["num"]),
-                        date_iso_to_timestamp(row["dt"]),
+                        dateutil.date_iso_to_timestamp(row["dt"]),
                         str(row["descr"])
                     )
                 )
