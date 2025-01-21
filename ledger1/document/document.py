@@ -178,3 +178,13 @@ class Document:
             "seqs": [seq.asdict() for seq in self.seqs],
             "fields": self.fields,
         }
+
+    def get_to_response_acc(self):
+        print(12, self.fields)
+        return {
+            "doc_type": self.doc_type,
+            "doc_num": self.doc_num,
+            "descr": self.descr,
+            "acc_num": "",
+            "fields": self.fields,
+        }
