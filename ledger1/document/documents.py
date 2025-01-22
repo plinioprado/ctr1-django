@@ -8,6 +8,7 @@ from ledger1.document.document_types import DocumentTypes
 from ledger1.utils import fileio
 from ledger1.admin import entities
 
+
 # get
 
 def get( # pylint: disable=too-many-locals
@@ -51,7 +52,6 @@ def get( # pylint: disable=too-many-locals
     elif doc_num == "new":
 
         if doc_type_is_tra is False and doc_type != "bstat2":
-            print(1, db_id, doc_type, doc_num)
             doc: Document = _get_document_obj(db_id, doc_dc=doc_dc, doc_type=doc_type)
             fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
             doc.add_fields_data(fields)
@@ -157,19 +157,33 @@ def get_one(
 
     return data
 
+
 # post
 
 def post(api_key: str, data) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    # no db_id because is in a csv file
-    op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+    doc_types: list[dict] = DocumentTypes(db_id).asdict()
+    doc_type_dict = [tp for tp in doc_types if tp["id"] == data["doc_type"]][0]
+    doc_type_is_tra = doc_type_dict["traacc"]
+    doc_dc: bool = data["doc_dc"] if "doc_dc" in data else None
 
-    doc: Document = _get_document_obj(db_id, doc_dc=data["doc_dc"], doc_type=data["doc_type"])
-    doc.set_from_request(data, op_seq_acc)
-    transactions.post(api_key, doc.get_to_transaction())
+    # no db_id because is in a csv file
+    if doc_type_is_tra:
+        op_seq_acc = document_options.get_op_seq_acc(doc_dc=doc_dc, doc_type=data["doc_type"])
+    else:
+        op_seq_acc = None
+
+    doc: Document = _get_document_obj(db_id, doc_dc=doc_dc, doc_type=data["doc_type"])
+    if doc_type_is_tra:
+        doc.set_from_request(data, op_seq_acc)
+        transactions.post(api_key, doc.get_to_transaction())
+    else:
+        doc.set_from_request_acc(data)
+
     dao_document.post(db_id, doc.get_to_document())
+
     return {
         "status": 200,
         "message": f"document {data["doc_type"]} {data["doc_num"]} created"
@@ -177,7 +191,6 @@ def post(api_key: str, data) -> dict:
 
 
 # put
-
 
 def put(api_key: str, data: dict) -> dict:
 
@@ -199,7 +212,6 @@ def put(api_key: str, data: dict) -> dict:
 
 # delete
 
-
 def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
@@ -217,9 +229,7 @@ def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
 ## helpers
 
-
 def _get_document_obj(db_id: str, doc_dc: bool, doc_type: str) -> Document:
-
     document_types: DocumentTypes = DocumentTypes(db_id)
     document_type: dict = document_types.get(doc_type)
 

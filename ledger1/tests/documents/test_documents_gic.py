@@ -82,3 +82,33 @@ def test_get_new_gic():
             }
         }
     }
+
+
+def test_post_gic():
+    response = documents.post(
+        api_key=API_KEY,
+        data={
+            "doc_type": "gic",
+            "doc_num": "1",
+            "descr": "ddd",
+            "acc_num": "1.1.4",
+            "fields": {
+                "detail": {
+                    "anticipated_interest": "3",
+                    "certificate": "2",
+                    "effective_date": "4",
+                    "interest_disbursement": "1",
+                    "interest_payment_frequency": "9",
+                    "interest_rate": "5",
+                    "maturity_date": "6",
+                    "maturity_instructions": "3",
+                    "next_interest_payment_date": "0",
+                    "redeemable": "8888",
+                    "redemption_rate": "3",
+                    "term": "7"
+                }
+            }
+        })
+
+    assert response["message"] == "document eft 1.99 created"
+    assert response["status"] == 200

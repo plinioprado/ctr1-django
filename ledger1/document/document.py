@@ -36,7 +36,7 @@ class Document:
     options: dict = {}
 
 
-    def __init__(self, doc_dc: bool, document_type: dict):
+    def __init__(self, document_type: dict, doc_dc: bool=None):
         self.doc_type = document_type["id"]
         self.doc_dc = doc_dc
         self.doc_type_name = document_type["name"]
@@ -94,6 +94,15 @@ class Document:
                 acc=str(op["acc"]),
                 val=float(doc_seq[0]["val"])
             ))
+
+    def set_from_request_acc(self, data: dict):
+        self.doc_type = data["doc_type"]
+        self.doc_num = data["doc_num"]
+
+        self.descr = data["descr"]
+        self.tra_num = None
+        if "fields" in data.keys():
+            self.fields = data["fields"]
 
 
     def add_document_data(self, data) -> None:
@@ -180,7 +189,7 @@ class Document:
         }
 
     def get_to_response_acc(self):
-        print(12, self.fields)
+
         return {
             "doc_type": self.doc_type,
             "doc_num": self.doc_num,

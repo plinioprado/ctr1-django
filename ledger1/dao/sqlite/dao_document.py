@@ -112,6 +112,7 @@ def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
     finally:
         con.close()
 
+
 def get_many_accs(db_id: str, doc_type: str) -> list[dict]:
 
     con, cur = dbutil.get_connection(db_id)
@@ -216,7 +217,7 @@ def post(db_id: str, data: dict):
         con.close()
 
 
- # put
+# put
 
 def put(db_id: str, data: dict):
 
