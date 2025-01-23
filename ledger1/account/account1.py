@@ -21,7 +21,8 @@ class Account1:
     doc_type: Optional[str] = ""
     doc_num: Optional[str] = ""
 
-    def set_from_data(self, data: dict):
+
+    def set_from_data(self, data) -> None:
 
         if isinstance(data["num"], str) and re.match(r"^\d.\d.\d$", data["num"]):
             self.num = data["num"]
@@ -54,7 +55,7 @@ class Account1:
             self.doc_num= ""
 
 
-    def dict(self):
+    def dict(self) -> dict:
         """ converts class to dict """
         return {
             "num": self.num,

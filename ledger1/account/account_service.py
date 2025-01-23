@@ -73,11 +73,8 @@ def post(api_key: str, data: dict) -> dict:
 
 def post_data(db_id: str, data: dict) -> str:
 
-    print(1)
     acc = Account1()
-    print(2)
     acc.set_from_data(data)
-    print(3)
 
     acc_num: str = dao_account1.post(db_id, acc)
 
@@ -108,6 +105,8 @@ def put(api_key: str, data: dict) -> dict:
         "message": f"account {acc_num} updated"
     }
 
+
+# delete
 
 def delete(api_key: str, acc_num: str) -> dict:
     """ Delete account

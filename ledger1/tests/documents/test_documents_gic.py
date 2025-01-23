@@ -9,13 +9,16 @@ def test_get_many_gic():
         doc_type="gic",
         doc_num=None)
 
+    print(response["data"])
     assert response["status"] == 200
     assert response["message"] == "wip"
     assert response["data"] == [
         {
+            "doc_type": "gic",
             "doc_num": "003.55555.444444444",
             "descr": "GIC",
-            "acc_num": "1.1.4"
+            "acc_num": "1.1.4",
+            "acc_dc": True,
         }]
 
 
@@ -91,7 +94,7 @@ def test_post_gic():
             "doc_type": "gic",
             "doc_num": "1",
             "descr": "ddd",
-            "acc_num": "1.1.4",
+            "acc_num": "1.1.5",
             "fields": {
                 "detail": {
                     "anticipated_interest": "3",
