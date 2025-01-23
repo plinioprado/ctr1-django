@@ -9,6 +9,7 @@ import sqlite3
 from ledger1.account.account1 import Account1
 from ledger1.utils import dbutil
 
+# get
 
 def get(db_id: str, acc_from: str, acc_to: str) -> list[dict]:
     """ Get (read) accounts """
@@ -43,6 +44,62 @@ def get(db_id: str, acc_from: str, acc_to: str) -> list[dict]:
         con.close()
 
 
+def get_many_by_doc(db_id: str, doc_type: str) -> list[dict]:
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text: str = """
+        SELECT
+          num,
+          name,
+          dc = 1 as dc,
+          doc_type,
+          doc_num
+          FROM account1
+        WHERE doc_type = ?;
+        """
+        query_params = (doc_type,)
+        rows: list[dict] = [{
+            "num": str(row["num"]),
+            "name": str(row["name"]),
+            "dc": row["dc"] == 1,
+            "doc_type": str(row["doc_type"]),
+            "doc_num": str(row["doc_num"])
+        } for row in cur.execute(query_text, query_params)]
+
+        return rows
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"getting accounts by document type: {str(err)}") from err
+    finally:
+        con.close()
+
+
+def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
+    """ Get account by document """
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text: str = """
+        SELECT num, name, dc FROM account1
+        WHERE doc_type = ? and doc_num = ?;
+        """
+        query_params = (doc_type, doc_num)
+        cur.execute(query_text, query_params)
+        row = dict(cur.fetchone())
+
+        return row
+
+    except sqlite3.DatabaseError as err:
+        raise IOError(f"getting account by document: {str(err)}") from err
+    finally:
+        con.close()
+
+
+# post
+
 def post(db_id: str, acc: Account1) -> str:
     """ Post (create) account """
 
@@ -51,10 +108,16 @@ def post(db_id: str, acc: Account1) -> str:
     try:
         query_text: str = """
         INSERT INTO account1
-        (num, name, dc)
-        VALUES (?, ?, ?);
+        (num, name, dc, active, doc_type, doc_num)
+        VALUES (?, ?, ?, ?, ?, ?);
         """
-        query_params = (acc.num, acc.name, 1 if acc.dc else 0)
+        query_params = (
+            acc.num,
+            acc.name,
+            1 if acc.dc else 0,
+            acc.active,
+            acc.doc_type,
+            acc.doc_num)
         cur.execute(query_text, query_params)
         con.commit()
 
@@ -65,6 +128,8 @@ def post(db_id: str, acc: Account1) -> str:
     finally:
         con.close()
 
+
+# put
 
 def put(db_id: str, acc: Account1) -> str:
     """ Put (update) account """
@@ -90,6 +155,8 @@ def put(db_id: str, acc: Account1) -> str:
         con.close()
 
 
+# delete
+
 def delete(db_id: str, num: str) -> str:
     """ Delete account """
 
@@ -108,6 +175,8 @@ def delete(db_id: str, num: str) -> str:
     finally:
         con.close()
 
+
+# other
 
 def get_options(db_id: str) -> list[dict]:
     """ Get a list of option for a form select
@@ -134,27 +203,6 @@ def get_options(db_id: str) -> list[dict]:
     finally:
         con.close()
 
-
-def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
-    """ Get account by document """
-
-    con, cur = dbutil.get_connection(db_id)
-
-    try:
-        query_text: str = """
-        SELECT num, name, dc FROM account1
-        WHERE doc_type = ? and doc_num = ?;
-        """
-        query_params = (doc_type, doc_num)
-        cur.execute(query_text, query_params)
-        row = dict(cur.fetchone())
-
-        return row
-
-    except sqlite3.DatabaseError as err:
-        raise IOError(f"getting account by document: {str(err)}") from err
-    finally:
-        con.close()
 
 def restore(db_id: str) -> None:
 

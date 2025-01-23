@@ -11,6 +11,8 @@ from ledger1.admin import entities
 from ledger1.account.account1 import Account1
 from ledger1.dao.sqlite import dao_account1
 
+# get
+
 def get(
         api_key: str,
         acc: str,
@@ -42,6 +44,15 @@ def get(
     }
 
 
+def get_many_by_doc(db_id: str, doc_type: str) -> list[dict]:
+
+    data: list[dict] = dao_account1.get_many_by_doc(db_id, doc_type)
+
+    return data
+
+
+# post
+
 def post(api_key: str, data: dict) -> dict:
     """ post (create) transaction
 
@@ -52,18 +63,28 @@ def post(api_key: str, data: dict) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    acc = Account1(
-        num=data["num"],
-        name=data["name"],
-        dc=data["dc"])
-
-    acc_num: str = dao_account1.post(db_id, acc)
+    acc_num = post_data(db_id, data)
 
     return {
         "code": 200,
         "message": f"account {acc_num} created"
     }
 
+
+def post_data(db_id: str, data: dict) -> str:
+
+    print(1)
+    acc = Account1()
+    print(2)
+    acc.set_from_data(data)
+    print(3)
+
+    acc_num: str = dao_account1.post(db_id, acc)
+
+    return acc_num
+
+
+# put
 
 def put(api_key: str, data: dict) -> dict:
     """ Put (update) account

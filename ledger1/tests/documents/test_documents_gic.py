@@ -110,5 +110,5 @@ def test_post_gic():
             }
         })
 
-    assert response["message"] == "document eft 1.99 created"
+    assert response["message"] == "document gic 1 created"
     assert response["status"] == 200

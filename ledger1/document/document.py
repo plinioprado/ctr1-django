@@ -1,4 +1,4 @@
-from ledger1.document.document_seq import DocumentSeq
+from ledger1.document.document_tra_seq import DocumentSeq
 
 class Document:
 
@@ -95,14 +95,14 @@ class Document:
                 val=float(doc_seq[0]["val"])
             ))
 
-    def set_from_request_acc(self, data: dict):
-        self.doc_type = data["doc_type"]
-        self.doc_num = data["doc_num"]
+    # def set_from_request_acc(self, data: dict):
+    #     self.doc_type = data["doc_type"]
+    #     self.doc_num = data["doc_num"]
 
-        self.descr = data["descr"]
-        self.tra_num = None
-        if "fields" in data.keys():
-            self.fields = data["fields"]
+    #     self.descr = data["descr"]
+    #     self.tra_num = None
+    #     if "fields" in data.keys():
+    #         self.fields = data["fields"]
 
 
     def add_document_data(self, data) -> None:

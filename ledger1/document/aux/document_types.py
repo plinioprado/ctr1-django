@@ -1,4 +1,4 @@
-from ledger1.document.document_type import DocumentType
+from ledger1.document.aux.document_type import DocumentType
 from ledger1.dao.sqlite import dao_document_type
 
 class DocumentTypes:

@@ -2,6 +2,7 @@
 
 import re
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass
 class Account1:
@@ -13,21 +14,44 @@ class Account1:
         dc: bool - True if Debit and False if Credit
     """
 
-    num: str | None
-    name: str
-    dc: bool
+    num: Optional[str] | None = None
+    name: Optional[str] = None
+    dc: Optional[bool] = None
+    active: Optional[bool] = True
+    doc_type: Optional[str] = ""
+    doc_num: Optional[str] = ""
 
-    def __post_init__(self):
-        """ individual validations """
+    def set_from_data(self, data: dict):
 
-        if not isinstance(self.num, str) or not re.match(r"^\d.\d.\d$", self.num):
+        if isinstance(data["num"], str) and re.match(r"^\d.\d.\d$", data["num"]):
+            self.num = data["num"]
+        else:
             raise ValueError("invalid account number")
 
-        if not isinstance(self.name, str) or not re.match(r"^.{3,90}$", self.num):
+        if isinstance(data["name"], str) and re.match(r"^.{3,90}$", data["name"]):
+            self.name = data["name"]
+        else:
             raise ValueError("invalid account name")
 
-        if self.dc not in [True, False]:
+        if data["dc"] in [True, False]:
+            self.dc = data["dc"]
+        else:
             raise ValueError("invalid account dc")
+
+        if "active" in data.keys() and data["active"] is False:
+            self.active = False
+        else:
+            self.active = True
+
+        if "doc_type" in data.keys() and isinstance(data["doc_type"], str):
+            self.doc_type = data["doc_type"]
+        else:
+            self.doc_type = ""
+
+        if "doc_num" in data.keys() and isinstance(data["doc_num"], str):
+            self.doc_num = data["doc_num"]
+        else:
+            self.doc_num= ""
 
 
     def dict(self):
@@ -36,4 +60,7 @@ class Account1:
             "num": self.num,
             "name": self.name,
             "dc": self.dc,
+            "active": self.active,
+            "doc_type": self.doc_type,
+            "doc_num": self.doc_num,
         }

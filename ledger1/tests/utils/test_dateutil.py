@@ -5,7 +5,6 @@ def test_date_iso_to_timestamp():
     # Valid ISO date
     date_iso = "2020-01-01"
     expected_timestamp = 1577865600.0
-    print(dateutil.date_iso_to_timestamp(date_iso))
     assert dateutil.date_iso_to_timestamp(date_iso) == expected_timestamp
 
     # Valid ISO date with time

@@ -1,10 +1,24 @@
+"""
+This module handles the creation, updating, and deletion of documents.
+Also provides options and formats for the front-end.
+
+There are two types of documents with different behaviors:
+ - account: Supports detailed Accounts, identified by a type and number stored
+   in the Account, complemented by fields in the DocumentField table.
+ - transaction: Supports Transactions, identified by a type, dc, and number
+   stored in the Transaction (in one of its Seqs), complemented by fields in
+   the DocumentField table.
+"""
+
 from ledger1.dao.sqlite import dao_document
 from ledger1.dao.sqlite import dao_document_field
 from ledger1.document.document import Document
-from ledger1.document import document_options
+from ledger1.document.document_acc import DocumentAccount
+from ledger1.document.aux import document_options
+from ledger1.document.aux.document_types import DocumentTypes
 
 from ledger1.transaction import transaction_service as transactions
-from ledger1.document.document_types import DocumentTypes
+from ledger1.account import account_service as accounts
 from ledger1.utils import fileio
 from ledger1.admin import entities
 
@@ -27,11 +41,18 @@ def get( # pylint: disable=too-many-locals
     if doc_num is None:
 
         if doc_type_is_tra is False and doc_type != "bstat2":
-            data: list[dict] = dao_document.get_many_accs(db_id, doc_type)
+            data: list[dict] = _get_many_acc(
+                db_id,
+                doc_type=doc_type)
+
             data_options = {}
 
         else:
-            data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
+            data = _get_many_data_tra(
+                db_id,
+                doc_dc=doc_dc,
+                doc_type=doc_type)
+
             data_options = document_options.get_op_doc_dc(db_id, doc_type)
 
         data_format: dict = get_format(doc_type, True)
@@ -138,6 +159,25 @@ def get( # pylint: disable=too-many-locals
     return response
 
 
+
+def _get_many_acc(db_id: str, doc_type: str) -> list[dict]:
+    accs: list[dict] = accounts.get_many_by_doc(db_id, doc_type)
+
+    data = [{
+            "doc_type": acc["doc_type"],
+            "doc_num": acc["doc_num"],
+            "acc_num": acc["num"],
+            "acc_dc": acc["dc"],
+            "descr": acc["name"]} for acc in accs]
+
+    return data
+
+
+def _get_many_data_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
+    data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
+
+    return data
+
 def get_one(
         db_id: str,
         doc_type: str,
@@ -158,6 +198,28 @@ def get_one(
     return data
 
 
+def _get_one_acc(db_id: str, doc_type: str) -> list[dict]:
+    accs: list[dict] = accounts.get_many_by_doc(db_id, doc_type)
+
+    data = []
+    for acc in accs:
+        fields = dao_document_field.get_one(
+            db_id,
+            doc_type=acc["doc_type"],
+            doc_num=acc["doc_num"])
+
+        data.append({
+            "doc_type": acc["doc_type"],
+            "doc_num": acc["doc_num"],
+            "acc_num": acc["num"],
+            "doc_dc": acc["dc"],
+            "descr": acc["name"],
+            "fields": fields,
+        })
+
+    return data
+
+
 # post
 
 def post(api_key: str, data) -> dict:
@@ -169,18 +231,22 @@ def post(api_key: str, data) -> dict:
     doc_type_is_tra = doc_type_dict["traacc"]
     doc_dc: bool = data["doc_dc"] if "doc_dc" in data else None
 
-    # no db_id because is in a csv file
     if doc_type_is_tra:
-        op_seq_acc = document_options.get_op_seq_acc(doc_dc=doc_dc, doc_type=data["doc_type"])
-    else:
-        op_seq_acc = None
-
-    doc: Document = _get_document_obj(db_id, doc_dc=doc_dc, doc_type=data["doc_type"])
-    if doc_type_is_tra:
+        op_seq_acc = document_options.get_op_seq_acc(
+            doc_dc=doc_dc,
+            doc_type=data["doc_type"])
+        doc: Document = _get_document_obj(
+            db_id,
+            doc_dc=doc_dc,
+            doc_type=data["doc_type"])
         doc.set_from_request(data, op_seq_acc)
         transactions.post(api_key, doc.get_to_transaction())
     else:
-        doc.set_from_request_acc(data)
+        doc: DocumentAccount = _get_document_acc_obj(
+            db_id,
+            doc_type=data["doc_type"])
+        doc.set_from_request(data)
+        accounts.post_data(db_id, doc.get_to_account())
 
     dao_document.post(db_id, doc.get_to_document())
 
@@ -189,6 +255,15 @@ def post(api_key: str, data) -> dict:
         "message": f"document {data["doc_type"]} {data["doc_num"]} created"
     }
 
+def _post_acc(db_id: str, data: dict) -> dict:
+    doc: DocumentAccount = _get_document_acc_obj(db_id, data["doc_type"])
+    doc.set_from_request(data)
+    accounts.post_data(db_id, doc.get_to_account())
+
+    return {
+        "status": 200,
+        "message": f"document {data["doc_type"]} {data["doc_num"]} created"
+    }
 
 # put
 
@@ -236,6 +311,15 @@ def _get_document_obj(db_id: str, doc_dc: bool, doc_type: str) -> Document:
     return Document(
         doc_dc=doc_dc,
         document_type=document_type)
+
+
+
+
+def _get_document_acc_obj(db_id: str, doc_type: str) -> DocumentAccount:
+    document_types: DocumentTypes = DocumentTypes(db_id)
+    document_type: dict = document_types.get(doc_type)
+
+    return DocumentAccount(document_type=document_type)
 
 
 def get_format(doc_type:str, is_list: bool) -> dict:

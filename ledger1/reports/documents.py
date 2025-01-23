@@ -1,6 +1,6 @@
 """ business logic to create the documents report """
 
-from ledger1.document.document_types import DocumentTypes
+from ledger1.document.aux.document_types import DocumentTypes
 from ledger1.dao.sqlite.dao_report import get_documents
 
 def get(

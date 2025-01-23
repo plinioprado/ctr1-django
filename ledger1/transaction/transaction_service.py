@@ -9,7 +9,7 @@
 
 from ledger1.dao.sqlite import dao_transaction1
 from ledger1.admin import entities
-from ledger1.document.document_types import DocumentTypes
+from ledger1.document.aux.document_types import DocumentTypes
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
 from ledger1.account import account_service
 from ledger1.utils.settings import get as settings_get
