@@ -9,7 +9,6 @@ def test_get_many_gic():
         doc_type="gic",
         doc_num=None)
 
-    print(response["data"])
     assert response["status"] == 200
     assert response["message"] == "wip"
     assert response["data"] == [

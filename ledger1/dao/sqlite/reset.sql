@@ -68,14 +68,6 @@ CREATE TABLE IF NOT EXISTS document_type (
     cpart_role_c TEXT,
     active INTEGER);
 
-DROP TABLE IF EXISTS document;
-CREATE TABLE IF NOT EXISTS document (
-    doc_type TEXT NOT NULL,
-    doc_num TEXT NOT NULL,
-    acc_num TEXT,
-    cpart_name TEXT,
-    PRIMARY KEY (doc_type, doc_num));
-
 DROP TABLE IF EXISTS document_field;
 CREATE TABLE IF NOT EXISTS document_field (
     doc_type TEXT,

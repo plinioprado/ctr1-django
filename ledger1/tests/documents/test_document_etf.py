@@ -15,4 +15,4 @@ def test_ini():
     assert doc.doc_type == "eft"
     assert doc.doc_num == "1"
     assert doc.doc_dc is True
-    assert doc.tra_num == None
+    assert doc.tra_num is None

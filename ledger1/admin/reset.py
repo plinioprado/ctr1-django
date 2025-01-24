@@ -21,7 +21,6 @@ def reset(db_id) -> None:
     dao_document_type.reset(db_id)
     dao_account1.restore(db_id)
     dao_transaction1.reset(db_id)
-    dao_document.restore(db_id, settings_file["file"]["csv"]["document"])
     dao_document_field.restore(db_id, settings_file["file"]["csv"]["document_field"])
     dao_setting.restore(db_id, settings_file["file"]["csv"]["setting"])
     dao_aux.restore(

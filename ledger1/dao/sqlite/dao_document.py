@@ -11,35 +11,6 @@ from ledger1.utils import dateutil
 
 # get
 
-def get_many(db_id: str, doc_type: str = None) -> list[dict]:
-
-    con, cur = dbutil.get_connection(db_id)
-
-    try:
-
-        query_text = """
-        SELECT
-            d.doc_type,
-            d.doc_num,
-            a.name
-        FROM document d
-            INNER JOIN account1 a ON a.num = d.acc_num
-        WHERE d.doc_type LIKE ?
-        """
-        doc_type_param = "%" if doc_type is None else doc_type
-        query_params = (doc_type_param,)
-
-        cur.execute(query_text, query_params)
-        rows = [dict(row) for row in cur.fetchall()]
-
-        return rows
-
-    except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting bank statements {str(err)}") from err
-    finally:
-        con.close()
-
-
 def get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
 
     con, cur = dbutil.get_connection(db_id)
@@ -55,12 +26,11 @@ def get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
             t.descr,
             td.val
         FROM transaction1_detail td
-            INNER JOIN transaction1 t ON t.num = td.num
-            INNER JOIN document d
-                ON d.doc_type = td.doc_type AND d.doc_num = td.doc_num
+            INNER JOIN transaction1 t
+                ON t.num = td.num
             LEFT OUTER JOIN document_field f
-                ON f.doc_type = d.doc_type
-                AND f.doc_num = d.doc_num
+                ON f.doc_type = td.doc_type
+                AND f.doc_num = td.doc_num
                 AND f.field_group = 'person'
                 AND f.field_name = 'name'
         WHERE td.doc_type = ? AND td.dc = ?
@@ -80,12 +50,14 @@ def get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
                 "descr": row["descr"],
                 "val": row["val"],
             })
-
         return data
     except sqlite3.DatabaseError as err:
         raise ValueError(f"getting documents {str(err)}") from err
     finally:
         con.close()
+
+
+
 
 
 def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
@@ -111,60 +83,6 @@ def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
         raise ValueError(f"getting document type {doc_type}: {str(err)}") from err
     finally:
         con.close()
-
-
-def get_many_accs(db_id: str, doc_type: str) -> list[dict]:
-
-    con, cur = dbutil.get_connection(db_id)
-
-    try:
-        query_text = """
-        SELECT
-            a.doc_num,
-            a.name AS descr,
-            a.num AS acc_num
-        FROM account1 a
-        WHERE a.doc_type = ?
-        """
-        query_params = (doc_type,)
-        cur.execute(query_text, query_params)
-        rows = [dict(row) for row in cur.fetchall()]
-
-        return rows
-
-    except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting accounts type {doc_type}: {str(err)}") from err
-    finally:
-        con.close()
-
-
-def get_one(db_id: str, doc_type: str, doc_num: str) -> dict:
-
-    con, cur = dbutil.get_connection(db_id)
-
-    try:
-        query_text = """
-        SELECT
-            d.doc_type,
-            d.doc_num,
-            d.acc_num,
-            d.cpart_name,
-            a.name
-        FROM document d
-            LEFT JOIN account1 a ON a.num = d.acc_num
-        WHERE d.doc_type = ? AND d.doc_num = ?
-        """
-        query_params = (doc_type, doc_num)
-        cur.execute(query_text, query_params)
-        row = dict(cur.fetchone())
-
-        return row
-
-    except sqlite3.DatabaseError as err:
-        raise ValueError(f"getting bank statements {str(err)}") from err
-    finally:
-        con.close()
-
 
 # post
 
@@ -216,6 +134,42 @@ def post(db_id: str, data: dict):
     finally:
         con.close()
 
+
+
+def get_fields(
+        db_id: str,
+        doc_type: str,
+        doc_num: str
+    ) -> dict:
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text = """
+        SELECT
+            doc_type,
+            doc_num,
+            field_group,
+            field_name,
+            field_value
+        FROM document_field
+        WHERE doc_type = ? AND doc_num = ?
+        """
+        query_params = (doc_type, doc_num)
+        cur.execute(query_text, query_params)
+
+        rows = {}
+        for row in cur.fetchall():
+            if row["field_group"] not in rows:
+               rows[row["field_group"]] = {}
+            rows[row["field_group"]][row["field_name"]] = row["field_value"]
+
+        return rows
+
+    except sqlite3.DatabaseError as err:
+        raise ValueError(f"getting document field {str(err)}") from err
+    finally:
+        con.close()
 
 # put
 

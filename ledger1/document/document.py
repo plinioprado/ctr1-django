@@ -45,10 +45,8 @@ class Document:
 
         self.doc_type = document_type["id"]
         self.doc_dc = doc_dc
-        print(1111, doc_num)
         self.doc_num = doc_num
         self.tra_num = tra_num
-        print(1112, self.doc_num)
         self.doc_type_name = document_type["name"]
         self.num_on_seq = document_type["num_on_seq"]
         self.cpart_role = document_type["cpart_role_d"] if self.doc_type else document_type["cpart_role_c"]

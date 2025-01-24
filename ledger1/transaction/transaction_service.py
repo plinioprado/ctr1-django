@@ -107,6 +107,13 @@ def get_many(api_key: str, date: str, date_to: str):
     return response
 
 
+def get_many_by_doc(db_id: str, doc_type: str, doc_dc: str) -> list[dict]:
+
+    data: list[dict] = dao_transaction1.get_many_by_doc(db_id, doc_type, doc_dc)
+
+    return data
+
+
 def get_one(api_key: str, num: int) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
@@ -199,11 +206,9 @@ def put(api_key: str, data: dict):
         descr=data["descr"],
         seqs=seqs,
     )
-    print(11)
 
     tra_num: int = dao_transaction1.put(db_id, tra)
 
-    print(19)
     return {
         "code": 200,
         "message": f"transaction {tra_num} updated",

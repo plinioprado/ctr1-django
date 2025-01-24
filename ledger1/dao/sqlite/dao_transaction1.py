@@ -7,6 +7,8 @@ from ledger1.utils import dbutil
 from ledger1.utils import dateutil
 
 
+# get
+
 def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
     """ return one transaction """
 
@@ -75,6 +77,45 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
     finally:
         con.close()
 
+
+def get_many_by_doc(db_id: str, doc_type: str, doc_dc) -> list[dict]:
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text: str = """
+        SELECT
+            td.doc_type,
+            td.doc_num,
+            td.dc,
+            t.dt,
+            t.descr,
+            td.val
+        FROM transaction1_detail td
+            INNER JOIN transaction1 t ON t.num = td.num
+        WHERE td.doc_type = ? AND td.dc = ?
+        ORDER BY td.num, td.seq DESC
+        """
+
+        query_params: tuple = (doc_type, doc_dc)
+
+        data = []
+        for row in cur.execute(query_text, query_params):
+            data.append({
+                "doc_type": row["doc_type"],
+                "doc_num": row["doc_num"],
+                "doc_dc": row["dc"] == 1,
+                "dt": dateutil.date_timestamp_to_iso(row["dt"]),
+                "descr": row["descr"],
+                "val": row["val"],
+            })
+
+        return data
+
+    except sqlite3.Error as err:
+        raise IOError(f"Error getting transaction: {str(err)}") from err
+    finally:
+        con.close()
 
 def get_one(db_id: str, num: int) -> Transaction1 | None:
     """ return one transaction """
@@ -156,6 +197,8 @@ def get_num_by_doc(db_id: str, doc_type: str, doc_num: str) -> int:
         con.close()
 
 
+# post
+
 def post(db_id: str, tra: Transaction1) -> int | None:
     """ insert one transaction
 
@@ -223,8 +266,6 @@ def put(db_id: str, tra: Transaction1):
 
     try:
 
-        print(111)
-
         query_text = """
         UPDATE transaction1 SET
             dt = ?,
@@ -238,12 +279,7 @@ def put(db_id: str, tra: Transaction1):
             tra.num)
         cur.execute(query_text, query_params)
 
-        print(112)
-        print(tra.asdict())
-
         cur.execute(f"DELETE FROM transaction1_detail WHERE num = {tra.num};")
-
-        print(113)
 
         query_text = """
         INSERT INTO transaction1_detail
@@ -261,11 +297,7 @@ def put(db_id: str, tra: Transaction1):
             ) for (k, seq) in enumerate(tra.seqs)]
         cur.executemany(query_text, query_data)
 
-        print(114)
-
         con.commit()
-
-        print(119)
 
         return tra.num
 
