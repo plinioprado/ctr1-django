@@ -30,10 +30,17 @@ def view(request: Request, doc_type: str = None, doc_num: str = None) -> Respons
                 doc_num=doc_num)
 
         elif request.method == "POST":
-            ret = documents.post(api_key, data=request.data)
+            ret = documents.post(
+                api_key,
+                doc_type=doc_type,
+                data=request.data)
 
         elif request.method == "PUT":
-            ret = documents.put(api_key, data=request.data)
+            ret = documents.put(
+                api_key,
+                doc_type=doc_type,
+                doc_num=doc_num,
+                data=request.data)
 
         elif request.method == "DELETE":
             ret = documents.delete(

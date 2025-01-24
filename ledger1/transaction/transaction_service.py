@@ -193,18 +193,23 @@ def put(api_key: str, data: dict):
         )
     ) for seq in data["seqs"]]
 
-
     tra: Transaction1 = Transaction1(
         num=data["num"],
         date=data["date"],
         descr=data["descr"],
         seqs=seqs,
     )
-    dao_num: int = dao_transaction1.put(db_id, tra)
+    print(11)
 
+    tra_num: int = dao_transaction1.put(db_id, tra)
+
+    print(19)
     return {
         "code": 200,
-        "message": f"transaction {dao_num} updated"
+        "message": f"transaction {tra_num} updated",
+        "data": {
+            "tra_num": tra_num
+        }
     }
 
 

@@ -144,6 +144,7 @@ def test_post_inv2_sell():
 
     response = documents.post(
         api_key=API_KEY,
+        doc_type="inv2",
         data={
             "cpart_name": "Ccc Ltd",
             "descr": "sale to Ccc Ltd",

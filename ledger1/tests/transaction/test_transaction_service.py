@@ -2,7 +2,7 @@
 
 # pylint: disable=missing-function-docstring
 
-import ledger1.transaction.transaction_service as service
+import ledger1.transaction.transaction_service as transactions
 from ledger1.admin import admin
 from ledger1.tests.utils import test_util
 
@@ -16,7 +16,7 @@ def test_get_one():
         api_key=API_KEY,
         param="reset")
 
-    result = service.get(
+    result = transactions.get(
         api_key=API_KEY,
         num=1)
 
@@ -50,7 +50,7 @@ def test_get_one():
     assert result["options"]["accounts"][0] == {'text': 'assets', 'value': '1.0.0'}
 
 
-    result = service.get(
+    result = transactions.get(
         api_key=API_KEY,
         num=999)
 
@@ -64,7 +64,7 @@ def test_get_one():
 
 def test_post():
 
-    result = service.post(
+    result = transactions.post(
         api_key=API_KEY,
         data={
             "date": "2020-01-25",
@@ -97,7 +97,7 @@ def test_post():
         "message": f"transaction {next_num} created"
     }
 
-    result2 = service.get(
+    result2 = transactions.get(
         api_key=API_KEY,
         num=next_num)
 
@@ -130,9 +130,9 @@ def test_post():
         }
 
 
-def test_update():
+def test_put():
 
-    result = service.put(
+    result = transactions.put(
         api_key=API_KEY,
         data={
         "num": next_num,
@@ -160,12 +160,10 @@ def test_update():
         ]
     })
 
-    assert result == {
-        "code": 200,
-        "message": f"transaction {next_num} updated"
-    }
+    assert result["code"] == 200
+    assert result["message"] == f"transaction {next_num} updated"
 
-    result2 = service.get(
+    result2 = transactions.get(
         api_key=API_KEY,
         num=next_num)
 
@@ -199,7 +197,7 @@ def test_update():
 
 def test_delete():
 
-    result = service.delete(
+    result = transactions.delete(
         api_key=API_KEY,
         num=next_num)
 
@@ -208,7 +206,7 @@ def test_delete():
         "message": f"transaction {next_num} deleted"
     }
 
-    result2 = service.get(
+    result2 = transactions.get(
         api_key=API_KEY,
         num=next_num)
 

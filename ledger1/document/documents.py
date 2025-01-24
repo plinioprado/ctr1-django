@@ -48,7 +48,7 @@ def get( # pylint: disable=too-many-locals
             data_options = {}
 
         else:
-            data = _get_many_data_tra(
+            data = _get_many_tra(
                 db_id,
                 doc_dc=doc_dc,
                 doc_type=doc_type)
@@ -73,7 +73,11 @@ def get( # pylint: disable=too-many-locals
     elif doc_num == "new":
 
         if doc_type_is_tra is False and doc_type != "bstat2":
-            doc: Document = _get_document_obj(db_id, doc_dc=doc_dc, doc_type=doc_type)
+            doc: Document = _get_document_tra_obj(
+                db_id,
+                doc_dc=doc_dc,
+                doc_type=doc_type,
+                doc_num="")
             fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
             doc.add_fields_data(fields)
             data = doc.get_to_response_acc()
@@ -83,8 +87,12 @@ def get( # pylint: disable=too-many-locals
         else:
 
             # set primary attributes
-            doc: Document = _get_document_obj(db_id, doc_dc=doc_dc, doc_type=doc_type)
-            #data = doc.get_new()
+            doc: Document = _get_document_tra_obj(
+                db_id,
+                doc_dc=doc_dc,
+                doc_type=doc_type,
+                doc_num="")
+
             op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=doc_dc)
 
             # set terciary attributes
@@ -131,7 +139,12 @@ def get( # pylint: disable=too-many-locals
             op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
 
             # set primary attributes (transaction)
-            doc: Document = _get_document_obj(db_id, doc_dc=tra_doc_dc, doc_type=doc_type)
+            doc: Document = _get_document_tra_obj(
+                db_id,
+                doc_dc=tra_doc_dc,
+                doc_type=doc_type,
+                doc_num=doc_num)
+
             doc.set_from_transaction(tra, op_seq_acc)
 
             # set secondary attributes (document)
@@ -159,7 +172,6 @@ def get( # pylint: disable=too-many-locals
     return response
 
 
-
 def _get_many_acc(db_id: str, doc_type: str) -> list[dict]:
     accs: list[dict] = accounts.get_many_by_doc(db_id, doc_type)
 
@@ -173,10 +185,11 @@ def _get_many_acc(db_id: str, doc_type: str) -> list[dict]:
     return data
 
 
-def _get_many_data_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
+def _get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
     data = dao_document.get_many_tra(db_id, doc_dc=doc_dc, doc_type=doc_type)
 
     return data
+
 
 def get_one(
         db_id: str,
@@ -188,7 +201,11 @@ def get_one(
     tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
     doc_dc = [seq for seq in tra["seqs"] if seq["doc"]["type"] == doc_type][0]["dc"]
 
-    doc: Document = _get_document_obj(db_id, doc_dc=doc_dc, doc_type=doc_type)
+    doc: Document = _get_document_tra_obj(
+        db_id,
+        doc_dc=doc_dc,
+        doc_type=doc_type,
+        doc_num=doc_num)
     doc.set_from_transaction(tra, op_seq_acc)
 
     res: dict = dao_document.get_one(db_id, doc_type, doc_num)
@@ -198,53 +215,31 @@ def get_one(
     return data
 
 
-def _get_one_acc(db_id: str, doc_type: str) -> list[dict]:
-    accs: list[dict] = accounts.get_many_by_doc(db_id, doc_type)
-
-    data = []
-    for acc in accs:
-        fields = dao_document_field.get_one(
-            db_id,
-            doc_type=acc["doc_type"],
-            doc_num=acc["doc_num"])
-
-        data.append({
-            "doc_type": acc["doc_type"],
-            "doc_num": acc["doc_num"],
-            "acc_num": acc["num"],
-            "doc_dc": acc["dc"],
-            "descr": acc["name"],
-            "fields": fields,
-        })
-
-    return data
-
-
 # post
 
-def post(api_key: str, data) -> dict:
+def post(api_key: str, doc_type: str, data) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    doc_types: list[dict] = DocumentTypes(db_id).asdict()
-    doc_type_dict = [tp for tp in doc_types if tp["id"] == data["doc_type"]][0]
-    doc_type_is_tra = doc_type_dict["traacc"]
-    doc_dc: bool = data["doc_dc"] if "doc_dc" in data else None
+    doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, data["doc_type"])
 
     if doc_type_is_tra:
+        doc_dc: bool = data["doc_dc"] if "doc_dc" in data else None
         op_seq_acc = document_options.get_op_seq_acc(
             doc_dc=doc_dc,
             doc_type=data["doc_type"])
-        doc: Document = _get_document_obj(
+        doc: Document = _get_document_tra_obj(
             db_id,
             doc_dc=doc_dc,
-            doc_type=data["doc_type"])
+            doc_type=data["doc_type"],
+            doc_num=data["doc_num"])
         doc.set_from_request(data, op_seq_acc)
         transactions.post(api_key, doc.get_to_transaction())
     else:
         doc: DocumentAccount = _get_document_acc_obj(
             db_id,
-            doc_type=data["doc_type"])
+            doc_type=data["doc_type"],
+            doc_num=None)
         doc.set_from_request(data)
         accounts.post_data(db_id, doc.get_to_account())
 
@@ -255,34 +250,71 @@ def post(api_key: str, data) -> dict:
         "message": f"document {data["doc_type"]} {data["doc_num"]} created"
     }
 
-def _post_acc(db_id: str, data: dict) -> dict:
-    doc: DocumentAccount = _get_document_acc_obj(db_id, data["doc_type"])
-    doc.set_from_request(data)
-    accounts.post_data(db_id, doc.get_to_account())
+
+# put
+
+
+def put(
+        api_key: str,
+        doc_type: str,
+        doc_num: str,
+        data) -> dict:
+
+    db_id: str = entities.get_db_id_by_api_key(api_key)
+
+    doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
+
+    if doc_type_is_tra:
+        print(1)
+        doc_dc: bool = data["doc_dc"] if "doc_dc" in data else None
+        print(2)
+        op_seq_acc = document_options.get_op_seq_acc(
+            doc_dc=doc_dc,
+            doc_type=data["doc_type"])
+        print(3, doc_num)
+        tra_num = transactions.get_by_doc(db_id, doc_type, doc_num)["num"]
+        doc: Document = _get_document_tra_obj(
+            db_id,
+            doc_dc=doc_dc,
+            doc_type=data["doc_type"],
+            doc_num=doc_num,
+            tra_num=tra_num)
+        print(4)
+        doc.set_from_request(data, op_seq_acc)
+        print(5, doc.get_to_transaction())
+        transactions.put(api_key, doc.get_to_transaction())
+        print(6)
+    else:
+        doc: DocumentAccount = _get_document_acc_obj(
+            db_id,
+            doc_type=doc_type,
+            doc_num=doc_num)
+        doc.set_from_request(data)
+        accounts.put_data(db_id, doc.get_to_account())
+
+    dao_document.post(db_id, doc.get_to_document())
 
     return {
         "status": 200,
         "message": f"document {data["doc_type"]} {data["doc_num"]} created"
     }
 
-# put
+# def put(api_key: str, data: dict) -> dict:
 
-def put(api_key: str, data: dict) -> dict:
+#     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+#     op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+#     doc = _get_document_tra_obj(db_id, doc_dc=data["doc_dc"], doc_type=data["doc_type"])
+#     doc.set_from_request(data, op_seq_acc)
+#     tra = transactions.get_by_doc(db_id, data["doc_type"], data["doc_num"])
+#     doc.tra_num = tra["num"]
+#     transactions.put(api_key, doc.get_to_transaction())
+#     dao_document.put(db_id, doc.get_to_document())
 
-    op_seq_acc = document_options.get_op_seq_acc(doc_dc=data["doc_dc"], doc_type=data["doc_type"])
-    doc = _get_document_obj(db_id, doc_dc=data["doc_dc"], doc_type=data["doc_type"])
-    doc.set_from_request(data, op_seq_acc)
-    tra = transactions.get_by_doc(db_id, data["doc_type"], data["doc_num"])
-    doc.tra_num = tra["num"]
-    transactions.put(api_key, doc.get_to_transaction())
-    dao_document.put(db_id, doc.get_to_document())
-
-    return {
-        "status": 200,
-        "message": f"document {data["doc_type"]} {data["doc_num"]} updated"
-    }
+#     return {
+#         "status": 200,
+#         "message": f"document {data["doc_type"]} {data["doc_num"]} updated"
+#     }
 
 
 # delete
@@ -304,18 +336,36 @@ def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
 ## helpers
 
-def _get_document_obj(db_id: str, doc_dc: bool, doc_type: str) -> Document:
+def _get_doc_type_is_tra(db_id: str, doc_type: str) -> bool:
+
+    doc_types: list[dict] = DocumentTypes(db_id).asdict()
+    doc_type_dict: dict = [tp for tp in doc_types if tp["id"] == doc_type][0]
+    doc_type_is_tra: bool = doc_type_dict["traacc"]
+
+    return doc_type_is_tra
+
+
+def _get_document_tra_obj(
+        db_id: str,
+        doc_dc: bool,
+        doc_type: str,
+        doc_num: str,
+        tra_num: str = None) -> Document:
     document_types: DocumentTypes = DocumentTypes(db_id)
     document_type: dict = document_types.get(doc_type)
 
     return Document(
+        document_type=document_type,
         doc_dc=doc_dc,
-        document_type=document_type)
+        doc_num=doc_num,
+        tra_num=tra_num)
 
 
+def _get_document_acc_obj(
+        db_id: str,
+        doc_type: str,
+        doc_num: str = None) -> DocumentAccount:
 
-
-def _get_document_acc_obj(db_id: str, doc_type: str) -> DocumentAccount:
     document_types: DocumentTypes = DocumentTypes(db_id)
     document_type: dict = document_types.get(doc_type)
 

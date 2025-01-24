@@ -36,9 +36,19 @@ class Document:
     options: dict = {}
 
 
-    def __init__(self, document_type: dict, doc_dc: bool=None):
+    def __init__(
+            self,
+            document_type: dict,
+            doc_dc: bool=None,
+            doc_num: str=None,
+            tra_num: str=None):
+
         self.doc_type = document_type["id"]
         self.doc_dc = doc_dc
+        print(1111, doc_num)
+        self.doc_num = doc_num
+        self.tra_num = tra_num
+        print(1112, self.doc_num)
         self.doc_type_name = document_type["name"]
         self.num_on_seq = document_type["num_on_seq"]
         self.cpart_role = document_type["cpart_role_d"] if self.doc_type else document_type["cpart_role_c"]
@@ -70,14 +80,10 @@ class Document:
 
 
     def set_from_request(self, data: dict, op_seq_acc: list[dict]):
+        # doc_type, doc_dc and and doc_num were already set in the instantiation
         self.cpart_name = data["cpart_name"]
-        self.doc_type = data["doc_type"]
-        self.doc_num = data["doc_num"]
-        self.doc_dc = data["doc_dc"]
-
         self.dt = data["dt"]
         self.descr = data["descr"]
-        self.tra_num = None
         if "fields" in data.keys():
             self.fields = data["fields"]
 
@@ -94,16 +100,6 @@ class Document:
                 acc=str(op["acc"]),
                 val=float(doc_seq[0]["val"])
             ))
-
-    # def set_from_request_acc(self, data: dict):
-    #     self.doc_type = data["doc_type"]
-    #     self.doc_num = data["doc_num"]
-
-    #     self.descr = data["descr"]
-    #     self.tra_num = None
-    #     if "fields" in data.keys():
-    #         self.fields = data["fields"]
-
 
     def add_document_data(self, data) -> None:
         self.cpart_name = data["cpart_name"]

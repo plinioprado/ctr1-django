@@ -223,6 +223,8 @@ def put(db_id: str, tra: Transaction1):
 
     try:
 
+        print(111)
+
         query_text = """
         UPDATE transaction1 SET
             dt = ?,
@@ -236,7 +238,12 @@ def put(db_id: str, tra: Transaction1):
             tra.num)
         cur.execute(query_text, query_params)
 
+        print(112)
+        print(tra.asdict())
+
         cur.execute(f"DELETE FROM transaction1_detail WHERE num = {tra.num};")
+
+        print(113)
 
         query_text = """
         INSERT INTO transaction1_detail
@@ -254,7 +261,11 @@ def put(db_id: str, tra: Transaction1):
             ) for (k, seq) in enumerate(tra.seqs)]
         cur.executemany(query_text, query_data)
 
+        print(114)
+
         con.commit()
+
+        print(119)
 
         return tra.num
 

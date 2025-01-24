@@ -93,17 +93,22 @@ def put(api_key: str, data: dict) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    acc = Account1(
-        num=data["num"],
-        name=data["name"],
-        dc=data["dc"])
-
-    acc_num: str = dao_account1.put(db_id, acc)
+    acc_num: str = put_data(db_id, data)
 
     return {
         "code": 200,
         "message": f"account {acc_num} updated"
     }
+
+
+def put_data(db_id: str, data: dict) -> str:
+
+    acc = Account1()
+    acc.set_from_data(data)
+
+    acc_num: str = dao_account1.put(db_id, acc)
+
+    return acc_num
 
 
 # delete

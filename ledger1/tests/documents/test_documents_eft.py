@@ -137,6 +137,7 @@ def test_post_eft_pay():
 
     response = documents.post(
         api_key=API_KEY,
+        doc_type="eft",
         data={
             "doc_type": "eft",
             "doc_num": "1.99",
@@ -166,6 +167,8 @@ def test_put_eft_pay():
 
     response = documents.put(
         api_key=API_KEY,
+        doc_type="eft",
+        doc_num="1.99",
         data={
             "doc_type": "eft",
             "doc_num": "1.99",
