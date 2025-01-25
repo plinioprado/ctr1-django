@@ -132,17 +132,44 @@ def test_post_eft_pay():
     response = documents.post(
         api_key=API_KEY,
         doc_type="eft",
-        data={
+        data= {
             "doc_type": "eft",
             "doc_num": "1.99",
             "doc_dc": False,
             "dt": "2020-01-22",
             "descr": "some payment",
+            "fields": {
+                "payment": {
+                "account_num": "54321",
+                "institution_num": "003",
+                "transit_num": "55555",
+                "type": "EFT"
+                },
+                "person": {
+                "address": "101, Main st, suite 1001",
+                "city": "Vancouver",
+                "country": "Canada",
+                "name": "Jack Black",
+                "pcode": "V6E 1R1",
+                "province": "BC"
+                }
+            },
             "seqs": [
-                { "type": "base", "text": "", "acc": "2.1.1", "val": 100 },
-                { "type": "tot", "text": "", "acc": "1.1.2", "val": 100 }
-            ]
-        })
+                {
+                "type": "base",
+                "text": "",
+                "acc": "2.1.1",
+                "val": "110"
+                },
+                {
+                "type": "tot",
+                "text": "",
+                "acc": "1.1.2",
+                "val": 110
+                }
+            ],
+            "doc_dc_name": "Pay"
+            })
 
     assert response['message'] == "document eft 1.99 created"
     assert response['status'] == 200
@@ -162,27 +189,42 @@ def test_put_eft_pay():
         api_key=API_KEY,
         doc_type="eft",
         doc_num="1.99",
-        data={
+        data= {
             "doc_type": "eft",
             "doc_num": "1.99",
             "doc_dc": False,
-            "dt": "2020-01-24",
+            "dt": "2020-01-22",
             "descr": "some payment2",
+            "fields": {
+                "payment": {
+                "account_num": "54321",
+                "institution_num": "003",
+                "transit_num": "55555",
+                "type": "EFT"
+                },
+                "person": {
+                "address": "101, Main st, suite 1001",
+                "city": "Vancouver",
+                "country": "Canada",
+                "name": "Jack Black",
+                "pcode": "V6E 1R1",
+                "province": "BC"
+                }
+            },
             "seqs": [
                 {
-                    "type": "base",
-                    "text": "account payable",
-                    "acc": "2.1.1",
-                    "val": 111.00
+                "type": "base",
+                "text": "",
+                "acc": "2.1.1",
+                "val": "110"
                 },
                 {
-                    "type": "tot",
-                    "text": "from acc 003.55555.7777777",
-                    "acc": "1.1.2",
-                    "val": 111.00
+                "type": "tot",
+                "text": "",
+                "acc": "1.1.2",
+                "val": 110
                 }
             ]
-
         })
 
     assert response['message'] == "document eft 1.99 updated"

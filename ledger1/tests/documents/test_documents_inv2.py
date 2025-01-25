@@ -144,7 +144,7 @@ def test_post_inv2_sell():
             "doc_num": "1.9",
             "doc_dc": False,
             "dt": "2020-01-22",
-            "descr": "ddd",
+            "descr": "sale to Ccc Ltd",
             "fields": {
                 "payment": {
                 "account_num": "543211",

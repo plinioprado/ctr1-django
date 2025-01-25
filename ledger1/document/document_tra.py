@@ -21,13 +21,13 @@ class DocumentTransaction(Document):
         self.db_id = db_id
         self.doc_type = doc_type
         self.doc_dc = doc_dc
+        self.tra_num = tra_num
         self.num_on_seq = document_type["num_on_seq"]
         self.op_seq_acc = op_seq_acc
 
         # to be set later
         self.doc_num = None
         self.descr = None
-        self.tra_num = None
         self.dt = None
 
         self.fields = {}

@@ -195,8 +195,6 @@ def put(api_key: str, data: dict):
         data: data of the transaction to be updated as a dict
     """
 
-    print(11, data)
-
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
     seqs: list[Transaction1Seq] = [Transaction1Seq(
@@ -215,8 +213,6 @@ def put(api_key: str, data: dict):
         descr=data["descr"],
         seqs=seqs,
     )
-
-    print(12, tra)
 
     tra_num: int = dao_transaction1.put(db_id, tra)
 

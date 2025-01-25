@@ -81,7 +81,13 @@ def get( # pylint: disable=too-many-locals
         else:
             op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=doc_dc)
             document_type: dict = _get_document_type(db_id, doc_type)
-            doc: DocumentTransaction = DocumentTransaction(db_id, doc_type, doc_dc, document_type, op_seq_acc)
+            doc: DocumentTransaction = DocumentTransaction(
+                db_id=db_id,
+                doc_type=doc_type,
+                doc_dc=doc_dc,
+                tra_num=None,
+                document_type=document_type,
+                op_seq_acc=op_seq_acc)
 
         doc.set_from_new()
         doc.set_from_fields(fields)
@@ -128,7 +134,14 @@ def get( # pylint: disable=too-many-locals
             op_seq_acc = document_options.get_op_seq_acc(doc_type=doc_type, doc_dc=tra_doc_dc)
             document_type: dict = _get_document_type(db_id, doc_type)
 
-            doc: DocumentTransaction = DocumentTransaction(db_id, doc_type, tra_doc_dc, document_type, op_seq_acc)
+            doc: DocumentTransaction = DocumentTransaction(
+                db_id=db_id,
+                doc_type=doc_type,
+                doc_dc=doc_dc,
+                tra_num=None,
+                document_type=document_type,
+                op_seq_acc=op_seq_acc)
+
             doc.set_from_transaction(tra, op_seq_acc)
             doc.set_from_fields(fields)
             data = doc.get_to_response()
@@ -189,6 +202,8 @@ def _get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
 
 def post(api_key: str, doc_type: str, data) -> dict:
 
+    print(1, data)
+
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, data["doc_type"])
@@ -201,7 +216,14 @@ def post(api_key: str, doc_type: str, data) -> dict:
 
         document_type: dict = _get_document_type(db_id, doc_type)
 
-        doc: DocumentTransaction = DocumentTransaction(db_id, doc_type, data["doc_dc"], document_type, op_seq_acc)
+        doc: DocumentTransaction = DocumentTransaction(
+            db_id=db_id,
+            doc_type=doc_type,
+            doc_dc=data["doc_dc"],
+            tra_num=None,
+            document_type=document_type,
+            op_seq_acc=op_seq_acc)
+
         doc.set_from_request(data, op_seq_acc)
 
         tra: dict = doc.get_to_transaction()
@@ -240,8 +262,16 @@ def put(
             doc_type=data["doc_type"],
             doc_dc=data["doc_dc"])
 
+        tra_num: str = transactions.get_by_doc(db_id, doc_type, data["doc_num"])["num"]
+
         document_type = _get_document_type(db_id, doc_type)
-        doc: DocumentTransaction = DocumentTransaction(db_id, doc_type, data["doc_dc"], document_type, op_seq_acc)
+        doc: DocumentTransaction = DocumentTransaction(
+            db_id=db_id,
+            doc_type=doc_type,
+            doc_dc=data["doc_dc"],
+            tra_num=tra_num,
+            document_type=document_type,
+            op_seq_acc=op_seq_acc)
         doc.set_from_request(data, op_seq_acc)
         transactions.put(api_key, doc.get_to_transaction())
 
@@ -285,32 +315,6 @@ def _get_doc_type_is_tra(db_id: str, doc_type: str) -> bool:
     doc_type_is_tra: bool = doc_type_dict["traacc"]
 
     return doc_type_is_tra
-
-
-def _get_document_tra_obj(
-        db_id: str,
-        doc_dc: bool,
-        doc_type: str,
-        doc_num: str,
-        tra_num: str = None) -> Document:
-    document_types: DocumentTypes = DocumentTypes(db_id)
-    document_type: dict = document_types.get(doc_type)
-
-    return Document(
-        document_type=document_type,
-        doc_dc=doc_dc,
-        doc_num=doc_num,
-        tra_num=tra_num)
-
-
-def _get_document_acc_obj(
-        db_id: str,
-        doc_type: str,
-        doc_num: str = None) -> DocumentAccount:
-
-    doc: DocumentAccount = DocumentAccount(db_id, doc_type)
-
-    return doc
 
 
 def _get_format(doc_type:str, is_list: bool) -> dict:
