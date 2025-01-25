@@ -320,7 +320,6 @@ def delete(db_id: str, num: int) -> int:
     con, cur = dbutil.get_connection(db_id)
 
     try:
-        cur.execute(f"DELETE FROM transaction1 WHERE num = {num};")
         cur.execute(f"DELETE FROM transaction1_detail WHERE num = {num};")
         con.commit()
 

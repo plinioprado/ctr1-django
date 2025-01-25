@@ -10,7 +10,7 @@ def test_get_many_gic():
         doc_num=None)
 
     assert response["status"] == 200
-    assert response["message"] == "wip"
+    assert response["message"] == "ok"
     assert response["data"] == [
         {
             "doc_type": "gic",
@@ -31,6 +31,7 @@ def test_get_one_gic():
     assert response["status"] == 200
     assert response["message"] == "ok"
     assert response["data"] == {
+        "doc_type": "gic",
         "doc_num": "003.55555.444444444",
         "descr": "GIC",
         "acc_num": "1.1.4",
@@ -49,7 +50,8 @@ def test_get_one_gic():
                 "redemption_rate": "0.04840",
                 "term": "1 year"
             }
-        }
+        },
+        "seqs": []
     }
 
 
@@ -61,7 +63,7 @@ def test_get_new_gic():
         doc_num="new")
 
     assert response["status"] == 200
-    assert response["message"] == "wip"
+    assert response["message"] == "ok"
     assert response["data"] == {
         "doc_type": "gic",
         "doc_num": "",
@@ -82,7 +84,8 @@ def test_get_new_gic():
                 "redemption_rate": "",
                 "term": ""
             }
-        }
+        },
+        "seqs": []
     }
 
 

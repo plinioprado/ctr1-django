@@ -46,7 +46,6 @@ def get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
                 "doc_num": row["doc_num"],
                 "doc_dc": row["dc"] == 1,
                 "dt": dateutil.date_timestamp_to_iso(row["dt"]),
-                "cpart_name": row["cpart_name"],
                 "descr": row["descr"],
                 "val": row["val"],
             })
@@ -55,9 +54,6 @@ def get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
         raise ValueError(f"getting documents {str(err)}") from err
     finally:
         con.close()
-
-
-
 
 
 def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
@@ -91,16 +87,6 @@ def post(db_id: str, data: dict):
     con, cur = dbutil.get_connection(db_id)
 
     try:
-        query_text: str = """
-        INSERT INTO document (
-            doc_type,
-            doc_num,
-            cpart_name
-        )
-        VALUES (?, ?, ?);
-        """
-        query_params = (data["doc_type"],data["doc_num"],data["cpart_name"])
-        cur.execute(query_text, query_params)
 
         if data["fields"]:
             query_text2: str = """
@@ -178,37 +164,30 @@ def put(db_id: str, data: dict):
     con, cur = dbutil.get_connection(db_id)
 
     try:
-        query_text: str = """
-        UPDATE document
-        SET
-            cpart_name = ?
-        WHERE doc_type = ? AND doc_num = ?;
-        """
-        query_params = (data["cpart_name"],data["doc_type"],data["doc_num"])
-        cur.execute(query_text, query_params)
 
-        query_text2: str = """
-        UPDATE document_field
-        SET
-            field_value = ?
-        WHERE
-            doc_type = ? AND
-            doc_num = ? AND
-            field_group = ? AND
-            field_name = ?
-        """
-        for field_group in data["fields"]:
-            for field_name in data["fields"][field_group]:
-                query_params2 = (
-                    data["fields"][field_group][field_name],
-                    data["doc_type"],
-                    data["doc_num"],
-                    field_group,
-                    field_name,
-                )
-                cur.execute(query_text2, query_params2)
+        if "fields" in data.keys():
+            query_text: str = """
+            UPDATE document_field
+            SET
+                field_value = ?
+            WHERE
+                doc_type = ? AND
+                doc_num = ? AND
+                field_group = ? AND
+                field_name = ?
+            """
+            for field_group in data["fields"]:
+                for field_name in data["fields"][field_group]:
+                    query_params = (
+                        data["fields"][field_group][field_name],
+                        data["doc_type"],
+                        data["doc_num"],
+                        field_group,
+                        field_name,
+                    )
+                    cur.execute(query_text, query_params)
 
-        con.commit()
+            con.commit()
 
         return {"doc_type": data["doc_type"],"doc_num": data["doc_num"]}
 
@@ -226,17 +205,11 @@ def delete(db_id: str, doc_type: str, doc_num: str):
 
     try:
         query_text = """
-        DELETE FROM document
+        DELETE FROM document_field
         WHERE doc_type = ? AND doc_num = ?;
         """
         query_params = (doc_type, doc_num)
         cur.execute(query_text, query_params)
-
-        query_text2 = """
-        DELETE FROM document_field
-        WHERE doc_type = ? AND doc_num = ?;
-        """
-        cur.execute(query_text2, query_params)
 
         con.commit()
 
@@ -247,35 +220,3 @@ def delete(db_id: str, doc_type: str, doc_num: str):
     finally:
         con.close()
 
-
-def restore(db_id: str, file_name) -> None:
-    """ Restore from CSV """
-
-    con, cur = dbutil.get_connection(db_id)
-
-    try:
-        with open(file_name, "r", encoding="UTF-8") as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                cur.execute(
-                    """
-                    INSERT INTO document (
-                        doc_type,
-                        doc_num,
-                        acc_num,
-                        cpart_name
-                    ) VALUES (?, ?, ?, ?);
-                    """,
-                    (
-                        str(row["doc_type"]),
-                        str(row["doc_num"]),
-                        str(row["acc_num"]),
-                        str(row["cpart_name"])
-                    )
-                )
-                con.commit()
-
-    except sqlite3.DatabaseError as err:
-        raise ValueError(f"restoring document {str(err)}") from err
-    finally:
-        con.close()

@@ -21,7 +21,7 @@ def test_get_many_eft_pay():
         'dt': '2020-01-05',
         'val': 190.0,
     }
-    assert response['message'] == 'wip'
+    assert response['message'] == 'ok'
     assert response['status'] == 200
 
 
@@ -33,11 +33,8 @@ def test_get_one_eft_pay():
         doc_num=1.1)
 
     assert response["data"] == {
-        "cpart_name": "Jack Black",
-        "cpart_role": "Payer",
         "descr": "pmt lawyer fees",
         "doc_type": "eft",
-        "doc_type_name": "EFT",
         "doc_num": "1.1",
         "doc_dc": False,
         "dt": "2020-01-05",
@@ -78,7 +75,7 @@ def test_get_one_eft_pay():
             }
         },
     }
-    assert response['message'] == 'wip'
+    assert response['message'] == 'ok'
     assert response['status'] == 200
 
 
@@ -89,16 +86,13 @@ def test_get_new_eft_pay():
         doc_type="eft",
         doc_num="new")
 
-    assert response['message'] == 'wip'
+    assert response['message'] == 'ok'
     assert response['status'] == 200
     assert response["data"] == {
         "doc_type": "eft",
         "doc_num": "",
         "doc_dc": False,
-        "doc_type_name": "EFT",
         "dt": "",
-        "cpart_name": "",
-        "cpart_role": "Payer",
         "descr": "",
         "seqs": [
             {
@@ -143,7 +137,6 @@ def test_post_eft_pay():
             "doc_num": "1.99",
             "doc_dc": False,
             "dt": "2020-01-22",
-            "cpart_name": "ccc",
             "descr": "some payment",
             "seqs": [
                 { "type": "base", "text": "", "acc": "2.1.1", "val": 100 },
@@ -174,7 +167,6 @@ def test_put_eft_pay():
             "doc_num": "1.99",
             "doc_dc": False,
             "dt": "2020-01-24",
-            "cpart_name": "test Ltd.",
             "descr": "some payment2",
             "seqs": [
                 {

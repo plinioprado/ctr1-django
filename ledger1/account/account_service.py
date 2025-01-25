@@ -51,6 +51,13 @@ def get_many_by_doc(db_id: str, doc_type: str) -> list[dict]:
     return data
 
 
+def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
+
+    data: dict = dao_account1.get_one_by_doc(db_id, doc_type, doc_num)
+
+    return data
+
+
 # post
 
 def post(api_key: str, data: dict) -> dict:

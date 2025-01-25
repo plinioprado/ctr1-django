@@ -153,6 +153,19 @@ def post(api_key: str, data: dict) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
+    tra_num: str = post_data(db_id, data)
+
+    return {
+        "code": 200,
+        "message": f"transaction {tra_num} created",
+        "data": {
+            "id": tra_num
+        }
+    }
+
+
+def post_data(db_id: str, data: dict) -> dict:
+
     seqs: list[Transaction1Seq] = [Transaction1Seq(
         account=str(seq["account"]),
         val=float(seq["val"]),
@@ -172,13 +185,7 @@ def post(api_key: str, data: dict) -> dict:
 
     tra_num: int = dao_transaction1.post(db_id, tra)
 
-    return {
-        "code": 200,
-        "message": f"transaction {tra_num} created",
-        "data": {
-            "id": tra_num
-        }
-    }
+    return tra_num
 
 
 def put(api_key: str, data: dict):
@@ -187,6 +194,8 @@ def put(api_key: str, data: dict):
     Arguments:
         data: data of the transaction to be updated as a dict
     """
+
+    print(11, data)
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
@@ -206,6 +215,8 @@ def put(api_key: str, data: dict):
         descr=data["descr"],
         seqs=seqs,
     )
+
+    print(12, tra)
 
     tra_num: int = dao_transaction1.put(db_id, tra)
 

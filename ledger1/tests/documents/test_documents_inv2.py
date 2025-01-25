@@ -18,7 +18,7 @@ def test_get_many_inv2_sell():
         'dt': '2020-01-20',
         'val': 1000.0
     }
-    assert response['message'] == 'wip'
+    assert response['message'] == 'ok'
     assert response['status'] == 200
 
 
@@ -38,7 +38,7 @@ def test_get_many_inv2_buy():
         'descr': 'lawyer fees',
         'val': 200.0
     }
-    assert response['message'] == 'wip'
+    assert response['message'] == 'ok'
     assert response['status'] == 200
 
 
@@ -49,16 +49,13 @@ def test_get_one_inv2_sell():
         doc_type="inv2",
         doc_num="1.1")
 
-    assert response['message'] == 'wip'
+    assert response['message'] == 'ok'
     assert response['status'] == 200
     assert response["data"] == {
-        "cpart_name": "Cedar Store Ltd",
-        "cpart_role": "Supplier",
         "descr": 'sale to cedar store ltd',
         "doc_type": "inv2",
         "doc_num": "1.1",
         "doc_dc": False,
-        "doc_type_name": "Invoice",
         "dt": "2020-01-20",
         "seqs": [
             {
@@ -106,14 +103,11 @@ def test_get_new_inv2():
         doc_type="inv2",
         doc_num="new")
 
-    assert response['message'] == 'wip'
+    assert response['message'] == 'ok'
     assert response['status'] == 200
     assert response["data"] == {
-        "cpart_name": "",
-        "cpart_role": "Supplier",
         "descr": "",
         "doc_type": "inv2",
-        "doc_type_name": "Invoice",
         "doc_num": "",
         "doc_dc": False,
         "dt": "",
@@ -146,26 +140,50 @@ def test_post_inv2_sell():
         api_key=API_KEY,
         doc_type="inv2",
         data={
-            "cpart_name": "Ccc Ltd",
-            "descr": "sale to Ccc Ltd",
-            "doc_dc": False,
-            "doc_num": "9.1",
             "doc_type": "inv2",
+            "doc_num": "1.9",
+            "doc_dc": False,
             "dt": "2020-01-22",
+            "descr": "ddd",
+            "fields": {
+                "payment": {
+                "account_num": "543211",
+                "institution_num": "003",
+                "transit_num": "55555",
+                "type": "EFT"
+                },
+                "person": {
+                "address": "101, Main st, suite 1001",
+                "city": "Vancouver",
+                "country": "Canada",
+                "name": "Jack Black",
+                "pcode": "V6E 1R1",
+                "province": "BC"
+                }
+            },
             "seqs": [
-                { "type": "base", "text": "", "acc": "3.1.1", "val": 100 },
-                { "type": "add", "text": "", "acc": "2.1.3", "val": 5 },
-                { "type": "tot", "text": "", "acc": "1.1.3", "val": 105 }
+                {
+                "type": "base",
+                "text": "",
+                "acc": "3.1.1",
+                "val": "10"
+                },
+                {
+                "type": "tot",
+                "text": "",
+                "acc": "1.1.3",
+                "val": 10
+                }
             ]
         })
 
-    assert response['message'] == "document inv2 9.1 created"
+    assert response['message'] == "document inv2 1.9 created"
     assert response['status'] == 200
 
     response2 = documents.get(
         api_key=API_KEY,
         doc_dc=False,
         doc_type="inv2",
-        doc_num="9.1")
+        doc_num="1.9")
 
     assert response2['data']["descr"] == "sale to Ccc Ltd"
