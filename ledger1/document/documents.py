@@ -12,7 +12,6 @@ There are two types of documents with different behaviors:
 
 from ledger1.dao.sqlite import dao_document
 from ledger1.dao.sqlite import dao_document_field
-from ledger1.document.document import Document
 from ledger1.document.document_acc import DocumentAccount
 from ledger1.document.document_tra import DocumentTransaction
 from ledger1.document.aux import document_options
@@ -202,8 +201,6 @@ def _get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
 
 def post(api_key: str, doc_type: str, data) -> dict:
 
-    print(1, data)
-
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, data["doc_type"])
@@ -295,9 +292,16 @@ def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
+    doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
 
-    transactions.delete(api_key, tra["num"])
+    if doc_type_is_tra:
+        tra: dict = transactions.get_by_doc(db_id, doc_type, doc_num)
+        transactions.delete(api_key, tra["num"])
+
+    else:
+        acc = accounts.get_one_by_doc(db_id, doc_type, doc_num)
+        accounts.delete_one(db_id, acc["num"])
+
     deleted_type, deleted_num = dao_document.delete(db_id, doc_type, doc_num)
 
     return {

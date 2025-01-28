@@ -82,5 +82,5 @@ def test_delete():
 
     assert result == {
         "code": 200,
-        "message": "account 9.9.9 deleted"
+        "message": "account 999 deleted"
     }

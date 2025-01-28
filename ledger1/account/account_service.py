@@ -130,18 +130,30 @@ def delete(api_key: str, acc_num: str) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    if acc_num is None:
-        raise ValueError("acc param missing")
-
-    an = f"{acc_num[0:1]}.{acc_num[1:2]}.{acc_num[2:3]}"
-
-    num: str = dao_account1.delete(db_id, an)
+    deleted_num: str = delete_one(db_id, acc_num)
 
     return {
         "code": 200,
-        "message": f"account {num} deleted"
+        "message": f"account {deleted_num} deleted"
     }
 
+
+def delete_one(db_id: str, acc_num: str) -> dict:
+
+    if acc_num is None:
+        raise ValueError("acc param missing")
+
+    if "." in acc_num:
+        num: str = acc_num.replace(".", "")
+    else:
+        num = acc_num
+
+    deleted_num: str = dao_account1.delete(db_id, num)
+
+    return deleted_num
+
+
+# helpers
 
 def get_options(api_key) -> list[dict]:
 

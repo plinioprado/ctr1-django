@@ -120,31 +120,43 @@ def test_post_gic():
     assert response["status"] == 200
 
 
-# def test_put_gic():
-#     response = documents.post(
-#         api_key=API_KEY,
-#         data={
-#             "doc_type": "gic",
-#             "doc_num": "1",
-#             "descr": "eee",
-#             "acc_num": "1.1.5",
-#             "fields": {
-#                 "detail": {
-#                     "anticipated_interest": "0",
-#                     "certificate": "2",
-#                     "effective_date": "1010-01-20",
-#                     "interest_disbursement": "1",
-#                     "interest_payment_frequency": "9",
-#                     "interest_rate": ".06",
-#                     "maturity_date": "2021-01-20",
-#                     "maturity_instructions": "3",
-#                     "next_interest_payment_date": "2020-07-20",
-#                     "redeemable": "8888",
-#                     "redemption_rate": "3",
-#                     "term": "1"
-#                 }
-#             }
-#         })
+def test_put_gic():
+    response = documents.put(
+        api_key=API_KEY,
+        doc_type="gic",
+        doc_num="1",
+        data={
+            "doc_type": "gic",
+            "doc_num": "1",
+            "descr": "eee",
+            "acc_num": "1.1.5",
+            "fields": {
+                "detail": {
+                    "anticipated_interest": "0",
+                    "certificate": "2",
+                    "effective_date": "1010-01-20",
+                    "interest_disbursement": "1",
+                    "interest_payment_frequency": "9",
+                    "interest_rate": ".06",
+                    "maturity_date": "2021-01-20",
+                    "maturity_instructions": "3",
+                    "next_interest_payment_date": "2020-07-20",
+                    "redeemable": "8888",
+                    "redemption_rate": "3",
+                    "term": "1"
+                }
+            }
+        })
 
-#     assert response["message"] == "document gic 1 updated"
-#     assert response["status"] == 200
+    assert response["message"] == "document gic 1 updated"
+    assert response["status"] == 200
+
+
+def test_delete():
+    response = documents.delete(
+        api_key=API_KEY,
+        doc_type="gic",
+        doc_num="1")
+
+    assert response["message"] == "document gic 1 deleted"
+    assert response["status"] == 200

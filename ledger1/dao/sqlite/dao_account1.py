@@ -158,12 +158,15 @@ def put(db_id: str, acc: Account1) -> str:
 # delete
 
 def delete(db_id: str, num: str) -> str:
-    """ Delete account """
 
     con, cur = dbutil.get_connection(db_id)
 
     try:
-        query_text = "DELETE FROM account1 WHERE num = ?;"
+        query_text = """
+            DELETE FROM account1
+                WHERE num = ?
+                RETURNING num;
+            """
         query_params = (num,)
         cur.execute(query_text, query_params)
         con.commit()
