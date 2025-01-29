@@ -11,6 +11,8 @@ from ledger1.admin import entities
 from ledger1.account.account1 import Account1
 from ledger1.dao.sqlite import dao_account1
 
+# get
+
 def get(
         api_key: str,
         acc: str,
@@ -33,8 +35,6 @@ def get(
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
-
     data = dao_account1.get(db_id, af, at)
 
     return {
@@ -43,6 +43,22 @@ def get(
         "data": data
     }
 
+
+def get_many_by_doc(db_id: str, doc_type: str) -> list[dict]:
+
+    data: list[dict] = dao_account1.get_many_by_doc(db_id, doc_type)
+
+    return data
+
+
+def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
+
+    data: dict = dao_account1.get_one_by_doc(db_id, doc_type, doc_num)
+
+    return data
+
+
+# post
 
 def post(api_key: str, data: dict) -> dict:
     """ post (create) transaction
@@ -54,18 +70,25 @@ def post(api_key: str, data: dict) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    acc = Account1(
-        num=data["num"],
-        name=data["name"],
-        dc=data["dc"])
-
-    acc_num: str = dao_account1.post(db_id, acc)
+    acc_num = post_data(db_id, data)
 
     return {
         "code": 200,
         "message": f"account {acc_num} created"
     }
 
+
+def post_data(db_id: str, data: dict) -> str:
+
+    acc = Account1()
+    acc.set_from_data(data)
+
+    acc_num: str = dao_account1.post(db_id, acc)
+
+    return acc_num
+
+
+# put
 
 def put(api_key: str, data: dict) -> dict:
     """ Put (update) account
@@ -77,18 +100,25 @@ def put(api_key: str, data: dict) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    acc = Account1(
-        num=data["num"],
-        name=data["name"],
-        dc=data["dc"])
-
-    acc_num: str = dao_account1.put(db_id, acc)
+    acc_num: str = put_data(db_id, data)
 
     return {
         "code": 200,
         "message": f"account {acc_num} updated"
     }
 
+
+def put_data(db_id: str, data: dict) -> str:
+
+    acc = Account1()
+    acc.set_from_data(data)
+
+    acc_num: str = dao_account1.put(db_id, acc)
+
+    return acc_num
+
+
+# delete
 
 def delete(api_key: str, acc_num: str) -> dict:
     """ Delete account
@@ -100,18 +130,30 @@ def delete(api_key: str, acc_num: str) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
-    if acc_num is None:
-        raise ValueError("acc param missing")
-
-    an = f"{acc_num[0:1]}.{acc_num[1:2]}.{acc_num[2:3]}"
-
-    num: str = dao_account1.delete(db_id, an)
+    deleted_num: str = delete_one(db_id, acc_num)
 
     return {
         "code": 200,
-        "message": f"account {num} deleted"
+        "message": f"account {deleted_num} deleted"
     }
 
+
+def delete_one(db_id: str, acc_num: str) -> dict:
+
+    if acc_num is None:
+        raise ValueError("acc param missing")
+
+    if "." in acc_num:
+        num: str = acc_num.replace(".", "")
+    else:
+        num = acc_num
+
+    deleted_num: str = dao_account1.delete(db_id, num)
+
+    return deleted_num
+
+
+# helpers
 
 def get_options(api_key) -> list[dict]:
 

@@ -1,0 +1,101 @@
+{
+  "h2": "GIC",
+  "head": [
+    {
+      "class": "col-md-3",
+      "label": "Number",
+      "name": "doc_num",
+      "type": "text",
+      "key": true
+    },
+    {
+      "class": "col-md-6",
+      "label": "Description",
+      "name": "descr",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Account",
+      "name": "acc_num",
+      "type": "text",
+      "disabled": true
+    }
+  ],
+  "detail": [
+    {
+      "class": "col-md-3",
+      "label": "Certificate",
+      "name": "fields.detail.certificate",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Redemption Rate",
+      "name": "fields.detail.redemption_rate",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Effective Date",
+      "name": "fields.detail.effective_date",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Interest Rate",
+      "name": "fields.detail.interest_rate",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Maturity Date",
+      "name": "fields.detail.maturity_date",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Term",
+      "name": "fields.detail.term",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Redeemable",
+      "name": "fields.detail.redeemable",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Interest Pmt Frequency",
+      "name": "fields.detail.interest_payment_frequency",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Next Interest pmt Date",
+      "name": "fields.detail.next_interest_payment_date",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Interest Disbursement",
+      "name": "fields.detail.interest_disbursement",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Anticipated Interest",
+      "name": "fields.detail.anticipated_interest",
+      "type": "text"
+    },
+    {
+      "class": "col-md-3",
+      "label": "Maturity Instructions",
+      "name": "fields.detail.maturity_instructions",
+      "type": "text"
+    }
+  ],
+  "parts": true,
+  "payment": true
+}

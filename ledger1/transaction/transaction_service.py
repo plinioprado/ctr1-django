@@ -9,11 +9,11 @@
 
 from ledger1.dao.sqlite import dao_transaction1
 from ledger1.admin import entities
-from ledger1.document.document_types import DocumentTypes
+from ledger1.document.aux.document_types import DocumentTypes
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
 from ledger1.account import account_service
 from ledger1.utils.settings import get as settings_get
-from ledger1.utils.field import date_iso_is_valid, date_iso_to_timestamp
+from ledger1.utils import dateutil
 
 def get(
         api_key: str,
@@ -49,24 +49,24 @@ def get_many(api_key: str, date: str, date_to: str):
 
     if date is None:
         df = settings["filters"]["date_min"]
-    elif not date_iso_is_valid(date):
+    elif not dateutil.date_iso_is_valid(date):
         raise ValueError(f"invalid date {date}")
-    elif date_iso_to_timestamp(date) < date_iso_to_timestamp(settings["filters"]["date_min"]):
+    elif dateutil.date_iso_to_timestamp(date) < dateutil.date_iso_to_timestamp(settings["filters"]["date_min"]):
         raise ValueError(f"invalid date {date}: before min {settings["filters"]["date_min"]}")
-    elif date_iso_to_timestamp(date) > date_iso_to_timestamp(settings["filters"]["date_max"]):
+    elif dateutil.date_iso_to_timestamp(date) > dateutil.date_iso_to_timestamp(settings["filters"]["date_max"]):
         raise ValueError(f"invalid date {date}: after max {settings["filters"]["date_max"]}")
     else:
         df = date
 
     if date_to is None:
         dt = settings["filters"]["date_max"]
-    elif not date_iso_is_valid(date_to):
+    elif not dateutil.date_iso_is_valid(date_to):
         raise ValueError(f"invalid date {date_to}")
-    elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(settings["filters"]["date_min"]):
+    elif dateutil.date_iso_to_timestamp(date_to) < dateutil.date_iso_to_timestamp(settings["filters"]["date_min"]):
         raise ValueError(f"invalid date_to {date_to}: before min {settings["filters"]["date_min"]}")
-    elif date_iso_to_timestamp(date_to) > date_iso_to_timestamp(settings["filters"]["date_max"]):
+    elif dateutil.date_iso_to_timestamp(date_to) > dateutil.date_iso_to_timestamp(settings["filters"]["date_max"]):
         raise ValueError(f"invalid date {date_to}: after max {settings["filters"]["date_max"]}")
-    elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(date):
+    elif dateutil.date_iso_to_timestamp(date_to) < dateutil.date_iso_to_timestamp(date):
         raise ValueError("invalid date_to: before date")
     else:
         dt = date_to
@@ -105,6 +105,13 @@ def get_many(api_key: str, date: str, date_to: str):
         response["options"] = { "accounts": options_account}
 
     return response
+
+
+def get_many_by_doc(db_id: str, doc_type: str, doc_dc: str) -> list[dict]:
+
+    data: list[dict] = dao_transaction1.get_many_by_doc(db_id, doc_type, doc_dc)
+
+    return data
 
 
 def get_one(api_key: str, num: int) -> dict:
@@ -146,6 +153,19 @@ def post(api_key: str, data: dict) -> dict:
 
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
+    tra_num: str = post_data(db_id, data)
+
+    return {
+        "code": 200,
+        "message": f"transaction {tra_num} created",
+        "data": {
+            "id": tra_num
+        }
+    }
+
+
+def post_data(db_id: str, data: dict) -> dict:
+
     seqs: list[Transaction1Seq] = [Transaction1Seq(
         account=str(seq["account"]),
         val=float(seq["val"]),
@@ -165,13 +185,7 @@ def post(api_key: str, data: dict) -> dict:
 
     tra_num: int = dao_transaction1.post(db_id, tra)
 
-    return {
-        "code": 200,
-        "message": f"transaction {tra_num} created",
-        "data": {
-            "id": tra_num
-        }
-    }
+    return tra_num
 
 
 def put(api_key: str, data: dict):
@@ -193,18 +207,21 @@ def put(api_key: str, data: dict):
         )
     ) for seq in data["seqs"]]
 
-
     tra: Transaction1 = Transaction1(
         num=data["num"],
         date=data["date"],
         descr=data["descr"],
         seqs=seqs,
     )
-    dao_num: int = dao_transaction1.put(db_id, tra)
+
+    tra_num: int = dao_transaction1.put(db_id, tra)
 
     return {
         "code": 200,
-        "message": f"transaction {dao_num} updated"
+        "message": f"transaction {tra_num} updated",
+        "data": {
+            "tra_num": tra_num
+        }
     }
 
 
@@ -270,7 +287,7 @@ def get_new(api_key: str) -> dict:
     }
 
 
-def get_by_doc(db_id: str, doc_type: str, doc_num: str):
+def get_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
     num: int = dao_transaction1.get_num_by_doc(db_id, doc_type, doc_num)
     tra: dict = _get_one_data(db_id, num)
 

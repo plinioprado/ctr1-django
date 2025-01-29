@@ -67,7 +67,7 @@ class Transaction1:
             self.num = int(self.num)
 
         try:
-            self.date = datetime.datetime.fromisoformat(self.date).isoformat()[0:10]
+            self.date = datetime.date.fromisoformat(self.date).isoformat()
         except ValueError as err:
             raise ValueError(f"invalid transaction date {self.date}") from err
 

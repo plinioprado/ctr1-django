@@ -1,4 +1,6 @@
 id,name,traacc,num_on_seq,dc_true_name,dc_false_name,cpart_role_d,cpart_role_c,active
 "bstat2","bank statement",0,base,,,,base,1
+"chequing","checking acc",0,base,,,,base,1
+"gic","GIC acc",0,base,,,,base,1
 "inv2","Invoice",1,base,Buy,Sell,Supplier,Customer,1
 "eft","EFT",1,tot,Receive,Pay,Payer,Payee,1

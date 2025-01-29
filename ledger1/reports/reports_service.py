@@ -1,7 +1,8 @@
 """ main service for reports """
 
 from ledger1.utils.settings import get as settings_file_get
-from ledger1.utils.field import date_iso_is_valid, date_iso_to_timestamp, acc_num_is_valid
+from ledger1.utils.field import acc_num_is_valid
+from ledger1.utils import dateutil
 from ledger1.utils import fileio
 from ledger1.admin import admin
 from ledger1.admin import entities
@@ -35,11 +36,11 @@ def service(
         df = None
     if date is None:
         df = settings["filters"]["date_min"]
-    elif not date_iso_is_valid(date):
+    elif not dateutil.date_iso_is_valid(date):
         raise ValueError(f"invalid date {date}")
-    elif date_iso_to_timestamp(date) < date_iso_to_timestamp(settings["filters"]["date_min"]):
+    elif dateutil.date_iso_to_timestamp(date) < dateutil.date_iso_to_timestamp(settings["filters"]["date_min"]):
         raise ValueError(f"invalid date {date}: before min {settings["filters"]["date_min"]}")
-    elif date_iso_to_timestamp(date) > date_iso_to_timestamp(settings["filters"]["date_max"]):
+    elif dateutil.date_iso_to_timestamp(date) > dateutil.date_iso_to_timestamp(settings["filters"]["date_max"]):
         raise ValueError(f"invalid date {date}: after max {settings["filters"]["date_max"]}")
     else:
         df = date
@@ -48,13 +49,13 @@ def service(
         dt = None
     if date_to is None:
         dt = settings["filters"]["date_max"]
-    elif not date_iso_is_valid(date_to):
+    elif not dateutil.date_iso_is_valid(date_to):
         raise ValueError(f"invalid date {date_to}")
-    elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(settings["filters"]["date_min"]):
+    elif dateutil.date_iso_to_timestamp(date_to) < dateutil.date_iso_to_timestamp(settings["filters"]["date_min"]):
         raise ValueError(f"invalid date_to {date_to}: before min {settings["filters"]["date_min"]}")
-    elif date_iso_to_timestamp(date_to) > date_iso_to_timestamp(settings["filters"]["date_max"]):
+    elif dateutil.date_iso_to_timestamp(date_to) > dateutil.date_iso_to_timestamp(settings["filters"]["date_max"]):
         raise ValueError(f"invalid date {date_to}: after max {settings["filters"]["date_max"]}")
-    elif date_iso_to_timestamp(date_to) < date_iso_to_timestamp(date):
+    elif dateutil.date_iso_to_timestamp(date_to) < dateutil.date_iso_to_timestamp(date):
         raise ValueError("invalid date_to: before date")
     else:
         dt = date_to

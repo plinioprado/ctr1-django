@@ -5,17 +5,24 @@
 from ledger1.reports.reports_service import service as reports
 from ledger1.admin import admin
 
+API_KEY: str ="Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p"
+
 def test_chart_accounts():
     """ test chart of accunts """
 
-    admin.get("reset")
+    admin.get(
+        api_key=API_KEY,
+        param="reset")
 
-    result = reports("chart_accounts")
+    result = reports(
+        api_key=API_KEY,
+        name="chart_accounts")
+
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"
     assert isinstance(result["data"], dict)
-    assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "chart of accounts"}
+    assert result["data"]["header"] == {"entity_name": "Test Ltd.", "title": "chart of accounts"}
     assert isinstance(result["data"]["table"], list)
     assert result["data"]["table"][0] == ['num', 'name', 'Dc']
     assert result["data"]["table"][1] == ["1.0.0", "assets", "D"]
@@ -24,12 +31,15 @@ def test_chart_accounts():
 def test_journal():
     """ test chart of accunts """
 
-    result = reports("journal")
+    result = reports(
+        api_key=API_KEY,
+        name="journal")
+
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"
     assert isinstance(result["data"], dict)
-    assert result["data"]["header"]["entity_name"] == "Example Ltd."
+    assert result["data"]["header"]["entity_name"] == "Test Ltd."
     assert result["data"]["header"]["title"] == "journal"
     assert isinstance(result["data"]["table"], list)
     assert result["data"]["table"][0] == ['dt', 'num', 'descr', 'seq', 'acc_num', 'acc_name', 'doc_type', 'doc_num', 'val', 'dc']
@@ -39,12 +49,15 @@ def test_journal():
 def test_general_ledger():
     """ test general ledger """
 
-    result = reports("general_ledger")
+    result = reports(
+        api_key=API_KEY,
+        name="general_ledger")
+
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"
     assert isinstance(result["data"], dict)
-    assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "general ledger"}
+    assert result["data"]["header"] == {"entity_name": "Test Ltd.", "title": "general ledger"}
     assert result["data"]["filters"] == {
         'acc': '1.0.0',
         'acc_to': '9.9.9',
@@ -58,11 +71,14 @@ def test_general_ledger():
 def test_trial_balance():
     """ test trial balance """
 
-    result = reports("trial_balance")
+    result = reports(
+        api_key=API_KEY,
+        name="trial_balance")
+
     assert isinstance(result, dict)
     assert result["code"] == 200
     assert result["message"] == "ok"
-    assert result["data"]["header"] == {"entity_name": "Example Ltd.", "title": "trial balance"}
+    assert result["data"]["header"] == {"entity_name": "Test Ltd.", "title": "trial balance"}
     assert result["data"]["filters"] == {
         'acc': '1.0.0',
         'acc_to': '9.9.9',

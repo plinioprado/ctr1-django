@@ -1,12 +1,13 @@
 """ data access object from transaction to sqlite """
 
 import csv
-import datetime
 import sqlite3
-from ledger1.utils import dbutil
-from ledger1.utils.field import date_iso_to_timestamp, date_timestamp_to_iso
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
+from ledger1.utils import dbutil
+from ledger1.utils import dateutil
 
+
+# get
 
 def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
     """ return one transaction """
@@ -31,9 +32,10 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
         WHERE t.dt BETWEEN ? AND ?
         ORDER BY td.num, td.seq DESC
         """
+
         query_data: tuple = (
-            datetime.datetime.fromisoformat(date_from).timestamp(),
-            datetime.datetime.fromisoformat(date_to).timestamp()
+            dateutil.date_iso_to_timestamp(date_from),
+            dateutil.date_iso_to_timestamp(date_to),
         )
 
         seqs = []
@@ -41,7 +43,7 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
         for row in cur.execute(query_text, query_data):
 
             num = int(row[0])
-            date: str = str(date_timestamp_to_iso(row[1]))
+            date: str = dateutil.date_timestamp_to_iso(row[1])
             descr: str = str(row[2])
             seq: int = int(row[3])
             account: str = row[4]
@@ -76,6 +78,45 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
         con.close()
 
 
+def get_many_by_doc(db_id: str, doc_type: str, doc_dc) -> list[dict]:
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+        query_text: str = """
+        SELECT
+            td.doc_type,
+            td.doc_num,
+            td.dc,
+            t.dt,
+            t.descr,
+            td.val
+        FROM transaction1_detail td
+            INNER JOIN transaction1 t ON t.num = td.num
+        WHERE td.doc_type = ? AND td.dc = ?
+        ORDER BY td.num, td.seq DESC
+        """
+
+        query_params: tuple = (doc_type, doc_dc)
+
+        data = []
+        for row in cur.execute(query_text, query_params):
+            data.append({
+                "doc_type": row["doc_type"],
+                "doc_num": row["doc_num"],
+                "doc_dc": row["dc"] == 1,
+                "dt": dateutil.date_timestamp_to_iso(row["dt"]),
+                "descr": row["descr"],
+                "val": row["val"],
+            })
+
+        return data
+
+    except sqlite3.Error as err:
+        raise IOError(f"Error getting transaction: {str(err)}") from err
+    finally:
+        con.close()
+
 def get_one(db_id: str, num: int) -> Transaction1 | None:
     """ return one transaction """
 
@@ -105,7 +146,7 @@ def get_one(db_id: str, num: int) -> Transaction1 | None:
         for row in cur.execute(query_text, query_data):
             if row[3] == 1:
                 num = int(row[0])
-                date: str = str(date_timestamp_to_iso(row[1]))
+                date: str = dateutil.date_timestamp_to_iso(row[1])
                 descr: str = str(row[2])
             seqs.append(Transaction1Seq(
                 account=row[4],
@@ -156,6 +197,8 @@ def get_num_by_doc(db_id: str, doc_type: str, doc_num: str) -> int:
         con.close()
 
 
+# post
+
 def post(db_id: str, tra: Transaction1) -> int | None:
     """ insert one transaction
 
@@ -174,8 +217,9 @@ def post(db_id: str, tra: Transaction1) -> int | None:
         (dt, descr)
         VALUES (?, ?);
         """
+
         query_params = (
-            date_iso_to_timestamp(tra.date),
+            dateutil.date_iso_to_timestamp(tra.date),
             tra.descr)
         cur.execute(query_text, query_params)
 
@@ -228,8 +272,9 @@ def put(db_id: str, tra: Transaction1):
             descr = ?
         WHERE num = ?;
         """
+
         query_params = (
-            date_iso_to_timestamp(tra.date),
+            dateutil.date_iso_to_timestamp(tra.date),
             tra.descr,
             tra.num)
         cur.execute(query_text, query_params)
@@ -275,7 +320,6 @@ def delete(db_id: str, num: int) -> int:
     con, cur = dbutil.get_connection(db_id)
 
     try:
-        cur.execute(f"DELETE FROM transaction1 WHERE num = {num};")
         cur.execute(f"DELETE FROM transaction1_detail WHERE num = {num};")
         con.commit()
 
@@ -301,7 +345,6 @@ def reset(db_id: str) -> None:
 
             reader = csv.DictReader(csvfile)
             for row in reader:
-
                 cur.execute(
                     """
                     INSERT INTO transaction1 (num, dt, descr)
@@ -309,7 +352,7 @@ def reset(db_id: str) -> None:
                     """,
                     (
                         int(row["num"]),
-                        date_iso_to_timestamp(row["dt"]),
+                        dateutil.date_iso_to_timestamp(row["dt"]),
                         str(row["descr"])
                     )
                 )

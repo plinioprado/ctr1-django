@@ -14,11 +14,8 @@ Document: contains the attributes, validations and basically:
         dt
         ...
 
-    Secondary attributes (stored in Documents as one record per doc):
-        cpart_name
-        tdb
 
-    Tertiary attributes (stored in DocumentsField as name/value pairs):
+    Secondary attributes (stored in DocumentsField as name/value pairs):
         tdb
 
 The seqs can be

@@ -1,19 +1,26 @@
 from ledger1.admin import admin
 
+API_KEY: str ="Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p"
 
 def test_setting_get_many():
-    ret: dict = admin.get(param="setting", query=None)
+    ret: dict = admin.get(
+        api_key=API_KEY,
+        param="setting",
+        query=None)
 
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
     assert ret["data"][0] == {
-        "key": "field_date_min",
-        "value": "2020-01-01"
+        "key": "entity_name",
+        "value": "Test Ltd."
     }
 
 
 def test_setting_get_filtered():
-    ret: dict = admin.get(param="setting", query={'key': ['field_date']})
+    ret: dict = admin.get(
+        api_key=API_KEY,
+        param="setting",
+        query={'key': ['field_date']})
 
     assert ret["status_code"] == 200
     assert ret["message"] == "ok"
@@ -31,6 +38,7 @@ def test_setting_get_filtered():
 
 def test_setting_get_one():
     ret: dict = admin.get(
+        api_key=API_KEY,
         param="setting",
         query=None,
         record_id="field_date_min")
@@ -45,6 +53,7 @@ def test_setting_get_one():
 
 def test_setting_get_new():
     ret: dict = admin.get(
+        api_key=API_KEY,
         param="setting",
         query=None,
         record_id="new")
@@ -59,6 +68,7 @@ def test_setting_get_new():
 
 def test_seting_create():
     ret = admin.post(
+        api_key=API_KEY,
         param="setting",
         data = {
             "key": "test_key",
@@ -72,6 +82,7 @@ def test_seting_create():
 
 def test_seting_update():
     ret = admin.put(
+        api_key=API_KEY,
         param="setting",
         data = {
             "key": "test_key",
@@ -85,7 +96,10 @@ def test_seting_update():
 
 def test_setting_delete():
 
-    ret: dict =admin.delete(param="setting", record_id="test_id")
+    ret: dict =admin.delete(
+        api_key=API_KEY,
+        param="setting",
+        record_id="test_id")
 
     assert ret["status_code"] == 200
     assert ret["message"] == "setting test_id deleted"

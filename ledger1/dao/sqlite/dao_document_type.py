@@ -1,7 +1,7 @@
 import csv
 import sqlite3
 from ledger1.utils import dbutil
-from ledger1.document.document_type import DocumentType
+from ledger1.document.aux.document_type import DocumentType
 
 def get(db_id: str) -> list[DocumentType]:
     try:
@@ -11,6 +11,7 @@ def get(db_id: str) -> list[DocumentType]:
             SELECT
                 id,
                 name,
+                traacc,
                 num_on_seq,
                 dc_false_name,
                 dc_true_name,
@@ -26,6 +27,7 @@ def get(db_id: str) -> list[DocumentType]:
             types.append(DocumentType(
                 id=str(row["id"]),
                 name=str(row["name"]),
+                traacc=int(row["traacc"]) == 1,
                 num_on_seq=str(row["num_on_seq"]),
                 dc_false_name=str(row["dc_false_name"]),
                 dc_true_name=str(row["dc_true_name"]),

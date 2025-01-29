@@ -1,5 +1,5 @@
 from ledger1.utils import fileio
-from ledger1.document.document_types import DocumentTypes
+from ledger1.document.aux.document_types import DocumentTypes
 
 
 def get_op_seq_acc(doc_dc: bool, doc_type: str) -> list[dict]:

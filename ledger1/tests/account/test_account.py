@@ -2,45 +2,44 @@
 
 # pylint: disable=missing-function-docstring
 
-from dataclasses import asdict
-import pytest
 from ledger1.account.account1 import Account1
 
 
-def test_validation():
+def test_account():
 
-    acc = Account1(
-            num="9.9.9",
-            name="test",
-            dc=False
-        )
+    acc = Account1()
+    acc.set_from_data({
+        "num": "9.9.9",
+        "name": "test",
+        "dc": False
+    })
 
-    assert asdict(acc) == {
+    assert acc.dict() == {
         'num': '9.9.9',
         'name': 'test',
-        'dc': False
+        'dc': False,
+        "active": True,
+        "doc_type": "",
+        "doc_num": ""
     }
 
-    with pytest.raises(ValueError) as err:
-        Account1(
-            num=1,
-            name="test",
-            dc=True
-        )
-    assert str(err.value) == "invalid account number"
+def test_document():
 
-    with pytest.raises(ValueError) as err:
-        Account1(
-            num="9.9.9",
-            name=1,
-            dc=False
-        )
-    assert str(err.value) == "invalid account name"
+    acc = Account1()
+    acc.set_from_data({
+        "num": "9.9.9",
+        "name": "test",
+        "dc": False,
+        "active": False,
+        "doc_type": "testtype",
+        "doc_num": "123"
+    })
 
-    with pytest.raises(ValueError) as err:
-        Account1(
-            num="9.9.9",
-            name="test",
-            dc=2
-        )
-    assert str(err.value) == "invalid account dc"
+    assert acc.dict() == {
+        'num': '9.9.9',
+        'name': 'test',
+        'dc': False,
+        "active": False,
+        "doc_type": "testtype",
+        "doc_num": "123"
+    }
