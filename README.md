@@ -25,6 +25,7 @@ Interface using the REST endpoints for:
 * documents module
   * invoice1 crud
   * eft crud
+  * gic crud
   * bank statement screen
 * reports module (with filter for date and account)
   * chart_account

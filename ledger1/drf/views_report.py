@@ -12,7 +12,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view #, permission_classes
 # from rest_framework.permissions import IsAuthenticated
-from ledger1.reports.reports_service import service
+from ledger1.reports import reports
 
 @api_view(["GET"])
 # @permission_classes([IsAuthenticated])
@@ -23,7 +23,7 @@ def view(request: Request, name: str):
 
         if request.method == "GET":
 
-            ret: dict = service(
+            ret: dict = reports.get(
                 name,
                 api_key=api_key,
                 acc=request.query_params.get("acc"),

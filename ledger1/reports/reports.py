@@ -1,19 +1,19 @@
 """ main service for reports """
 
 from ledger1.utils.settings import get as settings_file_get
-from ledger1.utils.field import acc_num_is_valid
+from ledger1.utils import field
 from ledger1.utils import dateutil
 from ledger1.utils import fileio
 from ledger1.admin import admin
 from ledger1.admin import entities
-from ledger1.reports.chart_accounts import get as chart_accounts_get
-from ledger1.reports.journal import get as journal_get
-from ledger1.reports.general_ledger import get as general_ledger_get
-from ledger1.reports.trial_balance import get as trial_balance_get
-from ledger1.reports.documents import get as documents_get
+from ledger1.reports import chart_accounts
+from ledger1.reports import journal
+from ledger1.reports import general_ledger
+from ledger1.reports import trial_balance
+from ledger1.reports import documents
 
 
-def service(
+def get(
         name: str,
         api_key: str,
         acc: str = None,
@@ -62,35 +62,35 @@ def service(
 
     if acc is None:
         af: str = settings["filters"]["acc_min"]
-    elif not acc_num_is_valid(f"{acc[0:1]}.{acc[1:2]}.{acc[2:]}"):
+    elif not field.acc_num_is_valid(f"{acc[0:1]}.{acc[1:2]}.{acc[2:]}"):
         raise f"invalid acc {acc}"
     else:
         af = f"{acc[0:1]}.{acc[1:2]}.{acc[2:3]}"
 
     if acc_to is None:
         at: str = settings["filters"]["acc_max"]
-    elif not acc_num_is_valid(f"{acc_to[0:1]}.{acc_to[1:2]}.{acc_to[2:]}"):
+    elif not field.acc_num_is_valid(f"{acc_to[0:1]}.{acc_to[1:2]}.{acc_to[2:]}"):
         raise f"invalid acc {acc_to}"
     else:
         at = f"{acc_to[0:1]}.{acc_to[1:2]}.{acc_to[2:3]}"
 
     # Get report
     if name == "chart_accounts":
-        data: dict = chart_accounts_get(
+        data: dict = chart_accounts.get(
             db_id,
             entity_name,
             acc_from=af,
             acc_to=at
         )
     elif name == "journal":
-        data = journal_get(
+        data = journal.get(
             db_id,
             entity_name,
             date_from=df,
             date_to=dt
         )
     elif name == "general_ledger":
-        data = general_ledger_get(
+        data = general_ledger.get(
             db_id,
             entity_name,
             date_from=df,
@@ -99,7 +99,7 @@ def service(
             acc_to=at
         )
     elif name == "trial_balance":
-        data = trial_balance_get(
+        data = trial_balance.get(
             db_id,
             entity_name,
             date_from=df,
@@ -108,7 +108,7 @@ def service(
             acc_to=at
         )
     elif name == "documents":
-        data = documents_get(
+        data = documents.get(
             db_id,
             entity_name,
             date_from=df,

@@ -8,7 +8,7 @@
 """
 
 from ledger1.admin import entities
-from ledger1.account.account1 import Account1
+from ledger1.account.account import Account
 from ledger1.dao.sqlite import dao_account1
 
 # get
@@ -80,7 +80,7 @@ def post(api_key: str, data: dict) -> dict:
 
 def post_data(db_id: str, data: dict) -> str:
 
-    acc = Account1()
+    acc = Account()
     acc.set_from_data(data)
 
     acc_num: str = dao_account1.post(db_id, acc)
@@ -110,7 +110,7 @@ def put(api_key: str, data: dict) -> dict:
 
 def put_data(db_id: str, data: dict) -> str:
 
-    acc = Account1()
+    acc = Account()
     acc.set_from_data(data)
 
     acc_num: str = dao_account1.put(db_id, acc)

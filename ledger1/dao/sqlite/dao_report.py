@@ -2,14 +2,14 @@
 
 import datetime
 from ledger1.utils import dbutil
-from ledger1.account.account1 import Account1
+from ledger1.account.account import Account
 
 
 def get(
         db_id: str,
         acc_from: str,
         acc_to: str
-    ) -> list[Account1]:
+    ) -> list[Account]:
     """
     Read (get) all accounts
 
@@ -29,7 +29,7 @@ def get(
         WHERE (num BETWEEN ? AND ?)
         """,
         (acc_from, acc_to)):
-        account = Account1(num=str(row[0]), name=str(row[1]), dc=bool(row[2]) == 1)
+        account = Account(num=str(row[0]), name=str(row[1]), dc=bool(row[2]) == 1)
         report_rows.append(account)
 
     return report_rows

@@ -11,7 +11,7 @@ from ledger1.dao.sqlite import dao_transaction1
 from ledger1.admin import entities
 from ledger1.document.aux.document_types import DocumentTypes
 from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
-from ledger1.account import account_service
+from ledger1.account import accounts
 from ledger1.utils.settings import get as settings_get
 from ledger1.utils import dateutil
 
@@ -100,7 +100,7 @@ def get_many(api_key: str, date: str, date_to: str):
         }
     }
 
-    options_account = account_service.get_options(api_key)
+    options_account = accounts.get_options(api_key)
     if len(data) > 0:
         response["options"] = { "accounts": options_account}
 
@@ -120,7 +120,7 @@ def get_one(api_key: str, num: int) -> dict:
 
     data: dict = _get_one_data(db_id, num)
 
-    options_account = None if not data else account_service.get_options(api_key)
+    options_account = None if not data else accounts.get_options(api_key)
     options_document_types = DocumentTypes(db_id).get_dict_options()
     options = {} if not options_account else {
         "accounts": options_account,
@@ -272,7 +272,7 @@ def get_new(api_key: str) -> dict:
         ]
     }
 
-    options_account = None if not data else account_service.get_options(api_key)
+    options_account = None if not data else accounts.get_options(api_key)
     options_document_types = DocumentTypes(db_id).get_dict_options()
     options = {} if not options_account else {
         "accounts": options_account,

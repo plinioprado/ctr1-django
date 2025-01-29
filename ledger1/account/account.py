@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 @dataclass
-class Account1:
+class Account:
     """  of a ledger1 account
 
     Attributes:

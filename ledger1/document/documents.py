@@ -18,7 +18,7 @@ from ledger1.document.aux import document_options
 from ledger1.document.aux.document_types import DocumentTypes
 
 from ledger1.transaction import transaction_service as transactions
-from ledger1.account import account_service as accounts
+from ledger1.account import accounts
 from ledger1.utils import fileio
 from ledger1.admin import entities
 
@@ -252,6 +252,9 @@ def put(
     db_id: str = entities.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
+
+    if data["doc_num"] != doc_num:
+        raise ValueError("doc_num in request does not match doc_num in url")
 
     if doc_type_is_tra:
 

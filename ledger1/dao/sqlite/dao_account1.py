@@ -6,7 +6,7 @@ and execure them in the SQLite database
 
 import csv
 import sqlite3
-from ledger1.account.account1 import Account1
+from ledger1.account.account import Account
 from ledger1.utils import dbutil
 
 # get
@@ -25,7 +25,7 @@ def get(db_id: str, acc_from: str, acc_to: str) -> list[dict]:
         query_params = (acc_from, acc_to)
         for row in cur.execute(query_text, query_params):
 
-            acc = Account1(
+            acc = Account(
                 num=str(row[0]),
                 name=str(row[1]),
                 dc=row[2] == 1
@@ -100,7 +100,7 @@ def get_one_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
 
 # post
 
-def post(db_id: str, acc: Account1) -> str:
+def post(db_id: str, acc: Account) -> str:
     """ Post (create) account """
 
     con, cur = dbutil.get_connection(db_id)
@@ -131,7 +131,7 @@ def post(db_id: str, acc: Account1) -> str:
 
 # put
 
-def put(db_id: str, acc: Account1) -> str:
+def put(db_id: str, acc: Account) -> str:
     """ Put (update) account """
 
     con, cur = dbutil.get_connection(db_id)
