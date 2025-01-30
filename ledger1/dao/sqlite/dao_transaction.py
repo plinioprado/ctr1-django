@@ -2,14 +2,14 @@
 
 import csv
 import sqlite3
-from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
+from ledger1.transaction.transaction import Transaction, TransactionSeq, TransactionSeqDoc
 from ledger1.utils import dbutil
 from ledger1.utils import dateutil
 
 
 # get
 
-def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
+def get_many(db_id: str, date_from: str, date_to: str) -> Transaction | None:
     """ return one transaction """
 
     con, cur = dbutil.get_connection(db_id)
@@ -51,11 +51,11 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
             dc: bool = row[6] == 1
 
             seqs.insert(
-                0, Transaction1Seq(
+                0, TransactionSeq(
                     account,
                     val,
                     dc,
-                    doc=Transaction1SeqDoc(
+                    doc=TransactionSeqDoc(
                         type=str(row[7]),
                         num=str(row[8])
                     )
@@ -63,7 +63,7 @@ def get_many(db_id: str, date_from: str, date_to: str) -> Transaction1 | None:
             )
 
             if seq == 1:
-                tras.insert(0, Transaction1(
+                tras.insert(0, Transaction(
                     num,
                     date,
                     descr,
@@ -117,7 +117,7 @@ def get_many_by_doc(db_id: str, doc_type: str, doc_dc) -> list[dict]:
     finally:
         con.close()
 
-def get_one(db_id: str, num: int) -> Transaction1 | None:
+def get_one(db_id: str, num: int) -> Transaction | None:
     """ return one transaction """
 
     con, cur = dbutil.get_connection(db_id)
@@ -148,11 +148,11 @@ def get_one(db_id: str, num: int) -> Transaction1 | None:
                 num = int(row[0])
                 date: str = dateutil.date_timestamp_to_iso(row[1])
                 descr: str = str(row[2])
-            seqs.append(Transaction1Seq(
+            seqs.append(TransactionSeq(
                 account=row[4],
                 val=row[5],
                 dc=row[6] == 1,
-                doc=Transaction1SeqDoc(
+                doc=TransactionSeqDoc(
                     type=row[7],
                     num=row[8]
                 )
@@ -162,7 +162,7 @@ def get_one(db_id: str, num: int) -> Transaction1 | None:
             return None
 
         else:
-            return Transaction1(
+            return Transaction(
                 num,
                 date,
                 descr=descr,
@@ -199,11 +199,11 @@ def get_num_by_doc(db_id: str, doc_type: str, doc_num: str) -> int:
 
 # post
 
-def post(db_id: str, tra: Transaction1) -> int | None:
+def post(db_id: str, tra: Transaction) -> int | None:
     """ insert one transaction
 
     Args:
-        tra (Transaction1): Object containing the transaction data without num
+        tra (Transaction): Object containing the transaction data without num
 
     Returns:
         int: num of the inserted transaction
@@ -252,11 +252,11 @@ def post(db_id: str, tra: Transaction1) -> int | None:
         con.close()
 
 
-def put(db_id: str, tra: Transaction1):
+def put(db_id: str, tra: Transaction):
     """ update one transaction
 
     Args:
-        tra (Transaction1): Object containing the new data of the transaction
+        tra (Transaction): Object containing the new data of the transaction
 
     Returns:
         int: num of the updated transaction

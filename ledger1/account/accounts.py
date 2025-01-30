@@ -7,7 +7,7 @@
             data (lisr[dict]): list of dicts with account data, only applicable to GET
 """
 
-from ledger1.admin import entities
+from ledger1.admin import admin
 from ledger1.account.account import Account
 from ledger1.dao.sqlite import dao_account1
 
@@ -33,7 +33,7 @@ def get(
     af = f"{acc[0:1]}.{acc[1:2]}.{acc[2:3]}"
     at = af if acc_to is None else f"{acc_to[0:1]}.{acc_to[1:2]}.{acc_to[2:3]}"
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     data = dao_account1.get(db_id, af, at)
 
@@ -68,7 +68,7 @@ def post(api_key: str, data: dict) -> dict:
         data: data of the account to be created as a dict
     """
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     acc_num = post_data(db_id, data)
 
@@ -98,7 +98,7 @@ def put(api_key: str, data: dict) -> dict:
         data: data of the account to be updated as a dict
     """
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     acc_num: str = put_data(db_id, data)
 
@@ -128,7 +128,7 @@ def delete(api_key: str, acc_num: str) -> dict:
         acc_num: number of the account to be deleted
     """
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     deleted_num: str = delete_one(db_id, acc_num)
 
@@ -157,7 +157,7 @@ def delete_one(db_id: str, acc_num: str) -> dict:
 
 def get_options(api_key) -> list[dict]:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     result = dao_account1.get_options(db_id)
 

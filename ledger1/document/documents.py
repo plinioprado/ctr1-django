@@ -17,10 +17,10 @@ from ledger1.document.document_tra import DocumentTransaction
 from ledger1.document.aux import document_options
 from ledger1.document.aux.document_types import DocumentTypes
 
-from ledger1.transaction import transaction_service as transactions
+from ledger1.transaction import transactions
 from ledger1.account import accounts
 from ledger1.utils import fileio
-from ledger1.admin import entities
+from ledger1.admin import admin
 
 
 # get
@@ -32,7 +32,7 @@ def get( # pylint: disable=too-many-locals
         doc_num: str = None
     ) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
 
@@ -201,7 +201,7 @@ def _get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
 
 def post(api_key: str, doc_type: str, data) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, data["doc_type"])
 
@@ -249,7 +249,7 @@ def put(
         doc_num: str,
         data) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
 
@@ -293,7 +293,7 @@ def put(
 
 def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
 

@@ -12,7 +12,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view #, permission_classes
 # from rest_framework.permissions import IsAuthenticated
-import ledger1.transaction.transaction_service as service
+from ledger1.transaction import transactions
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 # @permission_classes([IsAuthenticated])
@@ -22,20 +22,20 @@ def view(request: Request, num: int | None = None):
         api_key: str = request.headers["Authorization"]
 
         if request.method == "GET":
-            ret = service.get(
+            ret = transactions.get(
                 api_key,
                 num,
                 date=request.query_params.get("date"),
                 date_to=request.query_params.get("date_to"))
 
         elif request.method == "POST":
-            ret: dict = service.post(api_key, request.data)
+            ret: dict = transactions.post(api_key, request.data)
 
         elif request.method == "PUT":
-            ret: dict = service.put(api_key, request.data)
+            ret: dict = transactions.put(api_key, request.data)
 
         elif request.method == "DELETE":
-            ret: dict = service.delete(api_key, num)
+            ret: dict = transactions.delete(api_key, num)
 
         else:
             raise ValueError("invalid method")

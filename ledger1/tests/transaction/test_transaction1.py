@@ -1,31 +1,31 @@
-""" test Transaction1 model """
+""" test Transaction model """
 
 # pylint: disable=missing-function-docstring
 
 
-from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
+from ledger1.transaction.transaction import Transaction, TransactionSeq, TransactionSeqDoc
 
 
 def test_transaction_existent():
 
-    tra = Transaction1(
+    tra = Transaction(
             num=1,
             date="2020-01-05",
             descr="test",
             seqs=[
-                Transaction1Seq(
+                TransactionSeq(
                     account="1.1.1",
                     val=100.,
                     dc=True,
-                    doc=Transaction1SeqDoc(
+                    doc=TransactionSeqDoc(
                         type="bstat1",
                         num="1")
                 ),
-                Transaction1Seq(
+                TransactionSeq(
                     account="2.3.1",
                     val=100.,
                     dc=False,
-                    doc=Transaction1SeqDoc(
+                    doc=TransactionSeqDoc(
                         type="",
                         num="")
                 )
@@ -61,24 +61,24 @@ def test_transaction_existent():
 
 def test_transaction_new():
 
-    tra = Transaction1(
+    tra = Transaction(
             num=None,
             date="2020-01-05",
             descr="test",
             seqs=[
-                Transaction1Seq(
+                TransactionSeq(
                     account="1.1.1",
                     val=100.,
                     dc=True,
-                    doc=Transaction1SeqDoc(
+                    doc=TransactionSeqDoc(
                         type="bstat1",
                         num="1")
                 ),
-                Transaction1Seq(
+                TransactionSeq(
                     account="2.3.1",
                     val=100.,
                     dc=False,
-                    doc=Transaction1SeqDoc(
+                    doc=TransactionSeqDoc(
                         type="",
                         num="")
                 )

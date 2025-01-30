@@ -5,7 +5,6 @@ from ledger1.utils import field
 from ledger1.utils import dateutil
 from ledger1.utils import fileio
 from ledger1.admin import admin
-from ledger1.admin import entities
 from ledger1.reports import chart_accounts
 from ledger1.reports import journal
 from ledger1.reports import general_ledger
@@ -25,7 +24,7 @@ def get(
     """ directs the request to its report service """
 
     # get entity name
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
     entity_name: str = admin.get_db_settings(key="entity_name", db_id=db_id)["entity_name"]
 
     # for now, what is here should get from file settings

@@ -1,8 +1,7 @@
 from ledger1.dao.sqlite import dao
 from ledger1.dao.sqlite import dao_account1
 from ledger1.dao.sqlite import dao_document_type
-from ledger1.dao.sqlite import dao_transaction1
-from ledger1.dao.sqlite import dao_document
+from ledger1.dao.sqlite import dao_transaction
 from ledger1.dao.sqlite import dao_setting
 from ledger1.dao.sqlite import dao_document_field
 from ledger1.dao.sqlite import dao_aux
@@ -20,7 +19,7 @@ def reset(db_id) -> None:
     dao.reset(db_id, settings_file["file"]["sql"]["reset"])
     dao_document_type.reset(db_id)
     dao_account1.restore(db_id)
-    dao_transaction1.reset(db_id)
+    dao_transaction.reset(db_id)
     dao_document_field.restore(db_id, settings_file["file"]["csv"]["document_field"])
     dao_setting.restore(db_id, settings_file["file"]["csv"]["setting"])
     dao_aux.restore(

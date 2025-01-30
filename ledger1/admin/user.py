@@ -6,23 +6,15 @@ from ledger1.admin.aux import Aux
 @dataclass
 class User(Aux):
 
-    # fields
-    id: str | None
-    name: str
-    email: str
-    password: str
-    api_key: str
-    role: str
-    active: bool
-
     # db
-    table_name: str
-    primary_key: str
-    filter_field: str
-    primary_key_form: str
-
+    table_name = "user"
+    primary_key = "id"
+    filter_field = "name"
+    primary_key_form = "id"
 
     def __init__(self) -> None:
+
+        # fields
         self.id = None
         self.name = ""
         self.email = ""
@@ -30,11 +22,6 @@ class User(Aux):
         self.api_key = ""
         self.role = "user"
         self.active = True
-
-        self.table_name = "user"
-        self.primary_key = "id"
-        self.filter_field = "name"
-        self.primary_key_form = "id"
 
 
     def set_from_db(self, data) -> None:
