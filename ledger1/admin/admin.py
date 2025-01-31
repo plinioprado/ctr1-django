@@ -11,19 +11,19 @@ from ledger1.admin import entities
 from ledger1.admin import session
 from ledger1.admin.aux import Aux
 from ledger1.utils import fileio
-from ledger1.utils.client_error import ClientError
+from ledger1.utils import errorutil
 
 
 def login(data: dict) -> dict:
     try:
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
-            raise ClientError("invalid login data", 401)
+            errorutil.handle_error("invalid login data", 401)
 
         # data from file settings
         try:
             param_db_entity: str = entities.get_entity("id", data["entity"])
-        except Exception as err:
-            raise ClientError("invalid login", 401) from err
+        except IndexError:
+            errorutil.handle_error("invalid login", 401)
 
         # data from user
         user: dict = auxs.get_by_field(
@@ -33,7 +33,7 @@ def login(data: dict) -> dict:
         )
 
         if (not user or data["user_pass"] != user["password"]):
-            raise ClientError("invalid login", 401)
+            errorutil.handle_error("invalid login", 401)
 
         # data from db settings
         obj: Aux = auxs.get_object("setting")
@@ -111,7 +111,9 @@ def get(
         "message": "reset ok"
     }
     else:
-        raise ClientError(f"invalid param {param}")
+        response = None
+        errorutil.handle_error(f"invalid param {param}")
+
 
     return response
 

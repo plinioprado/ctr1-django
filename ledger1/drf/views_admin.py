@@ -13,7 +13,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from ledger1.admin import admin
-from ledger1.utils.client_error import ClientError
+from ledger1.utils.error_client import ClientError
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def view(request: Request, param: str = "", record_id: str = None):
