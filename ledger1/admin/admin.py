@@ -52,8 +52,8 @@ def login(data: dict) -> dict:
 
     except ValueError as err:
         return {
-            "message": "invalid login",
-            "status_code": int(str(err))
+            "message": f"value error on login: {str(err)}",
+            "status_code": 400
         }
 
 

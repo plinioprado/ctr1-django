@@ -17,6 +17,19 @@ def read_text(filename: str) -> str:
         raise OSError(f"Error reading text file {filename}:", err) from err
 
 
+def write_text(filename: str, txt: str) -> str:
+    """ read a file and return a dict """
+
+    try:
+        with open(filename, "w", encoding="utf-8") as file:
+            data = file.write(f"{txt}\n")
+
+        return data
+
+    except OSError as err:
+        raise OSError(f"Error writing to file {filename}:", err) from err
+
+
 def read_json(filename: str) -> dict:
     """ read a file and return a dict """
 
