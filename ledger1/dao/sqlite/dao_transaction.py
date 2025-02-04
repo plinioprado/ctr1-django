@@ -117,6 +117,45 @@ def get_many_by_doc(db_id: str, doc_type: str, doc_dc) -> list[dict]:
     finally:
         con.close()
 
+
+def get_many_by_acc(db_id: str, acc_num: str) -> list[dict]:
+    """ return one transaction """
+
+    con, cur = dbutil.get_connection(db_id)
+
+    try:
+
+        query_text: str = """
+        SELECT
+            td.num,
+            t.dt AS date,
+            t.descr,
+            td.seq,
+            td.account_num,
+            td.val,
+            td.dc,
+            td.doc_type,
+            td.doc_num
+        FROM transaction1_detail td
+            INNER JOIN transaction1 t ON t.num = td.num
+        WHERE td.account_num = ?
+        ORDER BY td.num, td.seq DESC
+        """
+
+        query_params: tuple = (acc_num,)
+        cur.execute(query_text, query_params)
+        rows = cur.fetchall()
+        tras = [dict(row) for row in rows]
+
+        return tras
+
+
+    except sqlite3.Error as err:
+        raise IOError(f"Error getting transaction: {str(err)}") from err
+    finally:
+        con.close()
+
+
 def get_one(db_id: str, num: int) -> Transaction | None:
     """ return one transaction """
 

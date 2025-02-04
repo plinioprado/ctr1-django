@@ -16,6 +16,7 @@ from ledger1.document.document_acc import DocumentAccount
 from ledger1.document.document_tra import DocumentTransaction
 from ledger1.document.aux import document_options
 from ledger1.document.aux.document_types import DocumentTypes
+from ledger1.document import documents_acc_seq
 
 from ledger1.transaction import transactions
 from ledger1.account import accounts
@@ -91,6 +92,7 @@ def get( # pylint: disable=too-many-locals
         doc.set_from_new()
         doc.set_from_fields(fields)
         data = doc.get_to_response()
+        data["seqs"] = []
 
         data_format: dict = _get_format(doc_type, False)
 
@@ -113,11 +115,14 @@ def get( # pylint: disable=too-many-locals
         if doc_type_is_tra is False and doc_type != "bstat2":
 
             acc: dict = accounts.get_one_by_doc(db_id, doc_type, doc_num)
+
             fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
+            seqs: list[dict] = documents_acc_seq.get(db_id=db_id, acc_num=acc["num"])
 
             doc: DocumentAccount = DocumentAccount(db_id, doc_type, doc_num)
             doc.set_from_account(acc)
             doc.set_from_fields(fields)
+            doc.set_seqs(seqs)
             data = doc.get_to_response()
 
             data_options = {}

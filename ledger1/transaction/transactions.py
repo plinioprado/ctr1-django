@@ -292,3 +292,9 @@ def get_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
     tra: dict = _get_one_data(db_id, num)
 
     return tra
+
+
+def get_by_acc(db_id: str, acc_num: str) -> list[dict]:
+    tras: list[dict] = dao_transaction.get_many_by_acc(db_id, acc_num)
+
+    return tras
