@@ -2,7 +2,7 @@
 
 # pylint: disable=missing-function-docstring
 
-from ledger1.reports.reports_service import service as reports
+from ledger1.reports import reports
 from ledger1.admin import admin
 
 API_KEY: str ="Bearer 2s3d4f-1q2w3e4r5t6y7u8i9o0p"
@@ -14,7 +14,7 @@ def test_chart_accounts():
         api_key=API_KEY,
         param="reset")
 
-    result = reports(
+    result = reports.get(
         api_key=API_KEY,
         name="chart_accounts")
 
@@ -31,7 +31,7 @@ def test_chart_accounts():
 def test_journal():
     """ test chart of accunts """
 
-    result = reports(
+    result = reports.get(
         api_key=API_KEY,
         name="journal")
 
@@ -49,7 +49,7 @@ def test_journal():
 def test_general_ledger():
     """ test general ledger """
 
-    result = reports(
+    result = reports.get(
         api_key=API_KEY,
         name="general_ledger")
 
@@ -71,7 +71,7 @@ def test_general_ledger():
 def test_trial_balance():
     """ test trial balance """
 
-    result = reports(
+    result = reports.get(
         api_key=API_KEY,
         name="trial_balance")
 

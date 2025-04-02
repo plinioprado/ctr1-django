@@ -1,13 +1,13 @@
-""" test Account1 model """
+""" test Account model """
 
 # pylint: disable=missing-function-docstring
 
-from ledger1.account.account1 import Account1
+from ledger1.account.account import Account
 
 
 def test_account():
 
-    acc = Account1()
+    acc = Account()
     acc.set_from_data({
         "num": "9.9.9",
         "name": "test",
@@ -25,7 +25,7 @@ def test_account():
 
 def test_document():
 
-    acc = Account1()
+    acc = Account()
     acc.set_from_data({
         "num": "9.9.9",
         "name": "test",

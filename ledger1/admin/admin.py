@@ -6,21 +6,24 @@ and return the requests
  """
 
 from ledger1.admin import reset as reset_service
-from ledger1.admin import session
 from ledger1.admin import auxs
+from ledger1.admin import entities
+from ledger1.admin import session
 from ledger1.admin.aux import Aux
 from ledger1.utils import fileio
-from ledger1.admin import entities
+from ledger1.utils import errorutil
 
 
 def login(data: dict) -> dict:
     try:
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
-            raise ValueError("400")
+            errorutil.handle_error("invalid login data", 401)
 
         # data from file settings
-        entity_id = data["entity"]
-        param_db_entity: str = entities.get_entity("id", entity_id)
+        try:
+            param_db_entity: str = entities.get_entity("id", data["entity"])
+        except IndexError:
+            errorutil.handle_error("invalid login", 401)
 
         # data from user
         user: dict = auxs.get_by_field(
@@ -30,13 +33,13 @@ def login(data: dict) -> dict:
         )
 
         if (not user or data["user_pass"] != user["password"]):
-            raise ValueError("401")
+            errorutil.handle_error("invalid login", 401)
 
         # data from db settings
         obj: Aux = auxs.get_object("setting")
-        entity_name: dict = auxs.get_one("entity_name", obj, entity_id)["value"]
+        entity_name: dict = auxs.get_one("entity_name", obj, data["entity"])["value"]
 
-        api_key: str = f"{param_db_entity["key"]}-{user["api_key"]}"
+        api_key: str = f"{param_db_entity['key']}-{user['api_key']}"
         data = session.get_session(api_key, entity_name, user)
 
         response = {
@@ -49,9 +52,12 @@ def login(data: dict) -> dict:
 
     except ValueError as err:
         return {
-            "message": "invalid login",
-            "status_code": int(str(err))
+            "message": f"value error on login: {str(err)}",
+            "status_code": 400
         }
+
+
+# get
 
 
 def get(
@@ -61,7 +67,7 @@ def get(
         record_id: str | None = None
     ) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = get_db_id_by_api_key(api_key)
 
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
@@ -105,14 +111,34 @@ def get(
         "message": "reset ok"
     }
     else:
-        raise ValueError(f"invalid param {param}")
+        response = None
+        errorutil.handle_error(f"invalid param {param}")
+
 
     return response
 
 
+def get_db_id_by_api_key(api_key: str) -> str:
+
+    entity_key: str = api_key.replace("Bearer ", "").split("-")[0]
+    api_key = entities.get_entity("key", entity_key)["id"]
+
+    return api_key
+
+
+def get_db_settings(key: str, db_id: str = "") -> dict:
+    settings_list: list[dict] = auxs.get_db_settings(key, db_id)
+
+    settings_dict: dict = {setting["key"]: setting["value"] for setting in settings_list}
+
+    return settings_dict
+
+
+# post
+
 def post(param: str, data: dict, api_key: str) -> dict:
     if param in ["user", "setting"]:
-        db_id: str = entities.get_db_id_by_api_key(api_key)
+        db_id: str = get_db_id_by_api_key(api_key)
 
         obj: Aux = auxs.get_object(param)
         record_id = auxs.post(data, obj, db_id)
@@ -129,10 +155,12 @@ def post(param: str, data: dict, api_key: str) -> dict:
     }
 
 
+# put
+
 def put(param: str, data: dict, api_key: str) -> dict:
 
     if param in ["user", "setting"]:
-        db_id: str = entities.get_db_id_by_api_key(api_key)
+        db_id: str = get_db_id_by_api_key(api_key)
 
         obj: Aux = auxs.get_object(param)
         record_id = auxs.put(data, obj, db_id)
@@ -149,10 +177,12 @@ def put(param: str, data: dict, api_key: str) -> dict:
     }
 
 
+# delete
+
 def delete(param: str, record_id: str, api_key: str) -> dict:
 
     if param in ["user", "setting"]:
-        db_id: str = entities.get_db_id_by_api_key(api_key)
+        db_id: str = get_db_id_by_api_key(api_key)
         obj: Aux = auxs.get_object(param)
         record_id = auxs.delete(record_id, obj, db_id)
 
@@ -171,11 +201,3 @@ def delete(param: str, record_id: str, api_key: str) -> dict:
 def reset(db_id) -> None:
 
     reset_service.reset(db_id)
-
-
-def get_db_settings(key: str, db_id: str = "") -> dict:
-    settings_list: list[dict] = auxs.get_db_settings(key, db_id)
-
-    settings_dict: dict = {setting["key"]: setting["value"] for setting in settings_list}
-
-    return settings_dict

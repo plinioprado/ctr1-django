@@ -7,11 +7,11 @@
             data (lisr[dict]): list of dicts with transaction data, only applicable to GET
 """
 
-from ledger1.dao.sqlite import dao_transaction1
-from ledger1.admin import entities
+from ledger1.dao.sqlite import dao_transaction
+from ledger1.admin import admin
 from ledger1.document.aux.document_types import DocumentTypes
-from ledger1.transaction.transaction1 import Transaction1, Transaction1Seq, Transaction1SeqDoc
-from ledger1.account import account_service
+from ledger1.transaction.transaction import Transaction, TransactionSeq, TransactionSeqDoc
+from ledger1.account import accounts
 from ledger1.utils.settings import get as settings_get
 from ledger1.utils import dateutil
 
@@ -43,7 +43,7 @@ def get(
 
 def get_many(api_key: str, date: str, date_to: str):
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     settings = settings_get()
 
@@ -71,7 +71,7 @@ def get_many(api_key: str, date: str, date_to: str):
     else:
         dt = date_to
 
-    result: list[Transaction1] = dao_transaction1.get_many(db_id, df, dt)
+    result: list[Transaction] = dao_transaction.get_many(db_id, df, dt)
     data = []
     for tra in result:
         for i, seq in enumerate(tra.seqs):
@@ -100,7 +100,7 @@ def get_many(api_key: str, date: str, date_to: str):
         }
     }
 
-    options_account = account_service.get_options(api_key)
+    options_account = accounts.get_options(api_key)
     if len(data) > 0:
         response["options"] = { "accounts": options_account}
 
@@ -109,18 +109,18 @@ def get_many(api_key: str, date: str, date_to: str):
 
 def get_many_by_doc(db_id: str, doc_type: str, doc_dc: str) -> list[dict]:
 
-    data: list[dict] = dao_transaction1.get_many_by_doc(db_id, doc_type, doc_dc)
+    data: list[dict] = dao_transaction.get_many_by_doc(db_id, doc_type, doc_dc)
 
     return data
 
 
 def get_one(api_key: str, num: int) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     data: dict = _get_one_data(db_id, num)
 
-    options_account = None if not data else account_service.get_options(api_key)
+    options_account = None if not data else accounts.get_options(api_key)
     options_document_types = DocumentTypes(db_id).get_dict_options()
     options = {} if not options_account else {
         "accounts": options_account,
@@ -137,7 +137,7 @@ def get_one(api_key: str, num: int) -> dict:
 
 def _get_one_data(db_id: str, num) -> dict:
 
-    result: Transaction1 | None = dao_transaction1.get_one(db_id, num)
+    result: Transaction | None = dao_transaction.get_one(db_id, num)
 
     data: dict = {} if result is None else result.asdict()
 
@@ -151,7 +151,7 @@ def post(api_key: str, data: dict) -> dict:
         data: data of the transaction to be created as a dict
     """
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     tra_num: str = post_data(db_id, data)
 
@@ -166,24 +166,24 @@ def post(api_key: str, data: dict) -> dict:
 
 def post_data(db_id: str, data: dict) -> dict:
 
-    seqs: list[Transaction1Seq] = [Transaction1Seq(
+    seqs: list[TransactionSeq] = [TransactionSeq(
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"]),
-        doc=Transaction1SeqDoc(
+        doc=TransactionSeqDoc(
             type=str(seq["doc"]["type"]),
             num=str(seq["doc"]["num"])
         )
     ) for seq in data["seqs"]]
 
-    tra: Transaction1 = Transaction1(
+    tra: Transaction = Transaction(
         num=None,
         date=data["date"],
         descr=data["descr"],
         seqs=seqs
     )
 
-    tra_num: int = dao_transaction1.post(db_id, tra)
+    tra_num: int = dao_transaction.post(db_id, tra)
 
     return tra_num
 
@@ -195,26 +195,26 @@ def put(api_key: str, data: dict):
         data: data of the transaction to be updated as a dict
     """
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
-    seqs: list[Transaction1Seq] = [Transaction1Seq(
+    seqs: list[TransactionSeq] = [TransactionSeq(
         account=str(seq["account"]),
         val=float(seq["val"]),
         dc=bool(seq["dc"]),
-        doc=Transaction1SeqDoc(
+        doc=TransactionSeqDoc(
             type=str(seq["doc"]["type"]),
             num=str(seq["doc"]["num"])
         )
     ) for seq in data["seqs"]]
 
-    tra: Transaction1 = Transaction1(
+    tra: Transaction = Transaction(
         num=data["num"],
         date=data["date"],
         descr=data["descr"],
         seqs=seqs,
     )
 
-    tra_num: int = dao_transaction1.put(db_id, tra)
+    tra_num: int = dao_transaction.put(db_id, tra)
 
     return {
         "code": 200,
@@ -232,9 +232,9 @@ def delete(api_key: str, num: int):
         number of the account to delete
     """
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
-    dao_num: int = dao_transaction1.delete(db_id, num)
+    dao_num: int = dao_transaction.delete(db_id, num)
 
     return {
         "code": 200,
@@ -244,7 +244,7 @@ def delete(api_key: str, num: int):
 
 def get_new(api_key: str) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     data: dict = {
         "num": "new",
@@ -272,7 +272,7 @@ def get_new(api_key: str) -> dict:
         ]
     }
 
-    options_account = None if not data else account_service.get_options(api_key)
+    options_account = None if not data else accounts.get_options(api_key)
     options_document_types = DocumentTypes(db_id).get_dict_options()
     options = {} if not options_account else {
         "accounts": options_account,
@@ -288,7 +288,13 @@ def get_new(api_key: str) -> dict:
 
 
 def get_by_doc(db_id: str, doc_type: str, doc_num: str) -> dict:
-    num: int = dao_transaction1.get_num_by_doc(db_id, doc_type, doc_num)
+    num: int = dao_transaction.get_num_by_doc(db_id, doc_type, doc_num)
     tra: dict = _get_one_data(db_id, num)
 
     return tra
+
+
+def get_by_acc(db_id: str, acc_num: str) -> list[dict]:
+    tras: list[dict] = dao_transaction.get_many_by_acc(db_id, acc_num)
+
+    return tras

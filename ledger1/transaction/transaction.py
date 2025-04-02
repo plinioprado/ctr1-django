@@ -5,12 +5,12 @@ import datetime
 from dataclasses import dataclass
 
 @dataclass
-class Transaction1SeqDoc:
+class TransactionSeqDoc:
     type: str
     num: str
 
 @dataclass
-class Transaction1Seq:
+class TransactionSeq:
     """
     Debit or credit in a Ledger transaction
 
@@ -24,7 +24,7 @@ class Transaction1Seq:
     account: str
     val: float
     dc: bool
-    doc: Transaction1SeqDoc
+    doc: TransactionSeqDoc
 
     def asdict(self):
         """ return the Transaction seq as a dict """
@@ -41,7 +41,7 @@ class Transaction1Seq:
 
 
 @dataclass
-class Transaction1:
+class Transaction:
     """
     Ledger transaction
 
@@ -51,13 +51,13 @@ class Transaction1:
             if None: Transaction being created so num was not yet assigned by the db
         date (str): transaction date in ISO format yyyy-mm-dd
         descr (str): description between 3 and 60 chars
-        seqs (list[Transaction1Seq]): debits and credits of the transaction
+        seqs (list[TransactionSeq]): debits and credits of the transaction
     """
 
     num: int | None
     date: str
     descr: str
-    seqs: list[Transaction1Seq]
+    seqs: list[TransactionSeq]
 
     def __post_init__(self):
 

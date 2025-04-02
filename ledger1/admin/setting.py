@@ -4,21 +4,13 @@ from ledger1.admin.aux import Aux
 @dataclass
 class Setting(Aux):
 
-    # fields
-    key: str
-    value: str
-
-    # db
-    table_name: str
-    primary_key: str
-    filter_field: str
-    primary_key_form: str
-
-
     def __init__(self) -> None:
+
+        # fields
         self.key = ""
         self.value = ""
 
+        # db
         self.table_name = "setting"
         self.primary_key = "setting_key"
         self.filter_field = "setting_key"

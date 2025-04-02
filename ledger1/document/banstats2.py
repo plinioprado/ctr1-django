@@ -9,7 +9,7 @@ from ledger1.reports import general_ledger
 from ledger1.dao.sqlite import dao_document
 from ledger1.utils import dateutil
 from ledger1.utils import fileio
-from ledger1.admin import entities
+from ledger1.admin import admin
 
 def get(api_key: str, num: str = None) -> dict:
 
@@ -24,9 +24,9 @@ def get(api_key: str, num: str = None) -> dict:
 def get_many(api_key: str) -> dict:
     ## obs: acc_num up to 11 dig
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
-    data = dao_document.get_many(db_id, "banstat2")
+    data = {} #dao_document.get_many(db_id, "banstat2")
 
     settings_data = fileio.get_file_settings()
     file_format_path = settings_data["file"]["format"]
@@ -42,13 +42,13 @@ def get_many(api_key: str) -> dict:
 
 def get_one(api_key: str, num: str, date: str = None, date_to: str = None):
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     settings_date: dict = admin.get_db_settings("field_date_")
     dt = dateutil.get_date_from(date, settings_date)
     dt_to = dateutil.get_date_to(date_to, settings_date)
 
-    row = dao_document.get_one(db_id, "banstat2", num)
+    row = {} # dao_document.get_one(db_id, "banstat2", num)
     stat: Banstat2 = Banstat2()
     stat.set_from_db(row)
     tra_seqs: list[dict] = general_ledger.get(

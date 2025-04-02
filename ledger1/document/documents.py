@@ -16,11 +16,12 @@ from ledger1.document.document_acc import DocumentAccount
 from ledger1.document.document_tra import DocumentTransaction
 from ledger1.document.aux import document_options
 from ledger1.document.aux.document_types import DocumentTypes
+from ledger1.document import documents_acc_seq
 
-from ledger1.transaction import transaction_service as transactions
-from ledger1.account import account_service as accounts
+from ledger1.transaction import transactions
+from ledger1.account import accounts
 from ledger1.utils import fileio
-from ledger1.admin import entities
+from ledger1.admin import admin
 
 
 # get
@@ -32,7 +33,7 @@ def get( # pylint: disable=too-many-locals
         doc_num: str = None
     ) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
 
@@ -91,6 +92,7 @@ def get( # pylint: disable=too-many-locals
         doc.set_from_new()
         doc.set_from_fields(fields)
         data = doc.get_to_response()
+        data["seqs"] = []
 
         data_format: dict = _get_format(doc_type, False)
 
@@ -113,11 +115,14 @@ def get( # pylint: disable=too-many-locals
         if doc_type_is_tra is False and doc_type != "bstat2":
 
             acc: dict = accounts.get_one_by_doc(db_id, doc_type, doc_num)
+
             fields: dict = dao_document_field.get_one(db_id, doc_type, doc_num)
+            seqs: list[dict] = documents_acc_seq.get(db_id=db_id, acc_num=acc["num"])
 
             doc: DocumentAccount = DocumentAccount(db_id, doc_type, doc_num)
             doc.set_from_account(acc)
             doc.set_from_fields(fields)
+            doc.set_seqs(seqs)
             data = doc.get_to_response()
 
             data_options = {}
@@ -201,7 +206,7 @@ def _get_many_tra(db_id: str, doc_dc: bool, doc_type: str) -> list[dict]:
 
 def post(api_key: str, doc_type: str, data) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, data["doc_type"])
 
@@ -249,9 +254,12 @@ def put(
         doc_num: str,
         data) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
+
+    if data["doc_num"] != doc_num:
+        raise ValueError("doc_num in request does not match doc_num in url")
 
     if doc_type_is_tra:
 
@@ -290,7 +298,7 @@ def put(
 
 def delete(api_key: str, doc_type: str, doc_num: str) -> dict:
 
-    db_id: str = entities.get_db_id_by_api_key(api_key)
+    db_id: str = admin.get_db_id_by_api_key(api_key)
 
     doc_type_is_tra: bool = _get_doc_type_is_tra(db_id, doc_type)
 

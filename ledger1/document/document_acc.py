@@ -60,6 +60,10 @@ class DocumentAccount(Document):
         self.fields = fields
 
 
+    def set_seqs(self, seqs: list[dict]) -> None:
+        self.seqs = seqs
+
+
     def get_to_account(self):
         return {
             "num": self.acc["num"],

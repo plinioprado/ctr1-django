@@ -1,7 +1,7 @@
 """ Finance reports - Chart of accounts """
 
 from ledger1.dao.sqlite.dao_report import get as get_accounts
-from ledger1.account.account1 import Account1
+from ledger1.account.account import Account
 
 
 def get(
@@ -24,7 +24,7 @@ def get(
     """
 
     rows: list[list] = []
-    accounts: list[Account1] = get_accounts(api_key, acc_from, acc_to)
+    accounts: list[Account] = get_accounts(api_key, acc_from, acc_to)
     rows.append(["num", "name", "Dc"])
     for account in accounts:
         rows.append([
