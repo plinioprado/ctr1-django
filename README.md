@@ -1,4 +1,4 @@
-# ctr-ledger1-django
+# ctr1-django
 
 Basic ledger system using Django REST Framework with SQLite.
 
