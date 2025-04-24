@@ -1,0 +1,66 @@
+{
+  "h2": "User",
+  "fields": [
+    {
+      "label": "Id",
+      "md": 2,
+      "name": "id",
+      "type": "text",
+      "read_only": true
+    },
+    {
+      "label": "Name",
+      "md": 4,
+      "name": "name",
+      "type": "text"
+    },
+    {
+      "label": "Email",
+      "md": 4,
+      "name": "email",
+      "type": "text"
+    },
+    {
+      "label": "Role",
+      "md": 2,
+      "name": "role",
+      "type": "select",
+      "options": [
+        {
+          "label": "Super",
+          "value": "super"
+        },
+        {
+          "label": "Admin",
+          "value": "admin"
+        },
+        {
+          "label": "User",
+          "value": "user"
+        },
+        {
+          "label": "Guest",
+          "value": "guest"
+        }
+      ]
+    },
+    {
+      "label": "Active",
+      "md": 2,
+      "name": "active",
+      "type": "boolean"
+    },
+    {
+      "label": "Expires",
+      "md": 3,
+      "name": "expires",
+      "type": "date"
+    },
+    {
+      "label": "Password",
+      "md": 4,
+      "name": "password",
+      "type": "text"
+    }
+  ]
+}

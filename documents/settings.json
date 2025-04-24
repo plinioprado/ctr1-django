@@ -1,9 +1,0 @@
-{
-  "sqlite3": {
-    "file_db": "./ledger1/dao/sqlite/tws.sqlite3",
-    "file_script_reset": "./documents/dao/sqlite/document_reset.sql"
-  },
-  "invoice2": {
-    "file_csv": "./documents/dao/csv/invoice2.csv"
-  }
-}
