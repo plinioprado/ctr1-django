@@ -1,0 +1,18 @@
+{
+  "h2": "Setting",
+  "fields": [
+    {
+      "label": "Key",
+      "md": 6,
+      "name": "key",
+      "type": "text",
+      "read_only": false
+    },
+    {
+      "label": "Value",
+      "md": 6,
+      "name": "value",
+      "type": "text"
+    }
+  ]
+}

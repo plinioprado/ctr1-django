@@ -1,0 +1,24 @@
+{
+  "h2": "Settings",
+  "columns": [
+    {
+      "header": "Key",
+      "name": "key",
+      "primary": true,
+      "type": "string"
+    },
+    {
+      "header": "Value",
+      "name": "value",
+      "type": "string"
+    }
+  ],
+  "filters": [
+    {
+      "label": "Key",
+      "name": "key",
+      "type": "text",
+      "md": 3
+    }
+  ]
+}

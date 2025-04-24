@@ -1,0 +1,3 @@
+id,name,email,password,api_key,role,entities,entity,active
+1,"John Doe","john.doe@example.com","12345","1q2w3e4r5t6y7u8i9o0p","admin","example","example",true
+2,"Jane Doe","john.doe@example.com","12345","1Q2W3E4R5T6Y7U8I9O0P","user","example","example",true
