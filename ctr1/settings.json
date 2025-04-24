@@ -1,0 +1,38 @@
+{
+  "entities": [
+    {
+      "id": "example",
+      "name": "Example Ltd",
+      "type": "sqlite",
+      "path": "./ctr1/dao/sqlite/tws.sqlite3",
+      "key": "1a2s3d"
+    },
+    {
+      "id": "test",
+      "name": "Lest Ltd.",
+      "type": "sqlite",
+      "path": "./ctr1/dao/sqlite/tws-test.sqlite3",
+      "key": "2s3d4f"
+    }
+  ],
+  "filters": {
+    "date_min": "2020-01-01",
+    "date_max": "2020-01-31",
+    "acc_min": "1.0.0",
+    "acc_max": "9.9.9"
+  },
+  "sqlite3": {
+    "file_db": "./ctr1/dao/sqlite/tws.sqlite3"
+  },
+  "file": {
+    "format": "./ctr1/dao/format",
+    "sql": {
+      "reset": "./ctr1/dao/sqlite/reset.sql"
+    },
+    "csv": {
+      "document_field": "./ctr1/dao/csv/document_field.csv",
+      "setting": "./ctr1/dao/csv/setting.csv",
+      "user": "./ctr1/dao/csv/user.csv"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+setting_key,setting_value,denied
+entity_name,Test Ltd.,cd
+field_date_min,2020-01-01,cd
+field_date_max,2020-12-31,cd
+menu_1_text,Admin,
+menu_1-1_text,Settings,
+menu_1-1_path,/admin/setting
+menu_1-2_text,Users,
+menu_1-2_path,/admin/user
