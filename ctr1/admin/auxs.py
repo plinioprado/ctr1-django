@@ -1,9 +1,9 @@
 """ This module """
 
-from ledger1.dao.sqlite import dao_aux
-from ledger1.admin.user import User
-from ledger1.admin.setting import Setting
-from ledger1.admin.aux import Aux
+from ctr1.dao.sqlite import dao_aux
+from ctr1.admin.user import User
+from ctr1.admin.setting import Setting
+from ctr1.admin.aux import Aux
 
 
 def get_many(obj: Aux, filters: dict, db_id: str) -> list[dict]:

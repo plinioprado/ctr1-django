@@ -1,4 +1,4 @@
-""" Parameters to redirect DRF Request objects from drf.urls to ledger1.drf.views """
+""" Parameters to redirect DRF Request objects from drf.urls to ctr1.drf.views """
 
 from django.urls import path
 from . import views_login

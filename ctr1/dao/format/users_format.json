@@ -13,13 +13,13 @@
       "type": "string"
     },
     {
-      "header": "Role",
-      "name": "role",
+      "header": "Email",
+      "name": "email",
       "type": "string"
     },
     {
-      "header": "Entity",
-      "name": "entity",
+      "header": "Role",
+      "name": "role",
       "type": "string"
     },
     {

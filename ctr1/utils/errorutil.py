@@ -8,7 +8,7 @@ def handle_error(msg, status_code = None):
     now = datetime.now()
 
     fileio.write_text(
-        "./ledger1/file/error.log",
+        "./ctr1/file/error.log",
         f"{now.strftime("%Y-%m-%d %H:%M:%S")} {error_msg}")
 
     raise ClientError(error_msg, status_code)

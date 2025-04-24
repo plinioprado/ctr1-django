@@ -3,7 +3,7 @@
   "fields": [
     {
       "label": "Id",
-      "md": 1,
+      "md": 2,
       "name": "id",
       "type": "text",
       "read_only": true
@@ -21,28 +21,40 @@
       "type": "text"
     },
     {
-      "label": "Entity",
-      "md": 3,
-      "name": "entity",
-      "type": "text"
-    },
-    {
       "label": "Role",
       "md": 2,
       "name": "role",
-      "type": "text"
-    },
-    {
-      "label": "Entities",
-      "md": 5,
-      "name": "entities",
-      "type": "text"
+      "type": "select",
+      "options": [
+        {
+          "label": "Super",
+          "value": "super"
+        },
+        {
+          "label": "Admin",
+          "value": "admin"
+        },
+        {
+          "label": "User",
+          "value": "user"
+        },
+        {
+          "label": "Guest",
+          "value": "guest"
+        }
+      ]
     },
     {
       "label": "Active",
-      "md": 1,
+      "md": 2,
       "name": "active",
-      "type": "text"
+      "type": "boolean"
+    },
+    {
+      "label": "Expires",
+      "md": 3,
+      "name": "expires",
+      "type": "date"
     },
     {
       "label": "Password",

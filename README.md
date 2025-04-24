@@ -6,7 +6,7 @@ This poject explores coding and tools using:
 
 * Web local service receving and responding rest requests using Django REST Framework (DRF) in the project root
 * Applications coded in plain Python, using function based views. These apps are self containing modules that return data as Python dicts that is then inserted into the DRF responses. So can be incorporated into other REST services beyond DRF.
-* A ledger system in ./ledger1
+* A ledger system in ./ctr1
 * An User app using DRF working with class-based views and Django coding in ./drf/user, accessed via endpoints and also the Django admin.
 
 ## Run
@@ -19,19 +19,6 @@ python manage.py runserver
 
 Interface using the REST endpoints for:
 
-* ledger1 module
-  * account CRUD
-  * transaction CRUD
-* documents module
-  * invoice1 crud
-  * eft crud
-  * gic crud
-  * bank statement screen
-* reports module (with filter for date and account)
-  * chart_account
-  * journal
-  * general_ledger
-  * trial_balance
 * admin module
   * login
   * setting crud
@@ -68,30 +55,14 @@ In Authorization, select Aasic Auth, fill Username and Password
 
 ## Endpoints
 
-ledger1 main endpoints
+ctr1 main endpoints
 
-* Accounts
+* Settings
 
-  * GET    http://localhost:8000/ledger/accounts/{num}   Get account
-  * POST   http://localhost:8000/ledger/accounts        Create account
-  * PUT    http://localhost:8000/ledger/accounts        Update account
-  * DELETE http://localhost:8000/ledger/accounts/{num}   Delete one account
-
-  Transactions
-
-  * GET    http://localhost:8000/ledger/transactions        Get all transactions
-  * GET    http://localhost:8000/ledger/transactions/{num}   Get transaction
-  * POST   http://localhost:8000/ledger/transactions        Create transaction
-  * PUT    http://localhost:8000/ledger/transactions        Update transaction
-  * DELETE http://localhost:8000/ledger/transactions/{num}   Delete one transaction
-
-* Documents
-
-  * GET    http://localhost:8000/ledger/docs/{type}       Get transactions from a type
-
-* Reports
-
-  * Report: http://localhost:8000/ledger/report
+  * GET    http://localhost:8000/ctr1/admin/setting/{num}   Get setting
+  * POST   http://localhost:8000/ctr1/admin/setting        Create setting
+  * PUT    http://localhost:8000/ctr1/setting        Update setting
+  * DELETE http://localhost:8000/ctr1/admin/setting/{num}   Delete one setting
 
 * Admin
 
@@ -151,7 +122,5 @@ Django and djangorestframework setup followed https://www.django-rest-framework.
 Check type hints:
 
 ```shell
-mypy ledger1/accounts1.py
-mypy ledger1/transactions1.py
-mypy ledger1/reports_service.py
+mypy ctr1/admin.py
 ```

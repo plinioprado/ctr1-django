@@ -3,7 +3,7 @@ from ctr1.utils import dbutil
 from ctr1.utils.fileio import read_text
 
 def reset(db_id: str, file_name: str) -> None:
-    """ Reset blank ledger1 tables """
+    """ Reset blank ctr1 tables """
 
     con, cur = dbutil.get_connection(db_id)
 

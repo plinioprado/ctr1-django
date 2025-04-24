@@ -1,6 +1,6 @@
 """ reset DRF view
 
-resets ledger1 db on the path ledger/reset
+resets ctr1 db on the path ledger/reset
 
 Arguments:
     request (Request): DRF REST request object
@@ -12,8 +12,8 @@ Returns:
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from ledger1.admin import admin
-from ledger1.utils.error_client import ClientError
+from ctr1.admin import admin
+from ctr1.utils.error_client import ClientError
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def view(request: Request, param: str = "", record_id: str = None):

@@ -38,9 +38,10 @@ def login(data: dict) -> dict:
         # data from db settings
         obj: Aux = auxs.get_object("setting")
         entity_name: dict = auxs.get_one("entity_name", obj, data["entity"])["value"]
+        db_settings: list[dict] = auxs.get_many(obj, "", param_db_entity["id"])
 
         api_key: str = f"{param_db_entity['key']}-{user['api_key']}"
-        data = session.get_session(api_key, entity_name, user)
+        data = session.get_session(api_key, entity_name, db_settings, user)
 
         response = {
             "data": data,
@@ -66,8 +67,6 @@ def get(
         query: dict | None = None,
         record_id: str | None = None
     ) -> dict:
-
-    print(1, param)
 
     db_id: str = get_db_id_by_api_key(api_key)
 

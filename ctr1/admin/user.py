@@ -77,6 +77,7 @@ class User(Aux):
         return {
             "id": str(self.id),
             "name": self.name,
+            "email": self.email,
             "role": self.role,
             "active": self.active,
         }

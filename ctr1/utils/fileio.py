@@ -73,6 +73,6 @@ def read_csv(filename: str) -> list[dict]:
 
 
 def get_file_settings() -> dict:
-    settings = read_json("./ledger1/settings.json")
+    settings = read_json("./ctr1/settings.json")
 
     return settings

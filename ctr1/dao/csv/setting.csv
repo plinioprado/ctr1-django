@@ -2,35 +2,8 @@ setting_key,setting_value,denied
 entity_name,Test Ltd.,cd
 field_date_min,2020-01-01,cd
 field_date_max,2020-12-31,cd
-menu_1_text,Documents,
-menu_1-1_text,Bank Statement,
-menu_1-1_path,/documents/banstat,
-menu_1-2_text,Chequing Account,
-menu_1-2_path,/documents/chequing
-menu_1-3_text,GIC Account,
-menu_1-3_path,/documents/gic,
-menu_1-4_text,Invoice,
-menu_1-4_path,/documents/inv2
-menu_1-5_text,EFT,
-menu_1-5_path,/documents/eft
-menu_2_text,Ledger,
-menu_2-1_text,Accounts,
-menu_2-1_path,/ledger/accounts
-menu_2-2_text,Transactions,
-menu_2-2_path,/ledger/transactions
-menu_3_text,Reports,
-menu_3-1_text,Chart of Accounts,
-menu_3-1_path,/report/chart_accounts
-menu_3-2_text,Journal,
-menu_3-2_path,/report/journal
-menu_3-3_text,General Ledger,
-menu_3-3_path,/report/general_ledger
-menu_3-4_text,Trial Balance,
-menu_3-4_path,/report/trial_balance
-menu_3-5_text,Documents,
-menu_3-5_path,/report/documents
-menu_4_text,Admin,
-menu_4-1_text,Settings,
-menu_4-1_path,/admin/setting
-menu_4-2_text,Users,
-menu_4-2_path,/admin/user
+menu_1_text,Admin,
+menu_1-1_text,Settings,
+menu_1-1_path,/admin/setting
+menu_1-2_text,Users,
+menu_1-2_path,/admin/user

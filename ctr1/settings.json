@@ -4,14 +4,14 @@
       "id": "example",
       "name": "Example Ltd",
       "type": "sqlite",
-      "path": "./ledger1/dao/sqlite/tws.sqlite3",
+      "path": "./ctr1/dao/sqlite/tws.sqlite3",
       "key": "1a2s3d"
     },
     {
       "id": "test",
       "name": "Lest Ltd.",
       "type": "sqlite",
-      "path": "./ledger1/dao/sqlite/tws-test.sqlite3",
+      "path": "./ctr1/dao/sqlite/tws-test.sqlite3",
       "key": "2s3d4f"
     }
   ],
@@ -22,17 +22,17 @@
     "acc_max": "9.9.9"
   },
   "sqlite3": {
-    "file_db": "./ledger1/dao/sqlite/tws.sqlite3"
+    "file_db": "./ctr1/dao/sqlite/tws.sqlite3"
   },
   "file": {
-    "format": "./ledger1/dao/format",
+    "format": "./ctr1/dao/format",
     "sql": {
-      "reset": "./ledger1/dao/sqlite/reset.sql"
+      "reset": "./ctr1/dao/sqlite/reset.sql"
     },
     "csv": {
-      "document_field": "./ledger1/dao/csv/document_field.csv",
-      "setting": "./ledger1/dao/csv/setting.csv",
-      "user": "./ledger1/dao/csv/user.csv"
+      "document_field": "./ctr1/dao/csv/document_field.csv",
+      "setting": "./ctr1/dao/csv/setting.csv",
+      "user": "./ctr1/dao/csv/user.csv"
     }
   }
 }

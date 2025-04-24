@@ -1,8 +1,8 @@
-from ledger1.dao.sqlite import dao
-from ledger1.dao.sqlite import dao_setting
-from ledger1.dao.sqlite import dao_aux
-from ledger1.admin.user import User
-from ledger1.utils import fileio
+from ctr1.dao.sqlite import dao
+from ctr1.dao.sqlite import dao_setting
+from ctr1.dao.sqlite import dao_aux
+from ctr1.admin.user import User
+from ctr1.utils import fileio
 
 
 def reset(db_id) -> None:
