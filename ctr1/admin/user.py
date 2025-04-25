@@ -21,6 +21,7 @@ class User(Aux):
         self.password = ""
         self.api_key = ""
         self.role = "user"
+        self.expires = None
         self.active = True
 
 
@@ -32,6 +33,7 @@ class User(Aux):
         self.api_key = str(data["api_key"])
         self.role = str(data["role"])
         self.active = bool(data["active"])
+        self.expires = str(data["expires"])
 
 
     def set_from_request(self, data) -> None:
@@ -42,6 +44,7 @@ class User(Aux):
         self.api_key = datetime.now().strftime('%Y%m%d%1q2w3e4r5t6y7u8i9o0p')
         self.role = str(data["role"])
         self.active = bool(data["active"])
+        self.expires = str(data["expires"])
 
 
     def get_to_db(self) -> dict:
@@ -55,6 +58,7 @@ class User(Aux):
             "api_key": self.api_key,
             "role": self.role,
             "active": self.active,
+            "expires": self.expires,
         }
 
 
@@ -68,6 +72,7 @@ class User(Aux):
             "password": "*" * 12,
             "role": self.role,
             "active": self.active,
+            "expires": self.expires,
         }
 
 
@@ -91,6 +96,7 @@ class User(Aux):
             "password": "",
             "role": "user",
             "active": True,
+            "expires": "",
         }
 
 
@@ -104,4 +110,5 @@ class User(Aux):
             "api_key": "str",
             "role": "str",
             "active": "bool",
+            "expires": "date",
         }
