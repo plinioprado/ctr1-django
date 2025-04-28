@@ -71,13 +71,13 @@ def get_filters(data_format: dict, filters: dict | None) -> list[dict]:
     return data
 
 
-def get_object(param: str) -> Aux:
-    if param == "user":
+def get_object(resource: str) -> Aux:
+    if resource == "user":
         obj: Aux = User()
-    elif param == "setting":
+    elif resource == "setting":
         obj = Setting()
     else:
-        raise ValueError(f"invalid param {param}")
+        raise ValueError(f"invalid resource {resource}")
 
     return obj
 
