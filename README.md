@@ -6,8 +6,6 @@ This poject explores coding and tools using:
 
 * Web local service receving and responding rest requests using Django REST Framework (DRF) in the project root
 * Applications coded in plain Python, using function based views. These apps are self containing modules that return data as Python dicts that is then inserted into the DRF responses. So can be incorporated into other REST services beyond DRF.
-* A ledger system in ./ctr1
-* An User app using DRF working with class-based views and Django coding in ./drf/user, accessed via endpoints and also the Django admin.
 
 ## Run
 
@@ -29,7 +27,6 @@ Constrains:
 
 * Single tennant
 * Single language (English)
-* Single currency (CAD)
 
 ## Install
 
@@ -40,7 +37,7 @@ source venv/bin/activate # activate venv
 
 ## Optional authentication
 
-Basic Auth implemented then commented out in setings.py and the views.
+Django basic Auth can be used instead of api_keys managed by the ctr1 component. It was implemented then commented out in setings.py and the views.
 
 Running with Browser when enabled:
 
@@ -51,7 +48,7 @@ To logout, request again http://localhost:8000/admin/ and click logout
 
 Running with Postman when enabled:
 
-In Authorization, select Aasic Auth, fill Username and Password
+In Authorization, select Basic Auth, fill Username and Password
 
 ## Endpoints
 
@@ -59,16 +56,23 @@ ctr1 main endpoints
 
 * Settings
 
-  * GET    http://localhost:8000/ctr1/admin/setting/{num}   Get setting
-  * POST   http://localhost:8000/ctr1/admin/setting        Create setting
-  * PUT    http://localhost:8000/ctr1/setting        Update setting
-  * DELETE http://localhost:8000/ctr1/admin/setting/{num}   Delete one setting
+  * GET    http://localhost:8000/ctr1/admin/settings/{code}   Get setting
+  * POST   http://localhost:8000/ctr1/admin/settings        Create setting
+  * PUT    http://localhost:8000/ctr1/admin/settings        Update setting
+  * DELETE http://localhost:8000/ctr1/admin/settings/{code}   Delete one setting
+
+* Users
+
+  * GET    http://localhost:8000/ctr1/admin/users/{code}   Get setting
+  * POST   http://localhost:8000/ctr1/admin/users        Create setting
+  * PUT    http://localhost:8000/ctr1/admin/users        Update setting
+  * DELETE http://localhost:8000/ctr1/admin/users/{code}   Delete one setting
 
 * Admin
 
-  * GET    http://localhost:8000/ledger/reset   Reset db
+  * GET    http://localhost:8000/ctr1/reset   Reset db
 
-* Django
+* Django admin (users are not the same as those used by Ctr1)
 
   * Admin: http://localhost/admin/
   * Users: http://localhost:8000/users/

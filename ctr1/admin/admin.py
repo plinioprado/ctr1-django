@@ -76,12 +76,16 @@ def get(
     # because the query values in Django came as an array
     filters: dict = {name: query[name][0] for name in query} if query else {}
 
-    if param in ["user", "setting"]:
-        obj: Aux = auxs.get_object(param)
+
+    if param in ["users", "settings"]:
+        resource = param[:-1]
+        obj: Aux = auxs.get_object(resource)
 
         if record_id is None:
             data: list[dict] | dict = auxs.get_many(obj, filters, db_id)
-            data_format: dict = fileio.read_json(f"{file_format_path}/{param}s_format.json")
+            data_format_path = f"{file_format_path}/{resource}s_format.json"
+            print(f"data_format_path: {data_format_path}")
+            data_format: dict = fileio.read_json(data_format_path)
             data_filters: list[dict] | None = auxs.get_filters(data_format, filters)
 
             response = {
@@ -94,7 +98,8 @@ def get(
 
         else:
             data = auxs.get_one(record_id, obj, db_id)
-            data_format = fileio.read_json(f"{file_format_path}/{param}_format.json")
+            data_format_path = f"{file_format_path}/{resource}_format.json"
+            data_format = fileio.read_json(data_format_path)
 
             response = {
                 "data": data,
@@ -138,10 +143,11 @@ def get_db_settings(key: str, db_id: str = "") -> dict:
 # post
 
 def post(param: str, data: dict, api_key: str) -> dict:
-    if param in ["user", "setting"]:
+    if param in ["users", "settings"]:
+        resource = param[:-1]
         db_id: str = get_db_id_by_api_key(api_key)
 
-        obj: Aux = auxs.get_object(param)
+        obj: Aux = auxs.get_object(resource)
         record_id = auxs.post(data, obj, db_id)
 
     else:
@@ -149,7 +155,7 @@ def post(param: str, data: dict, api_key: str) -> dict:
 
     return {
         "status_code": 200,
-        "message": f"{param} {record_id} created",
+        "message": f"{resource} {record_id} created",
         "data": {
             obj.primary_key_form: record_id
         }
@@ -160,10 +166,11 @@ def post(param: str, data: dict, api_key: str) -> dict:
 
 def put(param: str, data: dict, api_key: str) -> dict:
 
-    if param in ["user", "setting"]:
+    if param in ["users", "settings"]:
+        resource = param[:-1]
         db_id: str = get_db_id_by_api_key(api_key)
 
-        obj: Aux = auxs.get_object(param)
+        obj: Aux = auxs.get_object(resource)
         record_id = auxs.put(data, obj, db_id)
 
     else:
@@ -171,7 +178,7 @@ def put(param: str, data: dict, api_key: str) -> dict:
 
     return {
         "status_code": 200,
-        "message": f"{param} {record_id} updated",
+        "message": f"{resource} {record_id} updated",
         "data": {
             obj.primary_key_form: record_id
         }
@@ -182,9 +189,10 @@ def put(param: str, data: dict, api_key: str) -> dict:
 
 def delete(param: str, record_id: str, api_key: str) -> dict:
 
-    if param in ["user", "setting"]:
+    if param in ["users", "settings"]:
+        resource = param[:-1]
         db_id: str = get_db_id_by_api_key(api_key)
-        obj: Aux = auxs.get_object(param)
+        obj: Aux = auxs.get_object(resource)
         record_id = auxs.delete(record_id, obj, db_id)
 
     else:
@@ -192,7 +200,7 @@ def delete(param: str, record_id: str, api_key: str) -> dict:
 
     return {
         "status_code": 200,
-        "message": f"{param} {record_id} deleted",
+        "message": f"{resource} {record_id} deleted",
         "data": {
             obj.primary_key_form: record_id
         }

@@ -4,8 +4,8 @@ field_date_min,2020-01-01,cd
 field_date_max,2020-12-31,cd
 menu_1_text,Admin,
 menu_1-1_text,Settings,
-menu_1-1_path_api,/admin/setting
-menu_1-1_path_routing,/setting
+menu_1-1_path_api,/api/admin/settings
+menu_1-1_path_routing,/admin/settings
 menu_1-2_text,Users,
-menu_1-2_path_api,/admin/user
-menu_1-2_path_routing,/user
+menu_1-2_path_api,/api/admin/users
+menu_1-2_path_routing,/admin/users
