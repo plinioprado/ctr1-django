@@ -1,6 +1,6 @@
 # ctr1-django
 
-Basic ledger system using Django REST Framework with SQLite.
+Basic CRUD application using Django and SQLite for Financial Internal Controls and other prototypes
 
 This poject explores coding and tools using:
 
@@ -19,8 +19,8 @@ Interface using the REST endpoints for:
 
 * admin module
   * login
-  * setting crud
-  * user crud
+  * settings crud
+  * users crud
   * reset db
 
 Constrains:
@@ -34,21 +34,6 @@ Constrains:
 git clone plinioprado/ctr-ledger1-django # clone repo
 source venv/bin/activate # activate venv
 ```
-
-## Optional authentication
-
-Django basic Auth can be used instead of api_keys managed by the ctr1 component. It was implemented then commented out in setings.py and the views.
-
-Running with Browser when enabled:
-
-The first request should be http://localhost:8000/admin/ to login with a Django page.
-    For this demo, login is "admin" and pass "12345"
-The next ones will be to the application endpoints
-To logout, request again http://localhost:8000/admin/ and click logout
-
-Running with Postman when enabled:
-
-In Authorization, select Basic Auth, fill Username and Password
 
 ## Endpoints
 
@@ -125,3 +110,18 @@ Check type hints:
 ```shell
 mypy ctr1
 ```
+
+**Optional authentication**
+
+Django basic Auth can be used instead of api_keys managed by the ctr1 component. It was implemented then commented out in setings.py and the views.
+
+* Running with Browser when enabled:
+
+    The first request should be http://localhost:8000/admin/ to login with a Django page.
+        For this demo, login is "admin" and pass "12345"
+    The next ones will be to the application endpoints
+    To logout, request again http://localhost:8000/admin/ and click logout
+
+* Running with Postman when enabled:
+
+    In Authorization, select Basic Auth, fill Username and Password
