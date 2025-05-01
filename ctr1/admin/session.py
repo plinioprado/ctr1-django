@@ -1,10 +1,10 @@
 
 
-def get_session(api_key: str, entity_name: str, db_settings: list[dict], user: dict):
+def get_session(api_key: str, entity_name: str, db_settings: list[dict], user: dict) -> dict:
 
-    menu_options = get_menu_options(db_settings)
+    menu_options: list[dict] = get_menu_options(db_settings)
 
-    session = {
+    return {
         "user": {
             "api_key": api_key,
             "name": user["name"],
@@ -14,8 +14,6 @@ def get_session(api_key: str, entity_name: str, db_settings: list[dict], user: d
         },
         "menu_options": menu_options,
     }
-
-    return session
 
 
 def get_menu_options(db_settings: list[dict]) -> list[dict]:
