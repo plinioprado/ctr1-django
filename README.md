@@ -100,18 +100,13 @@ Unit test of the invoice1 module running pytest from the project root:
 pytest -vv # or pytest -s to show messages
 ```
 
-Integration test including the web service:
-
-1. Import to Postman the collection stored in invoice1/test/postman/ctr-invoice1-python.postman_collection
-2. Run the application
-3. Run the collection in Postman
-
 ## Standards
 
 References:
 
 * PEP 8 - https://peps.python.org/pep-0008
 * pylint - https://pypi.org/project/pylint
+* REST: https://restfulapi.net
 * Google Python Style Guide - https://google.github.io/styleguide/pyguide.html
 
 Checked with:
@@ -121,10 +116,12 @@ Checked with:
 
 ## Dev notes
 
-Django and djangorestframework setup followed https://www.django-rest-framework.org/tutorial/quickstart/
+Django and djangorestframework setup followed https://www.django-rest-framework.org/tutorial/quickstart
+
+When update library run: $ pip freeze > requirements.txt
 
 Check type hints:
 
 ```shell
-mypy ctr1/admin.py
+mypy ctr1
 ```

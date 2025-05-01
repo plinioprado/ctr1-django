@@ -16,7 +16,7 @@ from ctr1.admin import admin
 from ctr1.utils.error_client import ClientError
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
-def view(request: Request, param: str = "", record_id: str = None):
+def view(request: Request, param: str = "", record_id: str | None = None):
 
     try:
         api_key: str = request.headers["Authorization"]
@@ -30,13 +30,13 @@ def view(request: Request, param: str = "", record_id: str = None):
                 record_id=record_id)
 
         elif request.method == "POST":
-            ret: dict = admin.post(param, data=request.data, api_key=api_key)
+            ret = admin.post(param, data=request.data, api_key=api_key)
 
         elif request.method == "PUT":
-            ret: dict = admin.put(param, data=request.data, api_key=api_key)
+            ret = admin.put(param, data=request.data, api_key=api_key)
 
         elif request.method == "DELETE":
-            ret: dict = admin.delete(param, record_id, api_key=api_key)
+            ret = admin.delete(param, record_id, api_key=api_key)
 
         else:
             raise ValueError("invalid method")
@@ -52,11 +52,11 @@ def view(request: Request, param: str = "", record_id: str = None):
         return res
 
     except ValueError as err:
-        res: Response = Response({ "message": f"Error: {str(err)}"})
+        res = Response({ "message": f"Error: {str(err)}"})
         res.status_code = 400
         return res
 
     except Exception as err: # pylint: disable=broad-exception-caught
-        res: Response = Response({ "message": f"Error: {str(err)}" })
+        res = Response({ "message": f"Error: {str(err)}" })
         res.status_code = 500
         return res

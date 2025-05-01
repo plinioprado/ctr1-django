@@ -21,7 +21,7 @@ def login(data: dict) -> dict:
 
         # data from file settings
         try:
-            param_db_entity: str = entities.get_entity("id", data["entity"])
+            param_db_entity: dict = entities.get_entity("id", data["entity"])
         except IndexError:
             errorutil.handle_error("invalid login", 401)
 
@@ -37,13 +37,13 @@ def login(data: dict) -> dict:
 
         # data from db settings
         obj: Aux = auxs.get_object("setting")
-        entity_name: dict = auxs.get_one("entity_name", obj, data["entity"])["value"]
-        db_settings: list[dict] = auxs.get_many(obj, "", param_db_entity["id"])
+        entity_name: str = auxs.get_one("entity_name", obj, data["entity"])["value"]
+        db_settings: list[dict] = auxs.get_many(obj, {}, param_db_entity["id"])
 
         api_key: str = f"{param_db_entity['key']}-{user['api_key']}"
         data = session.get_session(api_key, entity_name, db_settings, user)
 
-        response = {
+        response: dict = {
             "data": data,
             "message": "ok",
             "status_code": 200,
@@ -76,6 +76,7 @@ def get(
     # because the query values in Django came as an array
     filters: dict = {name: query[name][0] for name in query} if query else {}
 
+    response: dict = {}
 
     if param in ["users", "settings"]:
         resource = param[:-1]
@@ -113,11 +114,10 @@ def get(
         reset(db_id)
 
         response = {
-        "status_code": 200,
-        "message": "reset ok"
-    }
+            "status_code": 200,
+            "message": "reset ok"
+        }
     else:
-        response = None
         errorutil.handle_error(f"invalid param {param}")
 
 
@@ -187,9 +187,13 @@ def put(param: str, data: dict, api_key: str) -> dict:
 
 # delete
 
-def delete(param: str, record_id: str, api_key: str) -> dict:
+def delete(param: str, record_id: str | None, api_key: str) -> dict:
 
     if param in ["users", "settings"]:
+
+        if record_id is None:
+            raise ValueError("record_id is required")
+
         resource = param[:-1]
         db_id: str = get_db_id_by_api_key(api_key)
         obj: Aux = auxs.get_object(resource)
