@@ -23,11 +23,11 @@ def view(request: Request):
         return res
 
     except ValueError as err:
-        res: Response = Response({ "message": str(err) })
+        res = Response({ "message": str(err) })
         res.status_code = 400
         return res
 
     except Exception as err: # pylint: disable=broad-exception-caught
-        res: Response = Response({ "message": str(err) })
+        res = Response({ "message": str(err) })
         res.status_code = 500
         return res

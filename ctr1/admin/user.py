@@ -15,17 +15,17 @@ class User(Aux):
     def __init__(self) -> None:
 
         # fields
-        self.id = None
-        self.name = ""
-        self.email = ""
-        self.password = ""
-        self.api_key = ""
-        self.role = "user"
-        self.expires = None
-        self.active = True
+        self.id: str | None = None
+        self.name: str = ""
+        self.email: str = ""
+        self.password: str = ""
+        self.api_key: str = ""
+        self.role: str = "user"
+        self.expires: str | None = None
+        self.active: bool = True
 
 
-    def set_from_db(self, data) -> None:
+    def set_from_db(self, data: dict) -> None:
         self.id = str(data["id"]) if data["id"] is not None else None
         self.name = str(data["name"])
         self.email = str(data["email"])
