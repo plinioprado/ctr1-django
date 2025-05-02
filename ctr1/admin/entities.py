@@ -20,6 +20,7 @@ from ctr1.utils import fileio
 def get_db_id_by_api_key(api_key: str) -> str:
 
     entity_key: str = api_key.replace("Bearer ", "").split("-")[0]
+
     api_key = get_entity("key", entity_key)["id"]
 
     return api_key
@@ -29,7 +30,10 @@ def get_entity(field: str, value: str) -> dict:
 
     settings_data = fileio.get_file_settings()
     entities = settings_data["entities"]
-    entity: dict = [en for en in entities if en[field] == value][0]
+    entity: dict = [en for en in entities if en[field] == value]
 
-    return entity
+    if entity == []:
+        raise ValueError("invalid api_key")
+
+    return entity[0]
 
