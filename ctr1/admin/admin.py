@@ -127,9 +127,9 @@ def get(
 def get_db_id_by_api_key(api_key: str) -> str:
 
     entity_key: str = api_key.replace("Bearer ", "").split("-")[0]
-    api_key = entities.get_entity("key", entity_key)["id"]
+    api_key = entities.get_entity("key", entity_key)
 
-    return api_key
+    return api_key["id"]
 
 
 def get_db_settings(key: str, db_id: str = "") -> dict:
