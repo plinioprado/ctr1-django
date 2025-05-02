@@ -2,17 +2,15 @@
   "entities": [
     {
       "id": "example",
-      "name": "Example Ltd",
       "type": "sqlite",
-      "path": "./ctr1/dao/sqlite/tws.sqlite3",
-      "key": "1a2s3d"
+      "path": "./ctr1/dao/sqlite/ctr1-example.sqlite3",
+      "key": "2s3d4f"
     },
     {
-      "id": "test",
-      "name": "Test Ltd.",
+      "id": "exampleus",
       "type": "sqlite",
-      "path": "./ctr1/dao/sqlite/tws-test.sqlite3",
-      "key": "2s3d4f"
+      "path": "./ctr1/dao/sqlite/ctr1-exampleus.sqlite3",
+      "key": "1q2w3e"
     }
   ],
   "filters": {

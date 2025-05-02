@@ -10,7 +10,7 @@ def test_login_valid():
     ret: dict = admin.login(data={
         "user_email": "john.doe@example.com",
         "user_pass": "12345",
-        "entity": "test"
+        "entity": "example"
     })
 
     assert ret["status_code"] == 200
@@ -51,7 +51,7 @@ def test_login_valid():
             },
         ],
         "entity": {
-            "name": "Test Ltd.",
+            "name": "Example Ltd.",
         },
     }
 
