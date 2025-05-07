@@ -17,7 +17,7 @@ from ctr1.utils import errorutil
 def login(data: dict) -> dict:
     try:
         if sorted(data.keys()) != ["entity", "user_email", "user_pass"]:
-            errorutil.handle_error("invalid login data", 401)
+            errorutil.handle_error("invalid login", 401)
 
         # data from file settings
         try:
@@ -52,9 +52,11 @@ def login(data: dict) -> dict:
         return response
 
     except ValueError as err:
+        print(f"xxxxx: {err}")
+        errorutil.log_error(err)
         return {
-            "message": f"value error on login: {str(err)}",
-            "status_code": 400
+            "message": "invalid login",
+            "status_code": 401
         }
 
 

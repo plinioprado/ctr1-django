@@ -30,6 +30,18 @@ def write_text(filename: str, txt: str) -> None:
         raise OSError(f"Error writing to file {filename}:", err) from err
 
 
+def add_text(filename: str, txt: str) -> None:
+    """ read a file and return a dict """
+
+    try:
+        with open(filename, "a", encoding="utf-8") as file:
+            file.write(f"{txt}\n")
+
+            return None
+
+    except OSError as err:
+        raise OSError(f"Error writing to file {filename}:", err) from err
+
 def read_json(filename: str) -> dict:
     """ read a file and return a dict """
 
