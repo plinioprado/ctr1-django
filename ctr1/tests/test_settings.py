@@ -12,7 +12,7 @@ def test_setting_get_many():
     assert ret["message"] == "ok"
     assert ret["data"][0] == {
         "key": "entity_name",
-        "value": "Test Ltd."
+        "value": "Example Ltd."
     }
 
 
