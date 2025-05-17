@@ -5,7 +5,7 @@
       "header": "Id",
       "name": "id",
       "primary": true,
-      "type": "string"
+      "type": "integer"
     },
     {
       "header": "Name",
